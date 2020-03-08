@@ -1,0 +1,132 @@
+
+/* Add or change the styles for all tasks in this css file */
+
+html {
+  font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
+  margin: 0px;
+}
+
+.row {
+  display: flex;
+  flex-wrap: nowrap;
+}
+
+.col {
+  margin-right: 30px;
+  flex:50%;
+}
+
+.geo-path {
+  stroke: #ddd;
+}
+
+#map {
+  width: 1000px;
+  height: 1000px;
+}
+
+#play-button {
+  margin-left: 20px;
+  width: 70px;
+}
+
+.place-text {
+  font-size: 1.2rem;
+  font-weight: 600;
+  text-shadow: 1px 1px 4px #ffffff;
+}
+
+p {
+  font-size: 1.4rem;
+}
+
+#task2a {
+  background-color: black;
+}
+
+#task2b {
+  background-color: black;
+}
+
+.tick {
+  color: white;
+}
+
+#ground-control {
+  margin-bottom: 10px;
+  align-items: flex-end;
+}
+
+#ground-control button {
+  font-size: 1.5rem;
+  font-weight: 300;
+  width:150px;
+  height:50px;
+  background-color: blue;
+  color: white;
+}
+
+#legend {
+  font-size: 1.5rem;
+  font-weight: 300;
+  background-color:black; 
+  outline: solid 10px blue;
+  color: white;
+  display: block;
+  text-align: right;
+  line-height: 50px;
+  padding: 0 0 20px 20px;
+}
+
+.l-label {
+  font-size: 1.5rem;
+  font-weight: 600;
+  text-decoration: underline;
+  outline: solid 4px blue;
+}
+
+.sublabel {
+  font-size: 1.5rem;
+  font-weight: 600;
+  outline: solid 4px blue;
+  align-content: center;
+}
+
+.legend-icon {
+  height: 70px;
+  width:auto;
+}
+
+.space-dog {
+  border-radius: 50%;
+  -webkit-transition: -webkit-transform 5s ease-in-out;
+  transition:         transform 5s ease-in-out;
+}
+
+.space-dog:hover {
+  outline: dotted 4px blueviolet;
+}
+
+.rotateC0 {
+  -webkit-transform: rotate(6deg);
+}
+
+.rotateC1 {
+  -webkit-transform: rotate(2deg);
+}
+
+.rotateCC0 {
+  -webkit-transform: rotate(-4deg);
+}
+
+.rotateCC0 {
+  -webkit-transform: rotate(-7deg);
+}
+
+.tooltip {
+  position: absolute;
+  font-size: 1.3rem;
+  font-weight: 600;
+  color: white;
+  background-color: blueviolet;
+}
