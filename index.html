@@ -1,0 +1,50 @@
+<!--EXAMPLE FROM PROGRAMMING 3 ASSIGNMENT-->
+
+
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>HORRORSCOPES</title>
+    <link rel="stylesheet" href="css/style.css">
+  </head>
+  <body>
+
+    <div class="row">
+      <div class="col">
+        <h1>HORRORSCOPES</h1>
+        <h3>An interactive visualization serial killers by their astrological signs!</h3>
+        <button id="fate-toggle">Show Fate</button>
+        <button id="float-toggle">Float Off</button>
+      </div>
+
+    </div>
+<!--
+    <div id="visRow">
+      <svg id="task2a"></svg>
+    </div>
+-->
+
+    <div class="row">
+      <div>
+        <label for="year-slider">Year</label>
+        <input type="range" id="year-slider" name="year-slider" value="1991" min="1991" max="2019" step="1">
+        <span id="year-selection">1991</span>
+      </div>
+
+      <button id="play-button">Play</button>
+    </div>
+
+    <div>
+      <svg id="map"></svg>
+    </div>
+
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://d3js.org/topojson.v3.min.js"></script>
+    <script src="https://d3js.org/d3.v5.min.js"></script>
+    <script src="js/dogHouse.js"></script>
+    <script src="js/task2.js"></script>
+    <script src="js/choroplethMap.js"></script>
+    <script src="js/task1.js"></script>
+  </body>
+</html>
