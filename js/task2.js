@@ -62,6 +62,7 @@ Promise.all([
 ]).then(files => {
   serialKillersData = files[0];
 
+
   // format signs dates to correct format
   formatAstrologyDates();
 
@@ -69,6 +70,12 @@ Promise.all([
   serialKillersData.forEach(d => {
       birthday = formatTime(new Date(d.Birthday));
       signs = Object.keys(astrologySignsData);
+
+      killerTypesString = d.Type;
+      d.Type = killerTypesString.split(", ");
+
+      killerNicknameString = d.Nickname;
+      d.Nickname = killerNicknameString.split(", ");
 
       //match serial killer with sign based on birthday
       //if birthday exists
