@@ -90,10 +90,14 @@ class ZodiacCycle {
 
     if (vis.data) {
 
-      //        const links = data.links.map(d => Object.create(d));
       //  const nodes = data.nodes.map(d => Object.create(d));
-
-      const keys = d3.keys(vis.data);
+      
+      // We don't need Unknown in this vis
+      if ("Unknown" in vis.data) {
+        delete vis.data["Unknown"];
+//        delete vis.data.Unknown;
+      }
+      
       const nodes = d3.entries(vis.data);
 
       //      const nodes = Object.keys(vis.data);
@@ -108,12 +112,13 @@ class ZodiacCycle {
       //        }
       //      });
 
+            //        const links = data.links.map(d => Object.create(d));
+
+      
       let links = [];
 
       nodes.forEach(d => {
-        if (d.key != "Unknown") {
           links.push({source: "root", target: d.key});
-        }
       });
       nodes.push({key:"root", value:[]});
 
@@ -143,14 +148,31 @@ class ZodiacCycle {
       console.log("NODES: " + nodes.length);
       //      console.log("NODES: " + vis.data.length);
 
+
+      //      let force = d3.layout.force()
+      //    .gravity(0.05)
+      //    .distance(100)
+      //    .charge(-100)
+      //    .size([vis.config.containerWidth/2, vis.config.containerHeight/2]);
+      //      
+
       const simulation = d3.forceSimulation(nodes)
       //            .force("link", d3.forceLink(links).id(d => d.id))
-//      .force("link", d3.forceLink().links(links))
-            .force("link", d3.forceLink(links).id(d => {
-//              console.log("FORCE LINK: " + d.key);
-              return d.key}))
-      .force("charge", d3.forceManyBody())
-      .force("center", d3.forceCenter(vis.containerWidth / 2, vis.containerHeight / 2));
+      //      .force("link", d3.forceLink().links(links))
+      .force("link", d3.forceLink(links).id(d =>d.key)
+             //                  .distance(vis.config.containerWidth/4)
+             .distance(200)
+//             .strength(0.5)
+//             .gravity(0.05)
+             //                   .charge(-100)
+             //                  .distance(200)
+            )
+      //      .force("charge", d3.forceManyBody())
+      .force("charge", d3.forceManyBody().strength(-800))
+//      .force("gravity", d3.forceManyBody())
+//      .force("distance", 200)
+      //      .force("strength", -100)
+      .force("center", d3.forceCenter(vis.config.containerWidth / 2, vis.config.containerHeight / 2));
 
       const link = vis.svg.append("g")
       .attr("stroke", "#FF0000")
@@ -183,39 +205,32 @@ class ZodiacCycle {
       //      .attr("cx", vis.config.containerWidth/2)
       //      .attr("cy",  vis.config.containerHeight/2)
       //      .attr("fill", color)
-      //      .call(drag(simulation))
+            .call(vis.drag(simulation))
       ;
 
-      node.append("title")
-      //       node.append("p")
-        .text(d => d.key);
-
-      //        simulation.on("tick", () => {
-      //    link
-      //        .attr("x1", d => d.source.x)
-      //        .attr("y1", d => d.source.y)
-      //        .attr("x2", d => d.target.x)
-      //        .attr("y2", d => d.target.y);
-      //
-      //    node
-      //        .attr("cx", d => d.x)
-      //        .attr("cy", d => d.y);
-      //  });
+      //      node.append("title")
+      //      //       node.append("p")
+      //        .text(d => d.key);
 
       simulation.on("tick", () => {
-        //    link
-        //        .attr("x1", d => d.source.x)
-        //        .attr("y1", d => d.source.y)
-        //        .attr("x2", d => d.target.x)
-        //        .attr("y2", d => d.target.y);
+        link
+          .attr("x1", d => d.source.x)
+          .attr("y1", d => d.source.y)
+          .attr("x2", d => d.target.x)
+          .attr("y2", d => d.target.y);
 
-//        node
-//          .attr("cx", d => d.x)
-//          .attr("cy", d => d.y);
+        node
+          .attr("cx", d => d.x)
+          .attr("cy", d => d.y);
       });
 
+  
+      ////          .attr("cx", d => d.x)
+      ////          .attr("cy", d => d.y);
+      //      });
+
       //        invalidation.then(() => simulation.stop());
-      return vis.svg.node();
+      //      return vis.svg.node();
 
       vis.render();
     }
