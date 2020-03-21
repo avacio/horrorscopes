@@ -46,89 +46,12 @@
       <svg id="task2a"></svg>
     </div>
 
-    <h2>Summary</h2>
-    <p>Reasoning:</p>
-    <ul><li>Did the dogs even have a choice?</li><ul><li>Did they want to risk their dog-day lives for space?</li>
-      </ul>
-      <li>It makes me sad to think about all of these dogs being sacrificed for the 'advancement of science' so I wanted to make a visualization where all these dogs could play together peacefully.</li>
-      <li>I tried to make a "floating animation" where these space dogs could all just be chilling in space.</li>
-      <ul><li>For the nauseous, you can turn off the animation by pressing the 'FLOAT ON/OFF' button.</li></ul>
-      <li>To see the actual fates of all these beautiful dogs, please click the 'SHOW FATE' button.</li>
-      <li>You can hover over the dogs to get a tooltip with their names and their flights, and any notes.</li>
-    </ul>
-    <p>Attributes:</p>
-    <ul><li><b>Dog gender</b> ==> COLOR of space outfit</li>
-      <li><b>Number of flights (space missions!) a dog embarked on</b> ==> SIZE of dog</li>
-      <li><b>Fate (did the dog survive all the flights or not)</b> ==> angel ICON with halo and wings if they died in action</li>
-    </ul>
-    <p>Questions to answer:</p>
-    <ul>
-      <li>Which dogs were most likely to survive?</li>
-      <ul><li>Male or female?</li>
-      </ul>
-      <li>Average flight number?</li>
-      <li>Just how many dogs were sacrificed for space travel missions??</li>
-    </ul>
-    <p>Future Improvements:</p>
-    <ul><li>Make the dog you hover over stay still (not rotate), to improve readability and avoid having to chase the dog down with your cursor</li></ul>
-
-    <br><br>
-    <h2>Process</h2>
-    While not necessary to display, I have found it extremely conducive to my own learning process to document the process of how I got to this point!
-
-    <p>Initial Brainstorming:</p>
-    <ul>
-      <li>Small multiples like the <a href="http://sxywu.com/filmflowers/">film flowers</a> example</li>
-      <ul><li>Could be dog collar designs!!</li></ul>
-      <li>Attributes to use:</li>
-      <ul><li>Name (English)</li>
-        <ul><li>Maybe only as a tooltip</li></ul>
-        <li>Gender</li>
-        <ul><li>Color or collar shape</li></ul>
-        <li>Flights</li>
-        <ul><li>Outline of dogtag?</li>
-          <li>Could be number of sides to the dogtag (i.e. circle = no flights, and hexagon = 6 flights)</li>
-        </ul>
-        <li>Fate</li>
-        <ul><li>Died or survived</li>
-          <ul><li>Spatial regions? Pet cemetery</li>
-            <li>Skeleton/ghost icon</li>
-          </ul>
-          <li>Linked view of time of death</li>
-        </ul>
-      </ul>
-      <li>Possible interactions and animations:</li>
-      <ul><li>Select dog collars in the doghouse to show those dogs in the race...</li>
-        <li>Dog race/relay with the collars</li>
-        <ul><li>Survivors make it past the finish line in the animation...</li></ul>
-        <li>Add notes to tooltip as well</li></ul>
-    </ul>
-
-    <p>Iterations:</p>
-    <image src="src/process/collar-sketch.png" width="600px"></image><ul>
-    <li>Initially I thought I would only make a "doghouse" with different collar types.</li>
-    <li>Collar color denotes gender, while the dog tag shape itself would denote the quantiative value of number of flights</li>
-    <li>With this design, I planned to have a linked view of a "dog race" of sorts...</li></ul>
-    <image src="src/process/race-sketch.png" width="600px"></image>
-    <ul><li>Using dates of the flights and survival status it would be reminiscent of dog races.</li>
-      <li>I was not altogether comfortable with this design though, because it implies that there are 'winner' and 'loser' dogs, when in reality they are all winners. :) </li>
-      <li>The x-scale of time is also misleading because intuitively it tells readers that the younger dogs (embarking on later flights) are 'faster' when this is not the case at all.</li>
-      <li>Either way, I thought I'd prototype this to see if it was feasible.</li>
-    </ul>
-    <image src="src/process/number%20of%20trups%20by%20circle%20radius.png" width="600px"></image>
-    <br>
-    <image src="src/process/possible-linked-views.png" width="1000px"></image>
-    <ul><li>I found some incredibly cute pictures of dog collars, and played with the idea of dog tag size representing the number of flights</li>
-      <li>Then I tried to whip up a linked view, but something felt off...</li>
-      <li>The way I was showing the missions/sacrifices of these dogs as 'races' felt dehumanizing (or de-canine-izing) and I didn't like it.</li>
-      <li>That's where I ended up with my current version where the dogs are just chilling, floating in space!</li>
-      <li>They don't even have to be dead or alive, and the "Show Fate" button can be toggled as to viewer preference</li>
-    </ul>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
     <script src="https://d3js.org/topojson.v3.min.js"></script>
     <script src="https://d3js.org/d3.v5.min.js"></script>
-    <script src="js/dogHouse.js"></script>
-    <script src="js/task2.js"></script>
+<!--    TODO COMMENTED OUT-->
+<!--    <script src="js/dogHouse.js"></script>-->
+<!--    <script src="js/task2.js"></script>-->
   </body>
 </html>

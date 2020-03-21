@@ -48,6 +48,10 @@ p {
   background-color: black;
 }
 
+#vis-cycle {
+  background-color: black;
+}
+
 .tick {
   color: white;
 }
@@ -123,10 +127,35 @@ p {
   -webkit-transform: rotate(-7deg);
 }
 
+.monthArc {
+  fill: white;
+  stroke: #AAAAAA;
+}
+
+.monthText {
+  fill: #6B6B6B;
+  font-size: 13px;
+  font-family: 'Courgette', sans-serif;
+}
+
 .tooltip {
   position: absolute;
   font-size: 1.3rem;
   font-weight: 600;
   color: white;
   background-color: blueviolet;
+}
+
+circle {
+     border:1px solid red;
+  fill-opacity: 0;
+/*  outline-color: white;*/
+}
+
+title {
+  color: aqua;
+    font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
+  margin: 0px;
+    fill: #6B6B6B;
+  font-size: 13px;
 }

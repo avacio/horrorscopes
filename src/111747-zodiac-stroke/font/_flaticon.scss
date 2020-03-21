@@ -1,0 +1,63 @@
+    /*
+    Flaticon icon font: Flaticon
+    Creation date: 22/06/2016 15:23
+    */
+
+    @font-face {
+  font-family: "Flaticon";
+  src: url("./Flaticon.eot");
+  src: url("./Flaticon.eot?#iefix") format("embedded-opentype"),
+       url("./Flaticon.woff") format("woff"),
+       url("./Flaticon.ttf") format("truetype"),
+       url("./Flaticon.svg#Flaticon") format("svg");
+  font-weight: normal;
+  font-style: normal;
+}
+
+@media screen and (-webkit-min-device-pixel-ratio:0) {
+  @font-face {
+    font-family: "Flaticon";
+    src: url("./Flaticon.svg#Flaticon") format("svg");
+  }
+}
+
+    .fi:before{
+        display: inline-block;
+  font-family: "Flaticon";
+  font-style: normal;
+  font-weight: normal;
+  font-variant: normal;
+  line-height: 1;
+  text-decoration: inherit;
+  text-rendering: optimizeLegibility;
+  text-transform: none;
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-font-smoothing: antialiased;
+  font-smoothing: antialiased;
+    }
+
+    .flaticon-aquarius:before { content: "\f100"; }
+.flaticon-aries:before { content: "\f101"; }
+.flaticon-cancer:before { content: "\f102"; }
+.flaticon-capricorn:before { content: "\f103"; }
+.flaticon-gemini:before { content: "\f104"; }
+.flaticon-leo:before { content: "\f105"; }
+.flaticon-libra:before { content: "\f106"; }
+.flaticon-pisces:before { content: "\f107"; }
+.flaticon-sagitarius:before { content: "\f108"; }
+.flaticon-scorpio:before { content: "\f109"; }
+.flaticon-taurus:before { content: "\f10a"; }
+.flaticon-virgo:before { content: "\f10b"; }
+    
+    $font-Flaticon-aquarius: "\f100";
+    $font-Flaticon-aries: "\f101";
+    $font-Flaticon-cancer: "\f102";
+    $font-Flaticon-capricorn: "\f103";
+    $font-Flaticon-gemini: "\f104";
+    $font-Flaticon-leo: "\f105";
+    $font-Flaticon-libra: "\f106";
+    $font-Flaticon-pisces: "\f107";
+    $font-Flaticon-sagitarius: "\f108";
+    $font-Flaticon-scorpio: "\f109";
+    $font-Flaticon-taurus: "\f10a";
+    $font-Flaticon-virgo: "\f10b";

@@ -1,0 +1,43 @@
+	/*
+  	Flaticon icon font: Flaticon
+  	Creation date: 22/06/2016 15:23
+  	*/
+
+@font-face {
+  font-family: "Flaticon";
+  src: url("./Flaticon.eot");
+  src: url("./Flaticon.eot?#iefix") format("embedded-opentype"),
+       url("./Flaticon.woff") format("woff"),
+       url("./Flaticon.ttf") format("truetype"),
+       url("./Flaticon.svg#Flaticon") format("svg");
+  font-weight: normal;
+  font-style: normal;
+}
+
+@media screen and (-webkit-min-device-pixel-ratio:0) {
+  @font-face {
+    font-family: "Flaticon";
+    src: url("./Flaticon.svg#Flaticon") format("svg");
+  }
+}
+
+[class^="flaticon-"]:before, [class*=" flaticon-"]:before,
+[class^="flaticon-"]:after, [class*=" flaticon-"]:after {   
+  font-family: Flaticon;
+        font-size: 20px;
+font-style: normal;
+margin-left: 20px;
+}
+
+.flaticon-aquarius:before { content: "\f100"; }
+.flaticon-aries:before { content: "\f101"; }
+.flaticon-cancer:before { content: "\f102"; }
+.flaticon-capricorn:before { content: "\f103"; }
+.flaticon-gemini:before { content: "\f104"; }
+.flaticon-leo:before { content: "\f105"; }
+.flaticon-libra:before { content: "\f106"; }
+.flaticon-pisces:before { content: "\f107"; }
+.flaticon-sagitarius:before { content: "\f108"; }
+.flaticon-scorpio:before { content: "\f109"; }
+.flaticon-taurus:before { content: "\f10a"; }
+.flaticon-virgo:before { content: "\f10b"; }
