@@ -33,7 +33,7 @@ const signsElementsDict = {
   "Capricorn": "earth"
 }
 
-
+// CONSTANTS FOR DATA MAPPINGS TO BE LOADED HERE
 let signsAndSerialKillers = {
   "Aquarius": [],
   "Pisces": [],
@@ -50,6 +50,9 @@ let signsAndSerialKillers = {
   "Unknown": []
 }
 
+let signsAndKills = {};
+
+// external functions to load or parse data correctly
 function formatAstrologyDates(){
 
   signs = Object.keys(astrologySignsData);
@@ -68,6 +71,28 @@ function formatAstrologyDates(){
   })
 };
 
+function loadSignsAndKills(signsAndSerialKillers)
+{
+  signsAndUnknown = Object.keys(signsAndSerialKillers);
+
+  signsAndUnknown.forEach(sign => {
+    let serialKillers = signsAndSerialKillers[sign];
+    let totalConfirmedKillsPerSign = 0;
+    let totalPossibleKillsPerSign = 0;
+
+    serialKillers.forEach(killer =>{
+      totalConfirmedKillsPerSign += killer['ProvenVictims'];
+      totalPossibleKillsPerSign += killer['PossibleVictims'];
+    })
+
+    signsAndKills[sign] = {
+        'total confirmed kills': totalConfirmedKillsPerSign,
+        'total possible kills': totalPossibleKillsPerSign
+    }
+
+  })
+}
+
 // Load data
 Promise.all([
   d3.csv('data/collective-serial-killer-database.csv')
@@ -77,15 +102,20 @@ Promise.all([
   // format signs dates to correct format
   formatAstrologyDates();
 
+  // assign each serial killer to their correct zodiac sign
   serialKillersData.forEach(d => {
     birthday = formatTime(new Date(d.Birthday));
     signs = Object.keys(astrologySignsData);
+
 
     killerTypesString = d.Type;
     d.Type = killerTypesString.split(", ");
 
     killerNicknameString = d.Nickname;
     d.Nickname = killerNicknameString.split(", ");
+
+    d.ProvenVictims = +d.ProvenVictims;
+    d.PossibleVictims = +d.PossibleVictims;
 
     //match serial killer with sign based on birthday
     //if birthday exists
@@ -109,6 +139,11 @@ Promise.all([
     }
   });
 
+  // assign the total number of confirmed kills +
+  // total number of possible kills to each zodiac sign
+  // ie loads signsAndKills map
+  loadSignsAndKills(signsAndSerialKillers);
+
   zodiacCycle.data = signsAndSerialKillers;
   zodiacCycle.elements = elements;
   zodiacCycle.signsElementsDict = signsElementsDict;
@@ -116,7 +151,6 @@ Promise.all([
 
 });
 
-console.log(signsAndSerialKillers);
 
 
 ///////////////////////
