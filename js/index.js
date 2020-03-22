@@ -1,4 +1,4 @@
-let zodiacCycle = new ZodiacCycle({ parentElement: '#vis-cycle' });
+let zodiacCycle = new ZodiacCycle({ parentElement: '#vis-nodes' });
 let formatTime = d3.timeFormat("%m/%d");
 
 let astrologySignsData= {
@@ -15,6 +15,24 @@ let astrologySignsData= {
   "Sagittarius": d3.timeDay.range(new Date(0000, 10, 22), new Date(0000, 11, 21), 1),
   "Capricorn": d3.timeDay.range(new Date(0000, 11, 22), new Date(0001, 0, 20), 1)
 }
+
+const elements = ["fire", "earth", "air", "water"];
+//TODO move somewhere else? try modules or static class again?
+const signsElementsDict = {
+  "Aquarius": "air",
+  "Pisces": "water",
+  "Aries": "fire",
+  "Taurus": "earth",
+  "Gemini": "air",
+  "Cancer": "water",
+  "Leo": "fire",
+  "Virgo": "earth",
+  "Libra": "air",
+  "Scorpio": "water",
+  "Sagittarius": "fire",
+  "Capricorn": "earth"
+}
+
 
 let signsAndSerialKillers = {
   "Aquarius": [],
@@ -89,52 +107,52 @@ Promise.all([
     } else {
       signsAndSerialKillers["Unknown"].push(d);
     }
-
   });
-  
+
   zodiacCycle.data = signsAndSerialKillers;
+  zodiacCycle.elements = elements;
+  zodiacCycle.signsElementsDict = signsElementsDict;
   zodiacCycle.update();
-  
+
 });
 
 console.log(signsAndSerialKillers);
-//const keys = Object.entries(signsAndSerialKillers);
-//const keys = Object.keys(signsAndSerialKillers);
-//console.log("KEYS LENGTH: " + keys.length);
 
+
+///////////////////////
 // INTERACTIVE ELEMENTS
 
-$("#fate-toggle").on("click", function() {
-  showFate = $(this).text() == "Show Fate";
+$("#view-toggle").on("click", function() {
+  isCyclicView = $(this).text() == "Cyclic View";
 
-  //  dogHouse.showFate = showFate;
-  //  dogHouse.update();
-
-  // Update button label
-  $(this)[0].innerHTML = (showFate ? "Hide Fate" : "Show Fate");
-});
-
-var interval;
-$("#float-toggle").on("click", function() {
-  floatOn = $(this).text() == "Float On";
+  zodiacCycle.isCyclicView = !isCyclicView;
+  zodiacCycle.update();
 
   // Update button label
-  $(this)[0].innerHTML = (floatOn ? "Float Off" : "Float On");
-
-  // Toggle float
-  //  dogHouse.floatOn = !floatOn;
-  //
-  //  if (!floatOn) {
-  //    interval = setInterval(() => {
-  //      dogHouse.floatOn = !dogHouse.floatOn
-  //      dogHouse.update();
-  //    }, 2000);
-  //  } else {
-  //    clearInterval(interval);
-  //  }
-  //
-  //  dogHouse.update();
+  $(this)[0].innerHTML = (isCyclicView ? "Element Group View" : "Cyclic View");
 });
+//
+//var interval;
+//$("#float-toggle").on("click", function() {
+//  floatOn = $(this).text() == "Float On";
+//
+//  // Update button label
+//  $(this)[0].innerHTML = (floatOn ? "Float Off" : "Float On");
+//
+//  // Toggle float
+//  //  dogHouse.floatOn = !floatOn;
+//  //
+//  //  if (!floatOn) {
+//  //    interval = setInterval(() => {
+//  //      dogHouse.floatOn = !dogHouse.floatOn
+//  //      dogHouse.update();
+//  //    }, 2000);
+//  //  } else {
+//  //    clearInterval(interval);
+//  //  }
+//  //
+//  //  dogHouse.update();
+//});
 
 // Float on start
 //$("#float-toggle").click();

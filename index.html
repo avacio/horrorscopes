@@ -10,13 +10,35 @@
       <div class="col">
         <h1>HORRORSCOPES</h1>
         <h3>An interactive visualization serial killers by their astrological signs!</h3>
-        <button id="fate-toggle">Show Fate</button>
-        <button id="float-toggle">Float Off</button>
+        <button id="view-toggle">Cyclic View</button>
       </div>
 
+
     </div>
-    <div id="visRow">
-      <svg id="vis-cycle"></svg>
+    <div id="vis-row" class="row">  
+      <svg id="vis-nodes"></svg>
+
+      <div id="vis-nodes-legend">
+        <b>LEGEND</b>
+        <div id="legend-elements">
+          <span class="fire row">
+            <span class="legend-node fire-bg"></span>
+            &nbsp;&nbsp;fire
+          </span>
+          <span class="earth row">
+            <span class="legend-node earth-bg"></span>
+            &nbsp;&nbsp;earth
+          </span>
+          <span class="air row">
+            <span class="legend-node air-bg"></span>
+            &nbsp;&nbsp;air
+          </span>
+          <span class="water row">
+            <span class="legend-node water-bg"></span>
+            &nbsp;&nbsp;water
+          </span>
+        </div>
+      </div>
     </div>
 
     <div class="row">
@@ -44,8 +66,10 @@
     <script src="https://d3js.org/topojson.v3.min.js"></script>
     <script src="https://d3js.org/d3.v5.min.js"></script>
     <script src="js/zodiacCycle.js"></script>
+<!--    <script type="module" src="js/zodiacCycle.js"></script>-->
+<!--    <script type="module" src="js/index.js"></script>-->
     <script src="js/index.js"></script>
-<!--    <script src="js/choroplethMap.js"></script>-->
-<!--    <script src="js/task1.js"></script>-->
+    <!--    <script src="js/choroplethMap.js"></script>-->
+    <!--    <script src="js/task1.js"></script>-->
   </body>
 </html>

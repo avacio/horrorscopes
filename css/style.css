@@ -48,8 +48,10 @@ p {
   background-color: black;
 }
 
-#vis-cycle {
-  background-color: black;
+#vis-nodes {
+/*  background-color: aqua;*/
+/*    background-color: black;*/
+    background-color: gray;
 }
 
 .tick {
@@ -80,6 +82,30 @@ p {
   text-align: right;
   line-height: 50px;
   padding: 0 0 20px 20px;
+}
+
+#vis-nodes-legend {
+  font-size: 1.5rem;
+  font-weight: 300;
+  background-color:black; 
+/*  outline: solid 10px blue;*/
+  color: white;
+  display: block;
+/*  text-align: right;*/
+/*  line-height: 50px;*/
+/*  padding: 0 0 20px 20px;*/
+  padding: 20px;
+}
+
+.legend-node {
+  height: 25px;
+  width: 25px;
+  border-radius: 50%;
+  display: inline-block;
+}
+
+.legend-node > html {
+  margin-left: 50px;
 }
 
 .l-label {
@@ -146,16 +172,66 @@ p {
   background-color: blueviolet;
 }
 
-circle {
-     border:1px solid red;
-  fill-opacity: 0;
-/*  outline-color: white;*/
+.node {
+/*
+  stroke: #fff;
+  stroke-width: 1.5;
+*/
+/*  color: aliceblue;*/
+/*  fill: #ff0000;*/
+}
+
+.link {
+  stroke: white;
+  stroke-opacity: 0.3;
+  stroke-width: 4px;
 }
 
 title {
   color: aqua;
-    font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
+  font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
   margin: 0px;
-    fill: #6B6B6B;
+  fill: #6B6B6B;
   font-size: 13px;
 }
+
+.fire {
+  fill: #EF7C7A;
+  color: #EF7C7A;
+/*  background-color: #EF7C7A;*/
+}
+
+.fire-bg {
+  background-color: #EF7C7A;
+}
+
+.earth {
+  fill: #8AAA46;
+  color: #8AAA46;
+/*  background-color: #8AAA46;*/
+}
+
+.earth-bg {
+  background-color: #8AAA46;
+}
+
+.air {
+  fill: #F7E967;
+  color: #F7E967;
+/*  background-color: #F7E967;*/
+}
+
+.air-bg {
+  background-color: #F7E967;
+}
+
+.water {
+  fill: #70B7BA;
+  color: #70B7BA;
+/*  background-color: #70B7BA;*/
+}
+
+.water-bg {
+  background-color: #70B7BA;
+}
+

@@ -1,5 +1,14 @@
-class ZodiacCycle {
+//import * as Util from './util';
+//  include signsElementsDict from './util.js';
+//"use strict";
+//Object.defineProperty(exports, "__esModule", { value: true });
+//
+//const Util = require("./util");
 
+//export default ZodiacCycle {
+class ZodiacCycle {
+  //import {signsElementsDict} from './util.js';
+  //include {signsElementsDict}
   constructor(_config) {
     this.config = {
       parentElement: _config.parentElement,
@@ -7,7 +16,10 @@ class ZodiacCycle {
       containerHeight: _config.containerHeight || 600,
     }
 
+
     this.data = _config.data;
+    this.Util = _config.Util;
+    this.isCyclicView = _config.isCyclicView || true;
 
     console.log("Init ZodiacCycle View");
 
@@ -18,17 +30,15 @@ class ZodiacCycle {
   initVis() {
     let vis = this;
 
-    //    vis.force = d3.layout.force(); 
-
     vis.svg = d3.select(vis.config.parentElement)
       .attr('width', vis.config.containerWidth)
-      .attr('height', vis.config.containerHeight)
-    //      .attr("transform", "translate(" + ( vis.config.containerWidth / 2) + "," + ( vis.config.containerHeight / 2) + ")")
-    ;
-
-    //          .attr("transform", "translate(" + ( vis.config.containerWidth / 2 + margin.left) + "," + ( vis.config.containerHeight / 2 + margin.top) + ")");
+      .attr('height', vis.config.containerHeight);
 
     vis.chart = vis.svg.append('g');
+    vis.links = vis.chart.append("g")
+      .attr("class", "link");
+    vis.nodes = vis.chart.append("g")
+      .attr("class", "node");
 
 
     vis.tooltip = d3.select('#visRow').append("div")
@@ -37,6 +47,10 @@ class ZodiacCycle {
       .attr('height', 100)
       .style('opacity', .0);
 
+
+    vis.iconPath = (vis.data, d => {
+      return "src/zodiac-icons/" + d.key.toLowerCase() + ".png";
+    });
     //      node.append("title")
     //      .text(d => d.id);
 
@@ -60,152 +74,134 @@ class ZodiacCycle {
     //    .attr("startOffset", "50%")
     //    .text("Yay, my text is on a wavy path");
 
-    ///////////////////////////////
-    //Append the month names to each slice
-    //    vis.svg.selectAll(".monthText")
-    //      .data(vis.data)
-    //    //    .enter()
-    //      .join('text')
-    //    //  .append("text")
-    //      .attr("class", "monthText")
-    //      .append("textPath")
-    //      .attr("xlink:href",function(d,i){return "#monthArc_"+i;})
-    //      .text(function(d){return d.month;});
   }
 
   update() {
     let vis = this;
+    //    vis.isCyclicView = true;
+    //    TODO
 
-    // If show-fate button is pressed, then sprites will change to show the dogs who died in action
-    //    if (vis.showFate) {
-    //      vis.imagePath = (vis.data, d => {
-    //        let path = 'src/space-dog';
-    //        path += (d.Gender == 'Female' ? '-yellow' : '-pink');
-    //        path += (d.Fate.includes('Died') ? '-angel.png' : '.png');
-    //        return path;
-    //      });
-    //    } else {
-    //      vis.imagePath = (vis.data, d => (d.Gender == "Female" ? 'src/space-dog-yellow.png' : 'src/space-dog-pink.png'));
-    //    }
 
     if (vis.data) {
 
+
       //  const nodes = data.nodes.map(d => Object.create(d));
-      
+
       // We don't need Unknown in this vis
       if ("Unknown" in vis.data) {
         delete vis.data["Unknown"];
-//        delete vis.data.Unknown;
       }
-      
+
       const nodes = d3.entries(vis.data);
 
       //      const nodes = Object.keys(vis.data);
       const entries = Object.entries(vis.data);
 
-      //              return d.value.length })
-      //console.log(keys)
-      //      const links = nodes.map(d => { 
-      //                console.log("d: " + d.key);
-      //        if (d.key != "Unknown") {
-      //          return Object.create({source: "root", target: d.key});
-      //        }
-      //      });
+      vis.sizeScale = d3.scaleSqrt()
+        .domain(d3.extent(nodes, d => d.value.length))
+        .range([15, 60])
+        .nice();
 
-            //        const links = data.links.map(d => Object.create(d));
 
-      
+      console.log("EXTENT: " + d3.extent(nodes, d => d.value.length));
+
+
       let links = [];
+      //      let filter;
+      const filter = (vis.data, d => {
+        return d.key != "root" && 
+          !vis.elements.includes(d.key)});
 
-      nodes.forEach(d => {
+      if (vis.isCyclicView) {
+        nodes.forEach(d => {
           links.push({source: "root", target: d.key});
-      });
+        });
+      } else {
+        nodes.forEach(d => {
+          links.push({source: vis.signsElementsDict[d.key], target: d.key});
+        });
+
+        vis.elements.forEach(d => {
+          nodes.push({key:d, value:[]});
+          links.push({source: "root", target: d});
+        });
+        //      filter = (vis.data, d => {
+        //        return d.key != "root" && 
+        //          !vis.elements.includes(d.key)});
+        //          return "src/zodiac-icons/" + d.key.toLowerCase() + ".png";
+      }
+
       nodes.push({key:"root", value:[]});
-
-
-      console.log("links: " + links.length);
-      console.log("links: " + links);
 
       links.forEach(d => {
         console.log(d);
       })
-      //      const keys = Object.keys(vis.data);
 
-      //      vis.numFlights = (vis.data, d => {return d.Flights ? d.Flights.split(',').length : 0});
-      //
-      //      vis.sizeScale = d3.scaleSqrt()
-      //        .domain(d3.extent(vis.data, d => vis.numFlights(d)))
-      //        .range([60, 200])
-      //        .nice();
-
-      //      const links = data.links.map(d => Object.create(d));
-      //      const nodes = vis.data.map(d => Object.create(d));
-
-      //      const nodes = keys.map(d => Object.create(d));
-      //      nodes.push({key:"root", value:[]});
       console.log("nodes: " + nodes);
-      //      
       console.log("NODES: " + nodes.length);
-      //      console.log("NODES: " + vis.data.length);
 
+      let simulation;
+      if (vis.isCyclicView) {
+        //      const simulation = d3.forceSimulation(nodes)
+        simulation = d3.forceSimulation(nodes)
+          .force("link", d3.forceLink(links).id(d =>d.key)
+                 //                  .distance(vis.config.containerWidth/4)
+                 .distance(200)
+                )
+        //      .force("charge", strength(-800))
+          .force("charge", d3.forceManyBody().strength(-800))
+        //      .force("charge").strength(-800))
+          .force("collide", d3.forceCollide().strength(2))
+          .force("center", d3.forceCenter(vis.config.containerWidth / 2, vis.config.containerHeight / 2));
+      } else {
+        simulation = d3.forceSimulation(nodes)
+          .force("link", d3.forceLink(links).id(d =>d.key)
+                 //                  .distance(vis.config.containerWidth/4)
+                 .distance(d => 90)
+                 //             .distance(d => filter(d) ? 90 :1)
+                )
+          .force("charge", d3.forceManyBody().strength(-1000))
+          .force("collide", d3.forceCollide().strength(2))
 
-      //      let force = d3.layout.force()
-      //    .gravity(0.05)
-      //    .distance(100)
-      //    .charge(-100)
-      //    .size([vis.config.containerWidth/2, vis.config.containerHeight/2]);
-      //      
+          .force("center", d3.forceCenter(vis.config.containerWidth / 2, vis.config.containerHeight / 2))
+          .force("forceX", d3.forceX().strength(0.05).x(vis.config.containerWidth / 2))
+          .force("forceY", d3.forceY().strength(0.1).y(vis.config.containerHeight / 2))
+//          .force("forceY", d3.forceCenter(vis.config.containerWidth / 2, vis.config.containerHeight / 2))
+        ;
+      }
 
-      const simulation = d3.forceSimulation(nodes)
-      //            .force("link", d3.forceLink(links).id(d => d.id))
-      //      .force("link", d3.forceLink().links(links))
-      .force("link", d3.forceLink(links).id(d =>d.key)
-             //                  .distance(vis.config.containerWidth/4)
-             .distance(200)
-//             .strength(0.5)
-//             .gravity(0.05)
-             //                   .charge(-100)
-             //                  .distance(200)
-            )
-      //      .force("charge", d3.forceManyBody())
-      .force("charge", d3.forceManyBody().strength(-800))
-//      .force("gravity", d3.forceManyBody())
-//      .force("distance", 200)
-      //      .force("strength", -100)
-      .force("center", d3.forceCenter(vis.config.containerWidth / 2, vis.config.containerHeight / 2));
-
-      const link = vis.svg.append("g")
-      .attr("stroke", "#FF0000")
-      .attr("stroke-opacity", 0.6)
+      const link = vis.links
       .selectAll("line")
       .data(links)
       .join("line")
       //      .attr("stroke-width", d => Math.sqrt(d.value))
-      .attr("stroke-width", d => Math.sqrt(20))
+      //      .attr("stroke-width", d => Math.sqrt(20))
       ;
 
-      const node = vis.svg.append("g")
-      .attr("stroke", "#fff")
-      .attr("stroke-width", 1.5)
+      const node = vis.nodes
       .selectAll("circle")
-      .data(nodes)
-      //      .data(entries)
+      .data(nodes.filter(d => filter(d)))   
       .join("circle")
-      .attr("r", d => {
-        ////        console.log("d: " + d.value);
-        //        console.log("d.length: " + d.length);
-        ////        console.log("TEST: " + vis.data[d].length);
-        //        console.log("TEST: " + d.value.length);
-        return d.value.length })
-      //      .attr("r", d => d.length)
-      //      .attr("r", 20)
-      //      .attr("fill", "FF0000")
-      //      .attr("x", (d, i) => (i % 8) * 150 + 50)
-      //      .attr("y",  (d, i) => i * 22 + 50)
-      //      .attr("cx", vis.config.containerWidth/2)
-      //      .attr("cy",  vis.config.containerHeight/2)
-      //      .attr("fill", color)
-            .call(vis.drag(simulation))
+      .attr("class", d => vis.signsElementsDict[d.key])
+      .attr("r", d => 
+            vis.sizeScale(d.value.length)
+           )
+      .call(vis.drag(simulation))
+      ;
+
+
+      // icon image
+      //      const image = node.append("g")
+      //      const image = vis.chart.append('image')
+      const image = vis.chart.selectAll('image')
+      .attr("class", "node-icon")
+      .data(nodes.filter(d => filter(d)))   
+      .join("image")
+      .attr("xlink:href", d => vis.iconPath(d))
+      //      .attr("width", d => vis.sizeScale(d))
+      //      .attr("height", d => vis.sizeScale(d))
+      .attr("width", d => 50)
+      .attr("height", d => 50)
       ;
 
       //      node.append("title")
@@ -222,15 +218,12 @@ class ZodiacCycle {
         node
           .attr("cx", d => d.x)
           .attr("cy", d => d.y);
+        image
+          .attr("x", d => d.x)
+          .attr("y", d => d.y);
       });
 
-  
-      ////          .attr("cx", d => d.x)
-      ////          .attr("cy", d => d.y);
-      //      });
-
       //        invalidation.then(() => simulation.stop());
-      //      return vis.svg.node();
 
       vis.render();
     }
@@ -238,42 +231,6 @@ class ZodiacCycle {
 
   render() {
     let vis = this;
-
-    //     c = Math.min(width, height) / 2,
-    //      ro = Math.min(width, height) / 2 - (c * .3),
-    //      ri = Math.min(width, height) / 2 - (c * .6),
-    //      a = (Math.PI * 2) / data.length,
-    //      colors = d3.scale.category10();
-
-
-    //    // render space dogs
-    //    vis.chart.selectAll('image')
-    //      .data(vis.data)
-    //      .join('image')
-    //      .attr('class', 'space-dog')
-    //    // Rotation classes for "floating" animation
-    //      .classed('rotateC0', (d,i) => vis.floatOn && i % 5)
-    //      .classed('rotateC1', (d,i) => vis.floatOn && i % 7)
-    //      .classed('rotateCC0', (d,i) => vis.floatOn && i % 6)
-    //      .classed('rotateCC1', (d,i) => vis.floatOn && i % 4)
-    //      .transition()
-    //    // Get respective space dog sprite
-    //      .attr("xlink:href", d => vis.imagePath(d))
-    //      .attr("x", (d, i) => (i % 8) * 150 + 50)
-    //      .attr("y",  (d, i) => i * 22 + 50)
-    //    // Size of dog is based on the number of space missions they have been on
-    //      .attr("width", d => vis.sizeScale(vis.numFlights(d)))
-    //      .attr("height", d => vis.sizeScale(vis.numFlights(d)));
-
-
-    // Tooltip!
-    //    const tooltipMouseover = (d) => {
-    //      vis.tooltip.html(d["Name (English)"] + '<br>' + d["Flights"] + '<br>' +d["Notes"])
-    //        .style('left', (d3.event.pageX + 15) + "px")
-    //        .style('top', (d3.event.pageY - 28) + "px")
-    //        .transition()
-    //        .style('opacity', .9); // started as 0!
-    //    };
 
     const tooltipMouseout = (d) => {
       vis.tooltip.transition()
