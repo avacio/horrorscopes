@@ -41,11 +41,13 @@ class ZodiacCycle {
       .attr("class", "node");
 
 
-    vis.tooltip = d3.select('#visRow').append("div")
+    vis.tooltip = d3.select('#vis-row').append("div")
+    //    vis.tooltip = d3.select('body').append("div")
       .attr('class', 'tooltip')
       .attr('width', 70)
       .attr('height', 100)
-      .style('opacity', .0);
+    //      .style('opacity', .0);
+    ;
 
 
     vis.iconPath = (vis.data, d => {
@@ -78,9 +80,17 @@ class ZodiacCycle {
 
   update() {
     let vis = this;
-    //    vis.isCyclicView = true;
-    //    TODO
 
+
+
+    vis.render();
+
+  }
+
+  render() {
+    let vis = this;
+
+    // Update view
 
     if (vis.data) {
 
@@ -97,17 +107,27 @@ class ZodiacCycle {
       //      const nodes = Object.keys(vis.data);
       const entries = Object.entries(vis.data);
 
+      //      const 
+
       vis.sizeScale = d3.scaleSqrt()
-        .domain(d3.extent(nodes, d => d.value.length))
+      // LOCAL DOMAIN BASED ON SELECTED COUNT TYPE
+        .domain(d3.extent(nodes, d => d.value[vis.countType]))
+
+      // GLOBAL DOMAIN
+      //        .domain(
+      //         d3.extent([].concat(nodes.map(d => d.value.numKillers), nodes.map(d => d.value.numProven), nodes.map(d => d.value.numPossible)))
+      //      )
         .range([15, 60])
         .nice();
 
+      // local min and max based on count type
+      //      console.log("EXTENT: " + d3.extent(nodes, d => d.value[vis.countType]));
+      //global min and max
+      console.log("GLOBAL EXTENT: " + d3.extent([].concat(nodes.map(d => d.value.numKillers), nodes.map(d => d.value.numProven), nodes.map(d => d.value.numPossible))));
 
-      console.log("EXTENT: " + d3.extent(nodes, d => d.value.length));
 
 
       let links = [];
-      //      let filter;
       const filter = (vis.data, d => {
         return d.key != "root" && 
           !vis.elements.includes(d.key)});
@@ -133,11 +153,6 @@ class ZodiacCycle {
 
       nodes.push({key:"root", value:[]});
 
-      links.forEach(d => {
-        console.log(d);
-      })
-
-      console.log("nodes: " + nodes);
       console.log("NODES: " + nodes.length);
 
       let simulation;
@@ -158,7 +173,6 @@ class ZodiacCycle {
           .force("link", d3.forceLink(links).id(d =>d.key)
                  //                  .distance(vis.config.containerWidth/4)
                  .distance(d => 90)
-                 //             .distance(d => filter(d) ? 90 :1)
                 )
           .force("charge", d3.forceManyBody().strength(-1000))
           .force("collide", d3.forceCollide().strength(2))
@@ -166,7 +180,7 @@ class ZodiacCycle {
           .force("center", d3.forceCenter(vis.config.containerWidth / 2, vis.config.containerHeight / 2))
           .force("forceX", d3.forceX().strength(0.05).x(vis.config.containerWidth / 2))
           .force("forceY", d3.forceY().strength(0.1).y(vis.config.containerHeight / 2))
-//          .force("forceY", d3.forceCenter(vis.config.containerWidth / 2, vis.config.containerHeight / 2))
+        //          .force("forceY", d3.forceCenter(vis.config.containerWidth / 2, vis.config.containerHeight / 2))
         ;
       }
 
@@ -178,16 +192,17 @@ class ZodiacCycle {
       //      .attr("stroke-width", d => Math.sqrt(20))
       ;
 
-      const node = vis.nodes
-      .selectAll("circle")
-      .data(nodes.filter(d => filter(d)))   
-      .join("circle")
-      .attr("class", d => vis.signsElementsDict[d.key])
-      .attr("r", d => 
-            vis.sizeScale(d.value.length)
-           )
-      .call(vis.drag(simulation))
-      ;
+      //      const node = vis.nodes
+      //      .selectAll("circle")
+      //      .data(nodes.filter(d => filter(d)))   
+      //      .join("circle")
+      //      .attr("class", d => vis.signsElementsDict[d.key])
+      //      .attr("r", d => 
+      //            //            vis.sizeScale(d.value.length)
+      //            vis.sizeScale(d.value[vis.countType])
+      //           )
+      //      .call(vis.drag(simulation))
+      //      ;
 
 
       // icon image
@@ -223,26 +238,47 @@ class ZodiacCycle {
           .attr("y", d => d.y);
       });
 
-      //        invalidation.then(() => simulation.stop());
 
-      vis.render();
+
+      // Tooltip!
+      const tooltipMouseover = (d) => {
+                vis.tooltip.html(d.key)
+//        vis.tooltip.html("TEST")
+          .style('left', (d3.event.pageX + 15) + "px")
+          .style('top', (d3.event.pageY - 28) + "px")
+          .transition()
+          .style('opacity', .9); // started as 0!
+      };
+
+      const tooltipMouseout = (d) => {
+        vis.tooltip.transition()
+          .style('opacity', 0);
+      };
+      //
+      const node = vis.nodes
+      .selectAll("circle")
+      .data(nodes.filter(d => filter(d)))   
+      .join("circle")
+      .attr("class", d => vis.signsElementsDict[d.key])
+      .attr("r", d => 
+            //            vis.sizeScale(d.value.length)
+            vis.sizeScale(d.value[vis.countType])
+           )
+      .call(vis.drag(simulation))
+      .on('mouseover', d => tooltipMouseover(d))
+      .on('mouseout', d => tooltipMouseout(d));
+
+      ;
+
+      //      vis.nodes.selectAll('circle')
+      //        .data(vis.data)
+      //        .join('circle')
+      //        .on('mouseover', d => tooltipMouseover(d))
+      //        .on('mouseout', d => tooltipMouseout(d));
     }
   }
 
-  render() {
-    let vis = this;
 
-    const tooltipMouseout = (d) => {
-      vis.tooltip.transition()
-        .style('opacity', 0);
-    };
-
-    //    vis.chart.selectAll('.space-dog')
-    //      .data(vis.data)
-    //      .join('.space-dog')
-    //      .on('mouseover', d => tooltipMouseover(d))
-    //      .on('mouseout', d => tooltipMouseout(d));
-  }
 
   drag = simulation => {
 

@@ -86,11 +86,11 @@ function loadSignsAndKills(signsAndSerialKillers)
     })
 
     signsAndKills[sign] = {
-        'total confirmed kills': totalConfirmedKillsPerSign,
-        'total possible kills': totalPossibleKillsPerSign
+      'numKillers' : signsAndSerialKillers[sign].length,
+      'numProven': totalConfirmedKillsPerSign,
+      'numPossible': totalPossibleKillsPerSign
     }
-
-  })
+  });
 }
 
 // Load data
@@ -144,13 +144,16 @@ Promise.all([
   // ie loads signsAndKills map
   loadSignsAndKills(signsAndSerialKillers);
 
-  zodiacCycle.data = signsAndSerialKillers;
+  //  zodiacCycle.data = signsAndSerialKillers;
+  zodiacCycle.data = signsAndKills;
   zodiacCycle.elements = elements;
   zodiacCycle.signsElementsDict = signsElementsDict;
+  //  zodiacCycle.signsAndKills = signsAndKills;
   zodiacCycle.update();
 
 });
 
+console.log(signsAndKills);
 
 
 ///////////////////////
@@ -165,7 +168,34 @@ $("#view-toggle").on("click", function() {
   // Update button label
   $(this)[0].innerHTML = (isCyclicView ? "Element Group View" : "Cyclic View");
 });
-//
+
+const killCountOptions = ["Number of Killers", "Proven Kills", "Proven + Possible Kills"];
+
+const killCountVariableNameDict = {};
+killCountVariableNameDict[killCountOptions[0]] = "numKillers";
+killCountVariableNameDict[killCountOptions[1]] = "numProven";
+killCountVariableNameDict[killCountOptions[2]] = "numPossible";
+
+// add the options to the button
+d3.select("#kill-count-select")
+  .selectAll('myOptions')
+  .data(killCountOptions)
+  .enter()
+  .append('option')
+  .text(function (d) { return d; }) // text showed in the menu
+  .attr("value", function (d) { return d; }); // corresponding value returned by the button
+
+zodiacCycle.countType = killCountVariableNameDict[d3.select("#kill-count-select").property("value")];
+zodiacCycle.update();
+
+d3.select("#kill-count-select").on("change", function(d) {
+  // recover the option that has been chosen
+  var selectedOption = d3.select(this).property("value")
+
+  zodiacCycle.countType = killCountVariableNameDict[selectedOption];
+  zodiacCycle.update();
+});
+
 //var interval;
 //$("#float-toggle").on("click", function() {
 //  floatOn = $(this).text() == "Float On";

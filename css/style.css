@@ -169,7 +169,8 @@ p {
   font-size: 1.3rem;
   font-weight: 600;
   color: white;
-  background-color: blueviolet;
+/*  background-color: blueviolet;*/
+  background-color: black;
 }
 
 .node {
