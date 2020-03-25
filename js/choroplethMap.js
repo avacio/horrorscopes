@@ -4,7 +4,7 @@ class ChoroplethMap {
     this.config = {
       parentElement: _config.parentElement,
       containerWidth: _config.containerWidth || 1500,
-      containerHeight: _config.containerHeight || 600,
+      containerHeight: _config.containerHeight || 1000,
     }
 
     this.initVis();
@@ -18,12 +18,12 @@ class ChoroplethMap {
         .attr('height', vis.config.containerHeight);
 
     vis.chart = vis.svg.append('g')
-        .attr('transform', 'translate(20,400), scale(0.8,0.8)');
+        .attr('transform', 'translate(20,200), scale(1,1)');
         //.attr('transform', 'translate(300,300), scale(0.2,0.2)');
 
     // We initialize a geographic path generator, that is similar to shape generators that you have used before (e.g. d3.line())
     // We define a projection: https://github.com/d3/d3-geo/blob/v1.11.9/README.md#geoAlbers
-    vis.path = d3.geoPath().projection(d3.geoMercator());
+    vis.path = d3.geoPath().projection(d3.geoNaturalEarth1());
   }
 
   update() {
