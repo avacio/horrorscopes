@@ -1,4 +1,5 @@
 let zodiacCycle = new ZodiacCycle({ parentElement: '#vis-nodes' });
+let barChart = new Barchart({ parentElement: '#bar-chart'});
 let formatTime = d3.timeFormat("%m/%d");
 
 let astrologySignsData= {
@@ -144,10 +145,15 @@ Promise.all([
   // ie loads signsAndKills map
   loadSignsAndKills(signsAndSerialKillers);
 
+  barChart.signsAndKills = signsAndKills;
+  barChart.update();
+
   zodiacCycle.data = signsAndSerialKillers;
   zodiacCycle.elements = elements;
   zodiacCycle.signsElementsDict = signsElementsDict;
   zodiacCycle.update();
+
+
 
 });
 
