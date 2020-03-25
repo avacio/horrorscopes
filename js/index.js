@@ -1,4 +1,6 @@
 let zodiacCycle = new ZodiacCycle({ parentElement: '#vis-nodes' });
+let choroplethMap = new ChoroplethMap({ parentElement: '#map' });
+
 let formatTime = d3.timeFormat("%m/%d");
 
 let astrologySignsData= {
@@ -95,7 +97,8 @@ function loadSignsAndKills(signsAndSerialKillers)
 
 // Load data
 Promise.all([
-  d3.csv('data/collective-serial-killer-database.csv')
+  d3.csv('data/collective-serial-killer-database.csv'),
+  d3.json('data/countries.topo.json')
 ]).then(files => {
   serialKillersData = files[0];
 
@@ -148,6 +151,23 @@ Promise.all([
   zodiacCycle.elements = elements;
   zodiacCycle.signsElementsDict = signsElementsDict;
   zodiacCycle.update();
+
+/*
+  console.log("signs");
+  console.log(signsAndSerialKillers);
+  console.log("elements");
+  console.log(elements);
+  console.log("signs elements dict");
+  console.log(signsElementsDict);*/
+
+  // loading data for the choropleth map
+  choroplethMap.world_geo = files[1];
+  choroplethMap.data = signsAndSerialKillers;
+  choroplethMap.elements = elements;
+  choroplethMap.signsElementsDict = signsElementsDict;
+
+  choroplethMap.update();
+
 
 });
 

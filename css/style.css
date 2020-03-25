@@ -17,6 +17,7 @@ html {
 }
 
 .geo-path {
+  fill: pink;
   stroke: #ddd;
 }
 
