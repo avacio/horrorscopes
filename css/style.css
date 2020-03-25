@@ -29,6 +29,7 @@ html {
 
 #map {
   border: 1px solid grey;
+  background-image: url(../src/world-background.jpg);
 }
 
 .world-sphere {
