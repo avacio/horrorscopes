@@ -3,8 +3,8 @@ class ChoroplethMap {
   constructor(_config) {
     this.config = {
       parentElement: _config.parentElement,
-      containerWidth: _config.containerWidth || 1500,
-      containerHeight: _config.containerHeight || 1000,
+      containerWidth: _config.containerWidth || 1200,
+      containerHeight: _config.containerHeight || 800,
     }
 
     this.initVis();
@@ -18,12 +18,15 @@ class ChoroplethMap {
         .attr('height', vis.config.containerHeight);
 
     vis.chart = vis.svg.append('g')
-        .attr('transform', 'translate(20,200), scale(1,1)');
+        .attr('transform', 'translate(20,100), scale(1.2,1.2)');
         //.attr('transform', 'translate(300,300), scale(0.2,0.2)');
 
     // We initialize a geographic path generator, that is similar to shape generators that you have used before (e.g. d3.line())
     // We define a projection: https://github.com/d3/d3-geo/blob/v1.11.9/README.md#geoAlbers
-    vis.path = d3.geoPath().projection(d3.geoNaturalEarth1());
+
+    const projection = d3.geoNaturalEarth1();
+
+    vis.path = d3.geoPath().projection(projection);
   }
 
   update() {
@@ -38,6 +41,27 @@ class ChoroplethMap {
 
   render() {
     let vis = this;
+
+    /*
+    var zoom = d3.zoom()
+      .scaleExtent([1, 8])
+      .on('zoom', function() {
+          g.selectAll('path')
+           .attr('transform', d3.event.transform);
+          g.selectAll("circle")
+           .attr('transform', d3.event.transform);
+    });
+
+    svg.call(zoom);*/
+
+    var zoom = d3.zoom()
+      .scaleExtent([1, 8])
+      .on('zoom', function() {
+          vis.chart.selectAll('path')
+           .attr('transform', d3.event.transform);
+    });
+
+    vis.svg.call(zoom);
 
     // 
     let geoPath = vis.chart.selectAll('.geo-path')
