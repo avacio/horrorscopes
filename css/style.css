@@ -18,7 +18,7 @@ html {
 
 .geo-path {
   fill: pink;
-  stroke: #ddd;
+  stroke: #fff;
 }
 
 /*
@@ -29,6 +29,10 @@ html {
 
 #map {
   border: 1px solid grey;
+}
+
+.world-sphere {
+  fill: grey;
 }
 
 #play-button {
