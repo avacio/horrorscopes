@@ -12,14 +12,23 @@
         <h3>An interactive visualization serial killers by their astrological signs!</h3>
         <button id="view-toggle">Cyclic View</button>
         <select id="kill-count-select"></select>
-
       </div>
-
 
     </div>
     <div id="vis-row" class="row">  
       <svg id="vis-nodes"></svg>
+      <div id="vis-nodes-info">
+        <span id="signNameText"><b>Sign</b></span>
+        <br><br>
+        <b>Dates: </b><span id="datesText"></span>
+        <br><br>
+        <b>Type: <span id="typeText"></span></b>
+        <br><br>
+        <b>Modality: </b><span id="modalityText"></span>
+        <br><br>
+        <b>Description: </b><div id="descriptionText" class="description"></div>
 
+      </div>
       <div id="vis-nodes-legend">
         <b>LEGEND</b>
         <div id="legend-elements">
@@ -39,6 +48,16 @@
             <span class="legend-node water-bg"></span>
             &nbsp;&nbsp;water
           </span>
+        </div>
+        <br>
+        <div id="elements-info" class="description">
+          <b class="fire">Fire</b>: passionate, spontaneous, assertive
+          <br>
+          <b class="earth">Earth</b>: reliable, practical, sensual
+          <br>
+          <b class="air">Air</b>: intellectual, detached, fair-minded
+          <br>
+          <b class="water">Water</b>: fluid, emotional, intuitive
         </div>
       </div>
     </div>
@@ -62,16 +81,14 @@
       <li>Zodiac Iconset:
         <div>Icons made by <a href="https://www.flaticon.com/authors/bqlqn" title="bqlqn">bqlqn</a> from <a href="https://www.flaticon.com/" title="Flaticon">www.flaticon.com</a></div>
       </li>
+      <li>Sign information: https://www.astrology-zodiac-signs.com/</li>
+      <li>Sign info: https://cafeastrology.com/natal/elements-astrology.html</li>
     </ul>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
     <script src="https://d3js.org/topojson.v3.min.js"></script>
     <script src="https://d3js.org/d3.v5.min.js"></script>
     <script src="js/zodiacCycle.js"></script>
-<!--    <script type="module" src="js/zodiacCycle.js"></script>-->
-<!--    <script type="module" src="js/index.js"></script>-->
     <script src="js/index.js"></script>
-    <!--    <script src="js/choroplethMap.js"></script>-->
-    <!--    <script src="js/task1.js"></script>-->
   </body>
 </html>
