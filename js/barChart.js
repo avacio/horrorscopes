@@ -41,27 +41,30 @@ class Barchart {
    * In some cases, you may not need this function but when you create more complex visualizations
    * you will probably want to organize your code in multiple functions.
    */
-  update() {
+  update(selectedOption) {
     let vis = this;
 
     // We don't need Unknown in this vis
-    if ("Unknown" in vis.signsAndKills) {
+    if ("Unknown" in vis.signsAndKills || "Unknown" in vis.signsAndSerialKillers) {
         delete vis.signsAndKills["Unknown"];
+        delete vis.signsAndSerialKillers["Unknown"];
     }
 
     let signs = Object.keys(vis.signsAndKills);
-    let maxConfirmedKills = 0;
+    let maxY = 0;
+ 
 
     // get max value for y
     signs.forEach(sign => {
-      if (maxConfirmedKills == 0)
-      {
-        maxConfirmedKills = vis.signsAndKills[sign]['total confirmed kills'];
+      if (maxY == 0)
+      { 
+        maxY = this.getMaxY(selectedOption, sign);
+        
       } else
       {
-        if (vis.signsAndKills[sign]['total confirmed kills'] > maxConfirmedKills)
+        if (vis.signsAndKills[sign]['total confirmed kills'] > maxY)
         {
-          maxConfirmedKills = vis.signsAndKills[sign]['total confirmed kills'];
+          maxY = vis.signsAndKills[sign]['total confirmed kills'];
         }
       }
     });
@@ -74,7 +77,7 @@ class Barchart {
       .padding(0.5);
 
     vis.yScale = d3.scaleLinear()
-      .domain([0, maxConfirmedKills])
+      .domain([0, maxY])
       .range([vis.height, 0])
       .nice();
 
@@ -86,6 +89,31 @@ class Barchart {
       .scale(vis.yScale);
 
     this.render();
+  }
+
+  getMaxY(selectedOption, sign)
+  { 
+      let vis = this;
+
+      console.log(selectedOption);
+      if (selectedOption == "Number of Killers")
+      { 
+        console.log("should print dict: " + vis.signsAndSerialKillers[sign]);
+        return vis.signsAndSerialKillers[sign].length;
+
+      } else if (selectedOption == "Proven Kills")
+      {
+        console.log('proven kills');
+        return vis.signsAndKills[sign]['total confirmed kills'];
+
+      } else (selectedOption == "Proven + Possible Kills")
+      { 
+        console.log(vis.signsAndKills[sign]['total confirmed kills'] +
+                        vis.signsAndKills[sign]['total possible kills']);
+
+        return (vis.signsAndKills[sign]['total confirmed kills'] +
+                        vis.signsAndKills[sign]['total possible kills'])
+      }
   }
 
   render() {

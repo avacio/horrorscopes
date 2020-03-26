@@ -146,6 +146,7 @@ Promise.all([
   loadSignsAndKills(signsAndSerialKillers);
 
   barChart.signsAndKills = signsAndKills;
+  barChart.signsAndSerialKillers = signsAndSerialKillers;
   barChart.update();
 
   zodiacCycle.data = signsAndSerialKillers;
@@ -170,6 +171,35 @@ $("#view-toggle").on("click", function() {
 
   // Update button label
   $(this)[0].innerHTML = (isCyclicView ? "Element Group View" : "Cyclic View");
+});
+
+const killCountOptions = ["Number of Killers", "Proven Kills", "Proven + Possible Kills"];
+
+const killCountVariableNameDict = {};
+killCountVariableNameDict[killCountOptions[0]] = "numKillers";
+killCountVariableNameDict[killCountOptions[1]] = "numProven";
+killCountVariableNameDict[killCountOptions[2]] = "numPossible";
+
+// add the options to the button
+d3.select("#kill-count-select")
+  .selectAll('myOptions')
+  .data(killCountOptions)
+  .enter()
+  .append('option')
+  .text(function (d) { return d; }) // text showed in the menu
+  .attr("value", function (d) { return d; }); // corresponding value returned by the button
+
+zodiacCycle.countType = killCountVariableNameDict[d3.select("#kill-count-select").property("value")];
+zodiacCycle.update();
+
+d3.select("#kill-count-select").on("change", function(d) {
+  // recover the option that has been chosen
+  var selectedOption = d3.select(this).property("value")
+
+  zodiacCycle.countType = killCountVariableNameDict[selectedOption];
+  zodiacCycle.update();
+
+  barChart.update(selectedOption);
 });
 //
 //var interval;
