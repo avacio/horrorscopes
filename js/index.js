@@ -146,7 +146,6 @@ Promise.all([
 
     // load and update barchart
     barChart.signsAndKills = signsAndKills;
-    barChart.signsAndSerialKillers = signsAndSerialKillers;
     barChart.update();
     //  zodiacCycle.data = signsAndSerialKillers;
     zodiacCycle.data = signsAndKills;
@@ -163,10 +162,6 @@ Promise.all([
   updateSignInfo();
 
 });
-
-console.log(signsAndKills);
-console.log(signsInfoDict);
-
 
 ///////////////////////
 // INTERACTIVE ELEMENTS

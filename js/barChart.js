@@ -45,9 +45,8 @@ class Barchart {
     let vis = this;
 
     // We don't need Unknown in this vis
-    if ("Unknown" in vis.signsAndKills || "Unknown" in vis.signsAndSerialKillers) {
+    if ("Unknown" in vis.signsAndKills) {
         delete vis.signsAndKills["Unknown"];
-        delete vis.signsAndSerialKillers["Unknown"];
     }
 
     vis.signsAndSelectedOption = {};
@@ -102,16 +101,17 @@ class Barchart {
 
       if (selectedOption == "Number of Killers" || selectedOption == null)
       { 
-        return vis.signsAndSerialKillers[sign].length;
+        return vis.signsAndKills[sign]['numKillers'];
 
       } else if (selectedOption == "Proven Kills")
-      {
-        return vis.signsAndKills[sign]['total confirmed kills'];
+      { 
+        console.log(vis.signsAndKills);
+        return vis.signsAndKills[sign]['numProven'];
 
       } else if (selectedOption == "Proven + Possible Kills")
       { 
-        return (vis.signsAndKills[sign]['total confirmed kills'] +
-                        vis.signsAndKills[sign]['total possible kills'])
+        return (vis.signsAndKills[sign]['numPossible'] +
+                        vis.signsAndKills[sign]['numProven'])
       }
   }
 
