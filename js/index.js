@@ -1,8 +1,9 @@
-let zodiacCycle = new ZodiacCycle({ parentElement: '#vis-nodes' });
 let barChart = new Barchart({ parentElement: '#bar-chart'});
+let selectedSign = "Aquarius";
+let zodiacCycle = new ZodiacCycle({ parentElement: '#vis-row', svg: "#vis-nodes" });
 let formatTime = d3.timeFormat("%m/%d");
 
-let astrologySignsData= {
+let astrologySignsData = {
   "Aquarius": d3.timeDay.range(new Date(0000, 0, 20), new Date(0000, 1, 18), 1), 
   "Pisces": d3.timeDay.range(new Date(0000, 1, 19), new Date(0000, 2, 20), 1),
   "Aries": d3.timeDay.range(new Date(0000, 2, 21), new Date(0000, 3, 19), 1),
@@ -18,21 +19,7 @@ let astrologySignsData= {
 }
 
 const elements = ["fire", "earth", "air", "water"];
-//TODO move somewhere else? try modules or static class again?
-const signsElementsDict = {
-  "Aquarius": "air",
-  "Pisces": "water",
-  "Aries": "fire",
-  "Taurus": "earth",
-  "Gemini": "air",
-  "Cancer": "water",
-  "Leo": "fire",
-  "Virgo": "earth",
-  "Libra": "air",
-  "Scorpio": "water",
-  "Sagittarius": "fire",
-  "Capricorn": "earth"
-}
+let signsInfoDict = {};
 
 // CONSTANTS FOR DATA MAPPINGS TO BE LOADED HERE
 let signsAndSerialKillers = {
@@ -87,16 +74,17 @@ function loadSignsAndKills(signsAndSerialKillers)
     })
 
     signsAndKills[sign] = {
-        'total confirmed kills': totalConfirmedKillsPerSign,
-        'total possible kills': totalPossibleKillsPerSign
+      'numKillers' : signsAndSerialKillers[sign].length,
+      'numProven': totalConfirmedKillsPerSign,
+      'numPossible': totalPossibleKillsPerSign
     }
-
-  })
+  });
 }
 
 // Load data
 Promise.all([
-  d3.csv('data/collective-serial-killer-database.csv')
+  d3.csv('data/collective-serial-killer-database.csv'),
+  d3.csv('data/signs-info.csv')
 ]).then(files => {
   serialKillersData = files[0];
 
@@ -145,19 +133,39 @@ Promise.all([
   // ie loads signsAndKills map
   loadSignsAndKills(signsAndSerialKillers);
 
-  barChart.signsAndKills = signsAndKills;
-  barChart.signsAndSerialKillers = signsAndSerialKillers;
-  barChart.update();
 
-  zodiacCycle.data = signsAndSerialKillers;
-  zodiacCycle.elements = elements;
-  zodiacCycle.signsElementsDict = signsElementsDict;
-  zodiacCycle.update();
+  // load info on astrological signs
+  files[1].forEach(d => {
+    signsInfoDict[d.Sign] = {
+      "type": d.Type,
+      "modality": d.Modality,
+      "dates": d.Dates,
+      "description": d.Description
+    };
+  });
+
+    // load and update barchart
+    barChart.signsAndKills = signsAndKills;
+    barChart.signsAndSerialKillers = signsAndSerialKillers;
+    barChart.update();
+    //  zodiacCycle.data = signsAndSerialKillers;
+    zodiacCycle.data = signsAndKills;
+    zodiacCycle.elements = elements;
+    zodiacCycle.signsInfoDict = signsInfoDict;
+    //  zodiacCycle.signsAndKills = signsAndKills;
+    zodiacCycle.update();
+    zodiacCycle.registerSelectCallback((sign) => {
+    selectedSign = sign;
+    updateSignInfo();
+  });
 
 
+  updateSignInfo();
 
 });
 
+console.log(signsAndKills);
+console.log(signsInfoDict);
 
 
 ///////////////////////
@@ -182,9 +190,10 @@ killCountVariableNameDict[killCountOptions[2]] = "numPossible";
 
 // add the options to the button
 d3.select("#kill-count-select")
-  .selectAll('myOptions')
+  .selectAll('killCountOptions')
   .data(killCountOptions)
   .enter()
+//  .join('killCountOptions')
   .append('option')
   .text(function (d) { return d; }) // text showed in the menu
   .attr("value", function (d) { return d; }); // corresponding value returned by the button
@@ -198,31 +207,23 @@ d3.select("#kill-count-select").on("change", function(d) {
 
   zodiacCycle.countType = killCountVariableNameDict[selectedOption];
   zodiacCycle.update();
-
   barChart.update(selectedOption);
-});
-//
-//var interval;
-//$("#float-toggle").on("click", function() {
-//  floatOn = $(this).text() == "Float On";
-//
-//  // Update button label
-//  $(this)[0].innerHTML = (floatOn ? "Float Off" : "Float On");
-//
-//  // Toggle float
-//  //  dogHouse.floatOn = !floatOn;
-//  //
-//  //  if (!floatOn) {
-//  //    interval = setInterval(() => {
-//  //      dogHouse.floatOn = !dogHouse.floatOn
-//  //      dogHouse.update();
-//  //    }, 2000);
-//  //  } else {
-//  //    clearInterval(interval);
-//  //  }
-//  //
-//  //  dogHouse.update();
-//});
 
-// Float on start
-//$("#float-toggle").click();
+});
+
+
+
+function updateSignInfo() {
+  console.log("Selected Sign: " + selectedSign);
+  if (!selectedSign) {return;} 
+
+  $("#signNameText")[0].innerHTML = selectedSign;
+  $("#datesText")[0].innerHTML = signsInfoDict[selectedSign].dates;
+  $("#typeText")[0].innerHTML = signsInfoDict[selectedSign].type.toUpperCase();
+  $("#modalityText")[0].innerHTML = signsInfoDict[selectedSign].modality.toUpperCase();
+  $("#descriptionText")[0].innerHTML = signsInfoDict[selectedSign].description;
+
+  elements.forEach(e =>  $("#typeText").removeClass(e));
+  $("#typeText").className = '';
+  $("#typeText").addClass(signsInfoDict[selectedSign].type);
+}

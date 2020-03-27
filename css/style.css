@@ -48,12 +48,6 @@ p {
   background-color: black;
 }
 
-#vis-nodes {
-/*  background-color: aqua;*/
-/*    background-color: black;*/
-    background-color: gray;
-}
-
 .tick {
   color: white;
 }
@@ -84,17 +78,48 @@ p {
   padding: 0 0 20px 20px;
 }
 
+#vis-nodes {
+  /*  background-color: aqua;*/
+  /*    background-color: black;*/
+  background-color: gray;
+  /*  background-color: darkgray;*/
+}
+
 #vis-nodes-legend {
   font-size: 1.5rem;
   font-weight: 300;
   background-color:black; 
-/*  outline: solid 10px blue;*/
+  /*  outline: solid 10px blue;*/
   color: white;
   display: block;
-/*  text-align: right;*/
-/*  line-height: 50px;*/
-/*  padding: 0 0 20px 20px;*/
+  /*  text-align: right;*/
+  /*  line-height: 50px;*/
+  /*  padding: 0 0 20px 20px;*/
   padding: 20px;
+  width: 200px;
+}
+
+#signNameText {
+  font-size: 3rem;
+  font-weight: 700;
+  text-decoration: underline;
+}
+
+.description {
+  font-size: 1rem;
+}
+
+#vis-nodes-info {
+  /*  margin: 20px;*/
+  padding: 20px;
+  /*  background-color: gray;*/
+  background-color: #565656;
+  /*  background-color: darkgray;*/
+  font-size: 1.5rem;
+  font-weight: 300;
+  /*  color: black;*/
+  color: white;
+  width: 250px;
 }
 
 .legend-node {
@@ -169,16 +194,17 @@ p {
   font-size: 1.3rem;
   font-weight: 600;
   color: white;
-  background-color: blueviolet;
+  /*  background-color: blueviolet;*/
+  background-color: black;
 }
 
 .node {
-/*
+  /*
   stroke: #fff;
   stroke-width: 1.5;
-*/
-/*  color: aliceblue;*/
-/*  fill: #ff0000;*/
+  */
+  /*  color: aliceblue;*/
+  /*  fill: #ff0000;*/
 }
 
 .link {
@@ -198,7 +224,7 @@ title {
 .fire {
   fill: #EF7C7A;
   color: #EF7C7A;
-/*  background-color: #EF7C7A;*/
+  /*  background-color: #EF7C7A;*/
 }
 
 .fire-bg {
@@ -208,7 +234,7 @@ title {
 .earth {
   fill: #8AAA46;
   color: #8AAA46;
-/*  background-color: #8AAA46;*/
+  /*  background-color: #8AAA46;*/
 }
 
 .earth-bg {
@@ -218,7 +244,7 @@ title {
 .air {
   fill: #F7E967;
   color: #F7E967;
-/*  background-color: #F7E967;*/
+  /*  background-color: #F7E967;*/
 }
 
 .air-bg {
@@ -228,7 +254,7 @@ title {
 .water {
   fill: #70B7BA;
   color: #70B7BA;
-/*  background-color: #70B7BA;*/
+  /*  background-color: #70B7BA;*/
 }
 
 .water-bg {
