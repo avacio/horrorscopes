@@ -143,11 +143,9 @@ Promise.all([
     };
   });
 
-  //  zodiacCycle.data = signsAndSerialKillers;
   zodiacCycle.data = signsAndKills;
   zodiacCycle.elements = elements;
   zodiacCycle.signsInfoDict = signsInfoDict;
-  //  zodiacCycle.signsAndKills = signsAndKills;
   zodiacCycle.update();
   zodiacCycle.registerSelectCallback((sign) => {
     selectedSign = sign;
@@ -167,6 +165,7 @@ console.log(signsInfoDict);
 $("#view-toggle").on("click", function() {
   isCyclicView = $(this).text() == "Cyclic View";
 
+  zodiacCycle.setPositions = true;
   zodiacCycle.isCyclicView = !isCyclicView;
   zodiacCycle.update();
 
@@ -186,7 +185,6 @@ d3.select("#kill-count-select")
   .selectAll('killCountOptions')
   .data(killCountOptions)
   .enter()
-//  .join('killCountOptions')
   .append('option')
   .text(function (d) { return d; }) // text showed in the menu
   .attr("value", function (d) { return d; }); // corresponding value returned by the button

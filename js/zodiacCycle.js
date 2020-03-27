@@ -25,6 +25,7 @@ class ZodiacCycle {
       }
     }
 
+    this.setPositions = true;
     console.log("Init ZodiacCycle View");
 
     this.initVis();
@@ -97,8 +98,6 @@ class ZodiacCycle {
       //global min and max
       console.log("GLOBAL EXTENT: " + d3.extent([].concat(nodes.map(d => d.value.numKillers), nodes.map(d => d.value.numProven), nodes.map(d => d.value.numPossible))));
 
-
-
       let links = [];
       const filter = (vis.data, d => {
         return d.key != "root" && 
@@ -124,33 +123,18 @@ class ZodiacCycle {
       let simulation;
       if (vis.isCyclicView) {
         simulation = d3.forceSimulation(nodes)
-        //        simulation = d3.forceRadial(nodes)
-          .force("link", d3.forceLink(links).id(d =>d.key)
-                 //                  .distance(vis.config.containerWidth/4)
-                 .distance(200)
-                )
-          .force("charge", d3.forceManyBody().strength(-800))
-        //          .force("charge", d3.forceManyBody().strength(-100))
-        //          .force("charge", d3.forceManyBody())
+          .force("link", d3.forceLink(links).id(d =>d.key).distance(200))
+          .force("charge", d3.forceManyBody().strength(-1000))
           .force("collide", d3.forceCollide().strength(2))
-          .force("center", d3.forceCenter(
-          vis.config.containerWidth / 2
-          , vis.config.containerHeight / 2));
+          .force("center", d3.forceCenter(vis.config.containerWidth / 2, vis.config.containerHeight / 2));
       } else {
         simulation = d3.forceSimulation(nodes)
-          .force("link", d3.forceLink(links).id(d =>d.key)
-                 //                  .distance(vis.config.containerWidth/4)
-                 .distance(d => 90)
-                )
+          .force("link", d3.forceLink(links).id(d =>d.key).distance(d => 90))
           .force("charge", d3.forceManyBody().strength(-1000))
           .force("collide", d3.forceCollide().strength(2))
           .force("center", d3.forceCenter(vis.config.containerWidth / 2, vis.config.containerHeight / 2))
-        //              .force("center", d3.forceCenter((vis.config.containerWidth - vis.infoWidth) / 2, vis.config.containerHeight / 2))
-        //          .force("forceX",d3.forceX().strength(0.05).x((vis.config.containerWidth - vis.infoWidth)/ 2))
           .force("forceX",d3.forceX().strength(0.05).x(vis.config.containerWidth / 2))
-          .force("forceY", d3.forceY().strength(0.1).y(vis.config.containerHeight / 2))
-        //          .force("forceY", d3.forceCenter(vis.config.containerWidth / 2, vis.config.containerHeight / 2))
-        ;
+          .force("forceY", d3.forceY().strength(0.1).y(vis.config.containerHeight / 2));
       }
 
       const link = vis.links
@@ -180,6 +164,9 @@ class ZodiacCycle {
 
       // Tooltip!
       const tooltipMouseover = (d) => {
+        if (vis.isCyclicView) {
+          vis.setPositions = false;
+        }
         vis.OPTS.selectedSign = d.key;
         vis.tooltip.html(d.key)
           .style('left', (d3.event.pageX + 15) + "px")
@@ -192,44 +179,45 @@ class ZodiacCycle {
         vis.tooltip.transition()
           .style('opacity', 0);
       };
-      //
+
       const node = vis.nodes
       .selectAll("circle")
       .data(nodes.filter(d => filter(d)))   
       .join("circle")
       .attr("id", d => d.key)
       .attr("class", d => vis.signsInfoDict[d.key].type)
-      .attr("r", d => 
-            //            vis.sizeScale(d.value.length)
-            vis.sizeScale(d.value[vis.countType])
-           )
+      .attr("r", d => vis.sizeScale(d.value[vis.countType]))
       .call(vis.drag(simulation))
       .on('mouseover', d => tooltipMouseover(d))
       .on('mouseout', d => tooltipMouseout(d));
 
       simulation.on("tick", () => {
-        //      simulation.on("tick", (e) => {
+        node
+          .attr("cx", d => {
+          if (vis.setPositions && vis.isCyclicView) {
+            d.x = vis.config.containerWidth / 2 +
+              Math.round(215 * Math.cos(d.index * (2 * Math.PI / 12)));
+          }
+          return d.x;
+        })
+          .attr("cy", d => {
+          if (vis.setPositions && vis.isCyclicView) {
+            d.y =   vis.config.containerWidth / 4 +
+              Math.round(215 * Math.sin(d.index * (2 * Math.PI / 12)));
+          }
+          return d.y;
+        })
+
         link
           .attr("x1", d => d.source.x)
           .attr("y1", d => d.source.y)
           .attr("x2", d => d.target.x)
           .attr("y2", d => d.target.y);
 
-        node
-          .attr("cx", d => d.x)
-          .attr("cy", d => d.y)
-        //                  .attr("vx", d => d.x)
-        //          .attr("vy", d => d.y)
-        //                  .attr("fx", d => d.x)
-        //        //          .attr("cy", d => 200);
-        //          .attr("fy", d => d.y);
         image
           .attr("x", d => d.x)
           .attr("y", d => d.y);
-
       });
-
-      //simulation.alpha(1).restart();
     }
   }
 
