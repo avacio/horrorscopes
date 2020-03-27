@@ -50,6 +50,7 @@ class Barchart {
         delete vis.signsAndSerialKillers["Unknown"];
     }
 
+    vis.signsAndSelectedOption = {};
     let signs = Object.keys(vis.signsAndKills);
     let maxY = 0;
  
@@ -58,13 +59,17 @@ class Barchart {
     signs.forEach(sign => {
       if (maxY == 0)
       { 
-        maxY = this.getMaxY(selectedOption, sign);
+        maxY = this.getY(selectedOption, sign);
+        vis.signsAndSelectedOption[sign]= maxY;
         
       } else
-      {
-        if (vis.signsAndKills[sign]['total confirmed kills'] > maxY)
+      { 
+        let y = this.getY(selectedOption, sign);
+        vis.signsAndSelectedOption[sign] = y;
+
+        if (y > maxY)
         {
-          maxY = vis.signsAndKills[sign]['total confirmed kills'];
+          maxY = y;
         }
       }
     });
@@ -91,26 +96,20 @@ class Barchart {
     this.render();
   }
 
-  getMaxY(selectedOption, sign)
+  getY(selectedOption, sign)
   { 
       let vis = this;
 
-      console.log(selectedOption);
-      if (selectedOption == "Number of Killers")
+      if (selectedOption == "Number of Killers" || selectedOption == null)
       { 
-        console.log("should print dict: " + vis.signsAndSerialKillers[sign]);
         return vis.signsAndSerialKillers[sign].length;
 
       } else if (selectedOption == "Proven Kills")
       {
-        console.log('proven kills');
         return vis.signsAndKills[sign]['total confirmed kills'];
 
-      } else (selectedOption == "Proven + Possible Kills")
+      } else if (selectedOption == "Proven + Possible Kills")
       { 
-        console.log(vis.signsAndKills[sign]['total confirmed kills'] +
-                        vis.signsAndKills[sign]['total possible kills']);
-
         return (vis.signsAndKills[sign]['total confirmed kills'] +
                         vis.signsAndKills[sign]['total possible kills'])
       }
@@ -118,6 +117,8 @@ class Barchart {
 
   render() {
     let vis = this;
+
+    console.log(vis.signsAndSelectedOption);
 
      // Bind data
     let bar = vis.chart.selectAll('rect')
@@ -132,9 +133,9 @@ class Barchart {
     bar.merge(barEnter)
       .transition()
         .attr('x', d => vis.xScale(d))
-        .attr('y', d => vis.yScale(vis.signsAndKills[d]['total confirmed kills']))
+        .attr('y', d => vis.yScale(vis.signsAndSelectedOption[d]))
         .attr('width', vis.xScale.bandwidth())
-        .attr('height', d => vis.height - vis.yScale(vis.signsAndKills[d]['total confirmed kills']));
+        .attr('height', d => vis.height - vis.yScale(vis.signsAndSelectedOption[d]));
 
     vis.xAxisG.call(vis.xAxis)
       .selectAll("text")
