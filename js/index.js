@@ -1,5 +1,5 @@
+let barChart = new Barchart({ parentElement: '#bar-chart'});
 let selectedSign = "Aquarius";
-
 let zodiacCycle = new ZodiacCycle({ parentElement: '#vis-row', svg: "#vis-nodes" });
 let formatTime = d3.timeFormat("%m/%d");
 
@@ -133,6 +133,7 @@ Promise.all([
   // ie loads signsAndKills map
   loadSignsAndKills(signsAndSerialKillers);
 
+
   // load info on astrological signs
   files[1].forEach(d => {
     signsInfoDict[d.Sign] = {
@@ -143,21 +144,24 @@ Promise.all([
     };
   });
 
-  zodiacCycle.data = signsAndKills;
-  zodiacCycle.elements = elements;
-  zodiacCycle.signsInfoDict = signsInfoDict;
-  zodiacCycle.update();
-  zodiacCycle.registerSelectCallback((sign) => {
+    // load and update barchart
+    barChart.signsAndKills = signsAndKills;
+    barChart.update();
+
+    zodiacCycle.data = signsAndKills;
+    zodiacCycle.elements = elements;
+    zodiacCycle.signsInfoDict = signsInfoDict;
+
+    zodiacCycle.update();
+    zodiacCycle.registerSelectCallback((sign) => {
     selectedSign = sign;
     updateSignInfo();
   });
 
+
   updateSignInfo();
+
 });
-
-console.log(signsAndKills);
-console.log(signsInfoDict);
-
 
 ///////////////////////
 // INTERACTIVE ELEMENTS
@@ -198,6 +202,8 @@ d3.select("#kill-count-select").on("change", function(d) {
 
   zodiacCycle.countType = killCountVariableNameDict[selectedOption];
   zodiacCycle.update();
+  barChart.update(selectedOption);
+
 });
 
 

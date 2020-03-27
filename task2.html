@@ -1,57 +1,30 @@
-<!--EXAMPLE FROM PROGRAMMING 3 ASSIGNMENT-->
-
-
 <!DOCTYPE html>
 <html>
-  <head>
-    <title>P3 - Task 2</title>
+<head>
+    <title>zodiac bar chart</title>
     <link rel="stylesheet" href="css/style.css">
-  </head>
-  <body>
+</head>
+<body>
 
-<!--    This is major Tom to ground control ....   -->
-    <div id="ground-control" class="row">
-      <div class="col">
-<!--    I have ENTIRELY too many good names and puns for the space dog theme    -->
-        <h1>One Small Step for Dog, One Giant Leap for Dogkind</h1>
-        <h1>A.K.A. All Dogs Go to Heaven</h1>
-        <h1>A.K.A. Em<u>BARK</u>ment</h1>
-        <h3>An animated visualization of space dogs and their space missions (in space!!)</h3>
-        <button id="fate-toggle">Show Fate</button>
-        <button id="float-toggle">Float Off</button>
-      </div>
-      <div id="legend">
-        <div class="col l-label"><h3>Legend</h3></div>
-        <div class="col"><g class="sublabel">Gender</g>
-          <image class="legend-icon" src="src/space-dog-yellow.png">Female</image>
-          <image class="legend-icon" src="src/space-dog-pink.png">Male</image>
-        </div>
+    <!-- Add slider and play/pause button -->
+    <div>
+        <label for="year-slider">Year</label>
+        <input type="range" id="year-slider" name="year-slider" value="1991" min="1991" max="2019" step="1">
+        <span id="year-selection">1991</span>
+    </div> 
 
-        <div class="col"><g class="sublabel">Fate</g>
-          <image class="legend-icon" src="src/dog.png">Survived</image>
-          <image class="legend-icon" src="src/dog-angel.png">Died in Action</image>
-        </div>
-
-        <div class="col"><g class="sublabel">Number of Space Missions Embarked</g>
-          <div class="row">
-            <image class="legend-size" src="src/dog.png" height="60px">1</image>
-            <image class="legend-size" src="src/dog.png" height="100px">3</image>
-            <image class="legend-size" src="src/dog.png" height="140px">5</image>
-            <image class="legend-size" src="src/dog.png" height="200px">7</image>
-          </div>
-        </div>
-      </div>
-    </div>
-    <div id="visRow">
-      <svg id="task2a"></svg>
+    <div>
+        <button type="button" id="play-button">play</button>
     </div>
 
-
+    <div>
+        <svg id="bar-chart"></svg>
+    </div>
+    
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
     <script src="https://d3js.org/topojson.v3.min.js"></script>
     <script src="https://d3js.org/d3.v5.min.js"></script>
-<!--    TODO COMMENTED OUT-->
-<!--    <script src="js/dogHouse.js"></script>-->
-<!--    <script src="js/task2.js"></script>-->
-  </body>
+    <script src="js/index.js"></script>
+    <script src="js/barChart.js"></script>
+</body>
 </html>
