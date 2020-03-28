@@ -41,9 +41,7 @@ let signsAndSerialKillers = {
 }
 
 let signsAndKills = {};
-
 let killersByCountry = {};
-let unknownCountries = [];
 
 // external functions to load or parse data correctly
 function formatAstrologyDates(){
@@ -103,6 +101,7 @@ Promise.all([
     //console.log(d.properties.name);
     if (d.properties.name == "United States of America") {
       killersByCountry["United States"] = 0;
+      //killersByCountry["United States"]: [];
     } else {
       killersByCountry[d.properties.name] = 0;
     }
@@ -114,23 +113,18 @@ Promise.all([
   serialKillersData.forEach(d => {
     //console.log(d);
 
+    // populate countries by killers
     killerCountriesActiveString = d.CountriesActive;
     d.CountriesActive = killerCountriesActiveString.split(",");
 
-    if (d.CountriesActive.includes(',')) {
-      //console.log(d.CountriesActive);
-    }
-
-    console.log(d.CountriesActive);
-
-    //console.log(d.CountriesActive in killersByCountry);
-
-    if (d.CountriesActive in killersByCountry) {
-      //console.log(d.CountriesActive);
+    if (d.CountriesActive.length == 1) {
       killersByCountry[d.CountriesActive]++;
     } else {
-      unknownCountries.push(d.CountriesActive);
+      d.CountriesActive.forEach(d => {
+        killersByCountry[d]++;
+      });
     }
+
 
     birthday = formatTime(new Date(d.Birthday));
     signs = Object.keys(astrologySignsData);
@@ -170,8 +164,6 @@ Promise.all([
   // total number of possible kills to each zodiac sign
   // ie loads signsAndKills map
   loadSignsAndKills(signsAndSerialKillers);
-
-  console.log(unknownCountries);
 
 /*
   console.log("signs");
