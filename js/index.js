@@ -1,6 +1,8 @@
 let barChart = new Barchart({ parentElement: '#bar-chart'});
+let choroplethMap = new ChoroplethMap({ parentElement: '#map' });
 let selectedSign = "Aquarius";
 let zodiacCycle = new ZodiacCycle({ parentElement: '#vis-row', svg: "#vis-nodes" });
+
 let formatTime = d3.timeFormat("%m/%d");
 
 let astrologySignsData = {
@@ -39,6 +41,9 @@ let signsAndSerialKillers = {
 }
 
 let signsAndKills = {};
+
+let killersByCountry = {};
+let unknownCountries = [];
 
 // external functions to load or parse data correctly
 function formatAstrologyDates(){
@@ -84,18 +89,47 @@ function loadSignsAndKills(signsAndSerialKillers)
 // Load data
 Promise.all([
   d3.csv('data/collective-serial-killer-database.csv'),
+  d3.json('data/countries.topo.json'),
   d3.csv('data/signs-info.csv')
 ]).then(files => {
   serialKillersData = files[0];
+  worldCountryData = files[1];
 
   // format signs dates to correct format
   formatAstrologyDates();
 
+  // set up array of countries in the world
+  worldCountryData.objects.countries.geometries.forEach(d => {
+    //console.log(d.properties.name);
+    if (d.properties.name == "United States of America") {
+      killersByCountry["United States"] = 0;
+    } else {
+      killersByCountry[d.properties.name] = 0;
+    }
+  });
+
+  console.log(killersByCountry);
+
   // assign each serial killer to their correct zodiac sign
   serialKillersData.forEach(d => {
+    //console.log(d);
+
+    killerCountriesActiveString = d.CountriesActive;
+    d.CountriesActive = killerCountriesActiveString.split(",");
+
+    //console.log(d.CountriesActive);
+
+    //console.log(d.CountriesActive in killersByCountry);
+
+    if (d.CountriesActive in killersByCountry) {
+      //console.log(d.CountriesActive);
+      killersByCountry[d.CountriesActive]++;
+    } else {
+      unknownCountries.push(d.CountriesActive);
+    }
+
     birthday = formatTime(new Date(d.Birthday));
     signs = Object.keys(astrologySignsData);
-
 
     killerTypesString = d.Type;
     d.Type = killerTypesString.split(", ");
@@ -133,9 +167,26 @@ Promise.all([
   // ie loads signsAndKills map
   loadSignsAndKills(signsAndSerialKillers);
 
+  //console.log(unknownCountries);
+
+/*
+  console.log("signs");
+  console.log(signsAndSerialKillers);
+  console.log("elements");
+  console.log(elements);
+  console.log("signs elements dict");
+  console.log(signsElementsDict);*/
+
+  // loading data for the choropleth map
+  choroplethMap.world_geo = files[1];
+  choroplethMap.data = signsAndSerialKillers;
+  choroplethMap.elements = elements;
+  choroplethMap.signsElementsDict = signsElementsDict;
+
+  choroplethMap.update();
 
   // load info on astrological signs
-  files[1].forEach(d => {
+  files[2].forEach(d => {
     signsInfoDict[d.Sign] = {
       "type": d.Type,
       "modality": d.Modality,

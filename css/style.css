@@ -17,12 +17,23 @@ html {
 }
 
 .geo-path {
-  stroke: #ddd;
+  fill: pink;
+  stroke: #fff;
 }
 
+/*
 #map {
   width: 1000px;
   height: 1000px;
+}*/
+
+#map {
+  border: 1px solid grey;
+  background-image: url(../src/world-background.jpg);
+}
+
+.world-sphere {
+  fill: grey;
 }
 
 #play-button {
