@@ -55,6 +55,7 @@ let signsAndSerialKillers = {
 let signsAndKills = {};
 
 let killersByCountry = {};
+let unknownCountries = [];
 
 // external functions to load or parse data correctly
 function formatAstrologyDates(){
@@ -108,6 +109,7 @@ Promise.all([
   // format signs dates to correct format
   formatAstrologyDates();
 
+  // set up array of countries in the world
   worldCountryData.objects.countries.geometries.forEach(d => {
     //console.log(d.properties.name);
     if (d.properties.name == "United States of America") {
@@ -117,12 +119,26 @@ Promise.all([
     }
   });
 
-
   console.log(killersByCountry);
 
   // assign each serial killer to their correct zodiac sign
   serialKillersData.forEach(d => {
     //console.log(d);
+
+    killerCountriesActiveString = d.CountriesActive;
+    d.CountriesActive = killerCountriesActiveString.split(",");
+
+    //console.log(d.CountriesActive);
+
+    //console.log(d.CountriesActive in killersByCountry);
+
+    if (d.CountriesActive in killersByCountry) {
+      //console.log(d.CountriesActive);
+      killersByCountry[d.CountriesActive]++;
+    } else {
+      unknownCountries.push(d.CountriesActive);
+    }
+
     birthday = formatTime(new Date(d.Birthday));
     signs = Object.keys(astrologySignsData);
 
@@ -166,6 +182,8 @@ Promise.all([
   zodiacCycle.elements = elements;
   zodiacCycle.signsElementsDict = signsElementsDict;
   zodiacCycle.update();
+
+  console.log(unknownCountries);
 
 /*
   console.log("signs");
