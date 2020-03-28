@@ -98,34 +98,17 @@ Promise.all([
 
   // set up array of countries in the world
   worldCountryData.objects.countries.geometries.forEach(d => {
-    //console.log(d.properties.name);
     if (d.properties.name == "United States of America") {
       killersByCountry["United States"] = 0;
-      //killersByCountry["United States"]: [];
     } else {
       killersByCountry[d.properties.name] = 0;
     }
   });
 
-  console.log(killersByCountry);
+  //console.log(killersByCountry);
 
   // assign each serial killer to their correct zodiac sign
   serialKillersData.forEach(d => {
-    //console.log(d);
-
-    // populate countries by killers
-    killerCountriesActiveString = d.CountriesActive;
-    d.CountriesActive = killerCountriesActiveString.split(",");
-
-    if (d.CountriesActive.length == 1) {
-      killersByCountry[d.CountriesActive]++;
-    } else {
-      d.CountriesActive.forEach(d => {
-        killersByCountry[d]++;
-      });
-    }
-
-
     birthday = formatTime(new Date(d.Birthday));
     signs = Object.keys(astrologySignsData);
 
@@ -158,6 +141,18 @@ Promise.all([
     } else {
       signsAndSerialKillers["Unknown"].push(d);
     }
+
+    // populate countries by killers
+    killerCountriesActiveString = d.CountriesActive;
+    d.CountriesActive = killerCountriesActiveString.split(",");
+
+    if (d.CountriesActive.length == 1) {
+      killersByCountry[d.CountriesActive]++;
+    } else {
+      d.CountriesActive.forEach(d => {
+        killersByCountry[d]++;
+      });
+    }
   });
 
   // assign the total number of confirmed kills +
@@ -166,19 +161,13 @@ Promise.all([
   loadSignsAndKills(signsAndSerialKillers);
 
 /*
+  console.log(killersByCountry);
   console.log("signs");
   console.log(signsAndSerialKillers);
   console.log("elements");
   console.log(elements);
   console.log("signs elements dict");
   console.log(signsElementsDict);*/
-
-  // loading data for the choropleth map
-  choroplethMap.world_geo = files[1];
-  choroplethMap.data = signsAndSerialKillers;
-  choroplethMap.elements = elements;
-
-  choroplethMap.update();
 
   // load info on astrological signs
   files[2].forEach(d => {
@@ -189,24 +178,29 @@ Promise.all([
       "description": d.Description
     };
   });
+  
+  // loading data for the choropleth map
+  choroplethMap.world_geo = files[1];
+  choroplethMap.killersByCountry = killersByCountry;
+  choroplethMap.data = signsAndSerialKillers;
+  choroplethMap.elements = elements;
+  choroplethMap.update();
 
-    // load and update barchart
-    barChart.signsAndKills = signsAndKills;
-    barChart.update();
+  // load and update barchart
+  barChart.signsAndKills = signsAndKills;
+  barChart.update();
 
-    zodiacCycle.data = signsAndKills;
-    zodiacCycle.elements = elements;
-    zodiacCycle.signsInfoDict = signsInfoDict;
+  zodiacCycle.data = signsAndKills;
+  zodiacCycle.elements = elements;
+  zodiacCycle.signsInfoDict = signsInfoDict;
 
-    zodiacCycle.update();
-    zodiacCycle.registerSelectCallback((sign) => {
+  zodiacCycle.update();
+  zodiacCycle.registerSelectCallback((sign) => {
     selectedSign = sign;
     updateSignInfo();
   });
 
-
   updateSignInfo();
-
 });
 
 ///////////////////////
@@ -251,8 +245,6 @@ d3.select("#kill-count-select").on("change", function(d) {
   barChart.update(selectedOption);
 
 });
-
-
 
 function updateSignInfo() {
   console.log("Selected Sign: " + selectedSign);
