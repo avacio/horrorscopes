@@ -181,7 +181,6 @@ Promise.all([
   choroplethMap.world_geo = files[1];
   choroplethMap.data = signsAndSerialKillers;
   choroplethMap.elements = elements;
-  choroplethMap.signsElementsDict = signsElementsDict;
 
   choroplethMap.update();
 
