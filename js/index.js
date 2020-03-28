@@ -54,6 +54,8 @@ let signsAndSerialKillers = {
 
 let signsAndKills = {};
 
+let killersByCountry = {};
+
 // external functions to load or parse data correctly
 function formatAstrologyDates(){
 
@@ -101,15 +103,28 @@ Promise.all([
   d3.json('data/countries.topo.json')
 ]).then(files => {
   serialKillersData = files[0];
+  worldCountryData = files[1];
 
   // format signs dates to correct format
   formatAstrologyDates();
 
+  worldCountryData.objects.countries.geometries.forEach(d => {
+    //console.log(d.properties.name);
+    if (d.properties.name == "United States of America") {
+      killersByCountry["United States"] = 0;
+    } else {
+      killersByCountry[d.properties.name] = 0;
+    }
+  });
+
+
+  console.log(killersByCountry);
+
   // assign each serial killer to their correct zodiac sign
   serialKillersData.forEach(d => {
+    //console.log(d);
     birthday = formatTime(new Date(d.Birthday));
     signs = Object.keys(astrologySignsData);
-
 
     killerTypesString = d.Type;
     d.Type = killerTypesString.split(", ");

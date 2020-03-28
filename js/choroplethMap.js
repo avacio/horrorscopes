@@ -24,8 +24,8 @@ class ChoroplethMap {
     // We initialize a geographic path generator, that is similar to shape generators that you have used before (e.g. d3.line())
     // We define a projection: https://github.com/d3/d3-geo/blob/v1.11.9/README.md#geoAlbers
 
-    const projection = d3.geoNaturalEarth1();
-    const pathGenerator = d3.geoPath().projection(projection);
+    vis.projection = d3.geoNaturalEarth1();
+    const pathGenerator = d3.geoPath().projection(vis.projection);
 
     vis.path = pathGenerator;
 
@@ -33,6 +33,8 @@ class ChoroplethMap {
     vis.chart.append('path')
       .attr('class', 'world-sphere')
       .attr('d', pathGenerator({type: 'Sphere'}));
+
+      
   }
 
   update() {
@@ -41,6 +43,7 @@ class ChoroplethMap {
     // To-do: Add color scale
 
     // To-do: Select data for specific year (could be done in task1.js too)
+    this.getNumberKillersPerCountry();
 
     vis.render();
   }
@@ -85,6 +88,29 @@ class ChoroplethMap {
         });
 
     // To-do: Add labels for each province with the population value
+    let geoLabels = vis.chart.selectAll('.geo-labels')
+        .data(topojson.feature(vis.world_geo, vis.world_geo.objects.countries).features); 
+
+    let geoLabelsEnter = geoLabels.enter().append('text')
+      .attr('class', 'geo-labels');
+
+    //console.log(vis.data);  
+
+    geoLabels.merge(geoLabelsEnter)
+      .attr("x", d => vis.projection(d3.geoCentroid(d))[0])
+      .attr("y", d => vis.projection(d3.geoCentroid(d))[1])
+      .text(d => {
+        //console.log(d);
+        //console.log(d.properties);
+        //let index = vis.selectedYear - 1991;
+          //return tickFormat(vis.population[index][d.id]);
+      });  
+  }
+
+  getNumberKillersPerCountry() {
+    let vis = this;
+    //console.log(vis.data);
+
   }
 }
 
