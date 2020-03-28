@@ -115,7 +115,11 @@ Promise.all([
     //console.log(d);
 
     killerCountriesActiveString = d.CountriesActive;
-    d.CountriesActive = killerCountriesActiveString.split(",");
+    //d.CountriesActive = killerCountriesActiveString.split(",");
+
+    if (d.CountriesActive.includes(',')) {
+      //console.log(d.CountriesActive);
+    }
 
     //console.log(d.CountriesActive);
 
@@ -167,7 +171,7 @@ Promise.all([
   // ie loads signsAndKills map
   loadSignsAndKills(signsAndSerialKillers);
 
-  //console.log(unknownCountries);
+  console.log(unknownCountries);
 
 /*
   console.log("signs");
