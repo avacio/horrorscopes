@@ -5,7 +5,7 @@ This data visualization is purely for entertainment purposes and gives the viewe
 
 ## Design Rationale
 ### Rationale for our design choices
-We have 3 planned view, and 1 potential view if we have time at the end:
+We have 3 planned views and 1 potential view if there is time at the end:
 1. Node-link diagram of astrological signs (“signs network” view)
 2. Stacked bar chart
 3. World map of serial killers
@@ -146,7 +146,7 @@ Within our directory, the source files are:
 ### Contributions Breakdown
 | Alexis | Grace | Margaret |
 | --- | --- | --- |
-| <ul><li>The astrological nodes visualization (force simulation) with cyclic and element group view options</li><li>UI elements: dropdown for kill count, view button toggle</li><li>Data compilation and processing of astrological signs information</li><li>User interaction of showing astrological information on node hover</li><li>Manual data entry to improve our database of serial killers</ul> | <ul><li>item</li><li>item</li><li>item</li><li>item</li><li>item</ul> | <ul><li>The world map visualization</li><li>Parsed countries information from serial killers .csv and linked it to the data from world TopoJSON</li><li>Manual data entry and fixed errors in the csv file</li><li>Moved and formatted content from Google docs into README</li> |
+| <ul><li>The astrological nodes visualization (force simulation) with cyclic and element group view options</li><li>UI elements: dropdown for kill count, view button toggle</li><li>Data compilation and processing of astrological signs information</li><li>User interaction of showing astrological information on node hover</li><li>Manual data entry to improve our database of serial killers</ul> | <ul><li>Parsing + mangling the data so that each killer’s birthday is matched correctly to an astrological sign</li><li>Parsing + mangling data to match astrological sign to total number of proven kills and number of proven/suspected kills</li><li>Implemented a barchart which updates based on dropdown selection (# of killers, proven kill count, proven/suspected kill count)</li><li>Manual data entry to improve database of serial killers</li><li>Manual data fixes for suspected kill count (took the average of sliding scale counts, ie. 8-10 suspected kills were changed to 9 suspected kills)</ul> | <ul><li>The world map visualization</li><li>Parsed countries information from serial killers .csv and linked it to the data from world TopoJSON</li><li>Manual data entry, fixed errors, and reformatted info in the csv file</li><li>Moved and formatted content from Google docs into README</li></ul> |
 
 ### Team Process
 |   | Weak | Satisfactory | Good | Excellent | What are specific actions you want to take to address issues|
