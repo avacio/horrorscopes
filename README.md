@@ -70,6 +70,8 @@ The following tasks we set out to facilitate in our proposal were:
 
 In our current visualization, the user can easily compare the number of serial killers associated with each sign. However, instead of seeing a specific number of kills, our visualization currently only facilitates the comparison of the total number of proven kills and the total number of proven and suspected kills. Our visualization facilitates this by providing a drop down menu, where the user can select between “Number of Killers”, “Proven Kills”, and “Proven + Possible Kills”. For our next milestone, we plan on implementing the stacked bar so that a user can compare and see what type of sign actually has a certain number of kills (ie 15-20 kills).
 
+User no longer have to select an astrological sign on the "radial chart" to compare each sign. As mentioned previously, after discussion with the TA and with the team, all 12 signs will be visible on the bar chart. Instead, user may [compare] by interacting with the bar (dragging Aquarius next to Capricorn to compare). They could also [sort] from least to most kills/killers (to be implemented next milesone).
+
 Our visualization will no longer facilitate “selecting” to enter the world view - rather, users can scroll down and see the world map. Users can now [compare] the number of killers from one country to another, as the number of killers per country is displayed. This will act as a basis for our next milestone, which will allow us to ensure that we are still facilitating our last two tasks listed above: hovering over the dot to get basic information about a killer, and selecting to get specific notes.
 
 ### Screenshots
