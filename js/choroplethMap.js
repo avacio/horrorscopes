@@ -43,7 +43,6 @@ class ChoroplethMap {
     // To-do: Add color scale
 
     // To-do: Select data for specific year (could be done in task1.js too)
-    this.getNumberKillersPerCountry();
 
     vis.render();
   }
@@ -68,6 +67,9 @@ class ChoroplethMap {
       .on('zoom', function() {
           vis.chart.selectAll('path')
            .attr('transform', d3.event.transform);
+
+          vis.chart.selectAll('text')
+           .attr('transform', d3.event.transform); 
     });
 
     vis.svg.call(zoom);
@@ -99,18 +101,10 @@ class ChoroplethMap {
     geoLabels.merge(geoLabelsEnter)
       .attr("x", d => vis.projection(d3.geoCentroid(d))[0])
       .attr("y", d => vis.projection(d3.geoCentroid(d))[1])
+      .attr("text-anchor","middle")
       .text(d => {
-        //console.log(d);
-        //console.log(d.properties);
-        //let index = vis.selectedYear - 1991;
-          //return tickFormat(vis.population[index][d.id]);
+          return vis.killersByCountry[d.properties.name];
       });  
-  }
-
-  getNumberKillersPerCountry() {
-    let vis = this;
-    //console.log(vis.data);
-
   }
 }
 

@@ -105,8 +105,6 @@ Promise.all([
     }
   });
 
-  //console.log(killersByCountry);
-
   // assign each serial killer to their correct zodiac sign
   serialKillersData.forEach(d => {
     birthday = formatTime(new Date(d.Birthday));
@@ -153,6 +151,8 @@ Promise.all([
         killersByCountry[d]++;
       });
     }
+
+    killersByCountry["United States of America"] = killersByCountry["United States"];
   });
 
   // assign the total number of confirmed kills +
@@ -178,7 +178,7 @@ Promise.all([
       "description": d.Description
     };
   });
-  
+
   // loading data for the choropleth map
   choroplethMap.world_geo = files[1];
   choroplethMap.killersByCountry = killersByCountry;
