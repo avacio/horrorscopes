@@ -58,9 +58,9 @@ Each node represents an astrological sign, along with the sign’s traditional s
 
 ### Screenshots
 <ul>
-  <li>![](src/screenshots/m2-a.png)</li>
-  <li>![](src/screenshots/m2-b.png)</li>
-  <li>![](src/screenshots/m2-c.png)</li>
+  <li><img src="/src/screenshots/m2-a.png" width="400px"</img></li>
+   <li><img src="/src/screenshots/m2-b.png" width="400px"</img></li>
+  <li><img src="/src/screenshots/m2-c.png" width="400px"</img></li>
 </ul>
 
 ### Links to the original data source
