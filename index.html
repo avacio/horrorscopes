@@ -10,11 +10,51 @@
       <div class="col">
         <h1>HORRORSCOPES</h1>
         <h3>An interactive visualization serial killers by their astrological signs!</h3>
-        <button id="view-toggle">Cyclic View</button>
-        <select id="kill-count-select"></select>
       </div>
-
     </div>
+
+    <div id="vis-nodes-legend" class="row">
+      <b>LEGEND</b>
+      <div id="legend-elements">
+        <span class="fire row">
+          <span class="legend-node fire-bg"></span>
+          &nbsp;&nbsp;fire
+        </span>
+        <span class="earth row">
+          <span class="legend-node earth-bg"></span>
+          &nbsp;&nbsp;earth
+        </span>
+        <span class="air row">
+          <span class="legend-node air-bg"></span>
+          &nbsp;&nbsp;air
+        </span>
+        <span class="water row">
+          <span class="legend-node water-bg"></span>
+          &nbsp;&nbsp;water
+        </span>
+      </div>
+      <div id="elements-info" class="description">
+        <b class="fire">FIRE</b>: passionate, spontaneous, assertive
+        <br>
+        <b class="earth">EARTH</b>: reliable, practical, sensual
+        <br>
+        <b class="air">AIR</b>: intellectual, detached, fair-minded
+        <br>
+        <b class="water">WATER</b>: fluid, emotional, intuitive
+      </div>
+      <div id="modality-info" class="description">
+        <b>CARDINAL</b>: Initiators - they like to keep one step ahead of the crowd.
+        <br>
+        <b>FIXED</b>: Tend to hang on to the past, but are strong in their stability.
+        <br>
+        <b>MUTABLE</b>: Mediate change and change their modes of expression frequently.
+      </div>
+    </div>
+
+    <div id="control" class="row">
+      <button id="view-toggle">Cyclic View</button>
+      <select id="kill-count-select"></select></div>
+
     <div id="vis-row" class="row">  
       <svg id="vis-nodes"></svg>
       <div id="vis-nodes-info">
@@ -29,45 +69,7 @@
         <b>Description: </b><div id="descriptionText" class="description"></div>
 
       </div>
-      <div id="vis-nodes-legend">
-        <b>LEGEND</b>
-        <div id="legend-elements">
-          <span class="fire row">
-            <span class="legend-node fire-bg"></span>
-            &nbsp;&nbsp;fire
-          </span>
-          <span class="earth row">
-            <span class="legend-node earth-bg"></span>
-            &nbsp;&nbsp;earth
-          </span>
-          <span class="air row">
-            <span class="legend-node air-bg"></span>
-            &nbsp;&nbsp;air
-          </span>
-          <span class="water row">
-            <span class="legend-node water-bg"></span>
-            &nbsp;&nbsp;water
-          </span>
-        </div>
-        <br>
-        <div id="elements-info" class="description">
-          <b class="fire">Fire</b>: passionate, spontaneous, assertive
-          <br>
-          <b class="earth">Earth</b>: reliable, practical, sensual
-          <br>
-          <b class="air">Air</b>: intellectual, detached, fair-minded
-          <br>
-          <b class="water">Water</b>: fluid, emotional, intuitive
-        </div>
-        <br><br>
-           <div id="modality-info" class="description">
-          <b>CARDINAL</b>: Initiators - they like to keep one step ahead of the crowd.
-          <br>
-          <b>FIXED</b>: Tend to hang on to the past, but are strong in their stability.
-          <br>
-          <b>MUTABLE</b>: Mediate change and change their modes of expression frequently.
-        </div>
-      </div>
+
       <div>
         <svg id="bar-chart"></svg>
       </div>
@@ -82,7 +84,7 @@
 
       <button id="play-button">Play</button>
     </div>
-    
+
     <div>
       <svg id="map"></svg>
     </div>

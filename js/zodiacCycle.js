@@ -3,7 +3,8 @@ class ZodiacCycle {
     this.config = {
       parentElement: _config.parentElement,
       svg: _config.svg,
-      containerWidth: _config.containerWidth || 1100,
+      //      containerWidth: _config.containerWidth || 1100,
+      containerWidth: _config.containerWidth || 700,
       containerHeight: _config.containerHeight || 600,
     }
 
@@ -30,7 +31,6 @@ class ZodiacCycle {
 
     this.initVis();
   }
-
 
   initVis() {
     let vis = this;
@@ -124,17 +124,17 @@ class ZodiacCycle {
       if (vis.isCyclicView) {
         simulation = d3.forceSimulation(nodes)
           .force("link", d3.forceLink(links).id(d =>d.key).distance(200))
-          .force("charge", d3.forceManyBody().strength(-1000))
-          .force("collide", d3.forceCollide().strength(2))
+          .force("charge", d3.forceManyBody().strength(-500))
+          .force("collide", d3.forceCollide().strength(1.5))
           .force("center", d3.forceCenter(vis.config.containerWidth / 2, vis.config.containerHeight / 2));
       } else {
         simulation = d3.forceSimulation(nodes)
-          .force("link", d3.forceLink(links).id(d =>d.key).distance(d => 90))
+          .force("link", d3.forceLink(links).id(d =>d.key).distance(d => 80))
           .force("charge", d3.forceManyBody().strength(-1000))
           .force("collide", d3.forceCollide().strength(2))
           .force("center", d3.forceCenter(vis.config.containerWidth / 2, vis.config.containerHeight / 2))
-          .force("forceX",d3.forceX().strength(0.05).x(vis.config.containerWidth / 2))
-          .force("forceY", d3.forceY().strength(0.1).y(vis.config.containerHeight / 2));
+          .force("forceX",d3.forceX().strength(0.07).x(vis.config.containerWidth / 2))
+          .force("forceY", d3.forceY().strength(0.15).y(vis.config.containerHeight / 2));
       }
 
       const link = vis.links
@@ -191,6 +191,13 @@ class ZodiacCycle {
       .on('mouseover', d => tooltipMouseover(d))
       .on('mouseout', d => tooltipMouseout(d));
 
+      if (vis.isCyclicView) {
+        // fix the position of the root node
+        const rootNode = simulation.nodes()[12];
+        rootNode.fx= vis.config.containerWidth / 2;
+        rootNode.fy= vis.config.containerHeight / 2;
+      }
+
       simulation.on("tick", () => {
         node
           .attr("cx", d => {
@@ -202,7 +209,7 @@ class ZodiacCycle {
         })
           .attr("cy", d => {
           if (vis.setPositions && vis.isCyclicView) {
-            d.y =   vis.config.containerWidth / 4 +
+            d.y =   vis.config.containerWidth / 2.2 +
               Math.round(215 * Math.sin(d.index * (2 * Math.PI / 12)));
           }
           return d.y;
