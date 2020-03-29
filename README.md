@@ -2,8 +2,56 @@
 
 ## Design Rationale
 ### Rationale for our design choices
+We have 3 planned view, and 1 potential view if we have time at the end:
+1. Node-link diagram of astrological signs (“signs network” view)
+2. Stacked bar chart
+3. World map of serial killers
+4. (Potential) Pie chart - links to the map and shows serial killer types
+
+Attributes/information we are encoding:
+- Astrological zodiac signs
+  - categorical
+  - cardinality: 12
+- Astrological sign element groups
+  - fire, earth, air, water
+  - categorical
+  - cardinality: 4
+- Number of killers (for each sign)
+  - quantitative
+  - integer: range[30, 51]
+- Number of proven kills (for each sign)
+  - quantitative
+  - integer: range[228, 774]
+- Number of proven and possible kills (for each sign)
+  - quantitative
+  - integer: range[657, 1998]
+- Serial killer type
+  - e.g., strangler, necrophiliac, rapist
+  - categorical
+  - cardinality: 7
+  - a serial killer may have none, several, or all of the serial killer types
+
+We currently have 2 UI elements:
+- Count Type Dropdown Menu
+  - Can show quantities in the view by:
+    - number of killers (for each sign)
+    - number of proven kills (for each sign)
+    - number of proven and possible kills (for each sign)
+  - This dropdown primarily affects the signs network and bar chart views and helps link them
+- View toggle for Signs Network view
+  - Toggles between a "cyclic view" and "element group view"
+
+In our original design, we had planned on users being able to select astrological signs in the signs network view to compare side-by-side in a linked bar chart. After discussion both within the team, and with Zipeng, we have decided to have all 12 of the signs shown at once in the bar chart as well. The cardinality of the astrological signs will always be fixed at 12, and so it is not too heavy of a cognitive load to display and compare between 12 at once. To remedy the use case of a user wanting to directly compare 2 signs together, we have decided to change the interaction instead so that users may be able to drag and reposition the bars themselves, so that they may be in any order that the user desires. We are planning on implementing this dragging-bar feature by the next milestone.
+
+As for the signs network view, we had originally planned on making it a static view, only of the entire zodiac cycle. Since then, it has evolved into an actual network, with dynamic movement drag interaction through the use of d3’s force simulation. By using force simulation, users can compare nodes by moving them next to one another, and it also adds an element of fun and responsiveness.
+
+Each node represents an astrological sign, along with the sign’s traditional symbol. Color encodes the sign’s attributed natural element (i.e. fire), and the node size encodes selected kill count type.
 
 ### How our vision has changed since the proposal
+
+#### How our visualization goals changed
+
+#### Does our visualization enable the tasks we set out to facilitate or successfully communicate the story you want to tell
 
 ### Screenshots
 
@@ -56,8 +104,8 @@ Within our directory, the source files are:
 | **2 - Data compilation** | **<ul><li>Integrate dataset from Wikipedia and The Serial Killer Database into one csv file</li><li>Manual data entry</li></ul>** | **Alexis, Grace, Margaret** | **N/A (Additional work required that was not included in the original milestone)** | **March 19 / 12 hours** |
 | 2 - Data processing | <ul><li>Process data in Javascript to desired maps/arrays categories</li></ul> | Grace | March 16 / 3 hours | --- |
 | 2 - Astrological Sign View | <ul><li>Begin work on this view</li><li>Incorporate dropdown & toggle UI</li></ul> | Alexis | March 18 / 13 hours | Initial Version: March 18 / 13 hours<br> **Refined Version: March 28 / 10 hours** |
-| 2 - Stacked / Grouped Bar chart View | <ul><li>Begin work on this view</li></ul> | Grace | March 18 / 13 hours | --- |
-| 2 - World Map View | <ul><li>Begin work on this view</li><li>Interactive tooltips</li></ul> | Margaret | March 18 / 13 hours | --- |
+| 2 - Stacked / Grouped Bar chart View | <ul><li>Begin work on this view</li></ul> | Grace | March 18 / 13 hours | Initial version: March 20 / 10 hours |
+| 2 - World Map View | <ul><li>Begin work on this view</li><li>Interactive tooltips</li></ul> | Margaret | March 18 / 13 hours | Initial version: March 24 / 10 hours<br>**Still need to work on interactivity and being able to show each individual killer within a country** |
 | **2 - Data Quality Control** | **<ul><li>Fix errors in csv file from manually entering data/combining data from 2 different sources</li><li>Typos, and reformatting for easier data use</li></ul>** | **Margaret** | **N/A** | **March 28 / 2 hours** |
 | 2 - Link Views | <ul><li>Link views and integrate code</li></ul> | Margaret, **Grace, Alexis** | March 25 / 3 hours | March 28 / 3 hours -- **Class received extension for milestone 2!<br>Linked views will have to be refined in the next milestone**|
 | 2 - Clean up | <ul><li>Clean up and document code</li><li>Organize file structures</li></ul> | Alexis, Margaret, Grace | March 25 / 5 hours | March 28 / 5 hours -- **Class received extension for milestone 2!** |
