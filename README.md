@@ -44,17 +44,31 @@ We currently have 2 UI elements:
 - View toggle for Signs Network view
   - Toggles between a "cyclic view" and "element group view"
 
-In our original design, we had planned on users being able to select astrological signs in the signs network view to compare side-by-side in a linked bar chart. After discussion both within the team, and with Zipeng, we have decided to have all 12 of the signs shown at once in the bar chart as well. The cardinality of the astrological signs will always be fixed at 12, and so it is not too heavy of a cognitive load to display and compare between 12 at once. To remedy the use case of a user wanting to directly compare 2 signs together, we have decided to change the interaction instead so that users may be able to drag and reposition the bars themselves, so that they may be in any order that the user desires. We are planning on implementing this dragging-bar feature by the next milestone.
+In our original design, we had planned on users being able to select astrological signs in the signs network view to compare side-by-side in a linked bar chart. After discussing both within the team and with Zipeng, we have decided to have all 12 of the signs shown at once in the bar chart. The cardinality of the astrological signs will always be fixed at 12, and so it is not too heavy of a cognitive load to display and compare between 12 at once. To remedy the use case of a user wanting to directly compare 2 signs together, we have decided to change the interaction instead so that users may be able to drag and reposition the bars themselves, so that they may be in any order that the user desires. We are planning on implementing this dragging-bar feature by the next milestone.
 
 As for the signs network view, we had originally planned on making it a static view, only of the entire zodiac cycle. Since then, it has evolved into an actual network, with dynamic movement drag interaction through the use of d3’s force simulation. By using force simulation, users can compare nodes by moving them next to one another, and it also adds an element of fun and responsiveness.
 
 Each node represents an astrological sign, along with the sign’s traditional symbol. Color encodes the sign’s attributed natural element (i.e. fire), and the node size encodes selected kill count type.
 
+For the map visualization, our initial implementation was to show the locations of serial killers around the world by having marks/dots represent each serial killer that was active within a country. However, after implementing the world map, we realized the countries were too small to properly show all the information in a visually appealing way, especially considering the United States has over 200 killers. Instead, we changed the design so that when the page is first loaded, the number of killers that was active in a country is initially shown as a text label. Countries without any killers are represented by having a grey fill. Zooming and panning are implemented on the map so that once the user has zoomed in to a certain size such that the country is big enough on the screen, the text labels will get replaced with the individual dots that represent individual serial killers. From there, the user can hover over a dot to see basic information about a specific serial killer or select the dot to get specific notes. The implementation of serial killers as dots will be completed by the next milestone.
+
 ### How our vision has changed since the proposal
 
 #### How our visualization goals changed
+While our overall visualization goals have not changed, we have new data that we want to showcase. As such, we have new goals that we want to achieve within our visualization. 
+
+Our primary goal from our proposal was to “allow users to explore and learn more about serial killers such as their sun signs, their kill magnitude breakdown, as well as their locations around the world.” With our new data set, which gives us more comprehensive serial killer “types” (Stalker, Strangler, etc), we wanted to include this in our goals. As such, our new goal includes allowing users to be able to learn about serial killer types and compare them based on astrological signs (ie number of stalkers who are Geminis vs. stalkers who are Aquarius).
 
 #### Does our visualization enable the tasks we set out to facilitate or successfully communicate the story you want to tell
+The following tasks we set out to facilitate in our proposal were:
+- User can easily [compare] the number of serial killers associated with each sign.
+- User can [sort] the signs (by most number of killers to least, or least to most)  to get a more accurate read 
+- User can [select] an astrological sign on the “radial chart” to see which astrological signs actually have a certain number of kills (ie 15-20 kills)
+- User [selects] the world view (map)
+- User [hovers] over a dot in the USA and sees basic information about a specific serial killer born in the US (birthday, years active, sun sign, victims & possible victims). 
+- User [selects] the dot to get specific notes about the serial killer.
+
+In our current visualization, the user can easily compare the number of serial killers associated with each sign. However, instead of seeing a specific number of kills, our visualization currently only facilitates the comparison of the total number of proven kills and the total number of proven and suspected kills. Our visualization facilitates this by providing a drop down menu, where the user can select between “Number of Killers”, “Proven Kills”, and “Proven + Possible Kills”. For our next milestone, we plan on implementing the stacked bar so that a user can compare and see what type of sign actually has a certain number of kills (ie 15-20 kills).
 
 ### Screenshots
 <ul>
@@ -100,7 +114,7 @@ Within our directory, the source files are:
     </ul>
   </li>
 </ul>
-
+<br>
 
 ## Project Management & Team Assessment
 ### Status Update
@@ -114,7 +128,7 @@ Within our directory, the source files are:
 | 2 - Astrological Sign View | <ul><li>Begin work on this view</li><li>Incorporate dropdown & toggle UI</li></ul> | Alexis | March 18 / 13 hours | Initial Version: March 18 / 11 hours<br> **Refined Version: March 28 / 5 hours** |
 | 2 - Stacked / Grouped Bar chart View | <ul><li>Begin work on this view</li></ul> | Grace | March 18 / 13 hours | Initial version: March 20 / 10 hours |
 | 2 - World Map View | <ul><li>Begin work on this view</li><li>Interactive tooltips</li></ul> | Margaret | March 18 / 13 hours | Initial version: March 24 / 10 hours<br>**Still need to work on interactivity and being able to show each individual killer within a country** |
-| **2 - Data Quality Control** | **<ul><li>Fix errors in csv file from manually entering data/combining data from 2 different sources</li><li>Typos, and reformatting for easier data use</li></ul>** | **Margaret** | **N/A** | **March 28 / 2 hours** |
+| **2 - Data Quality Control** | **<ul><li>Fix errors in csv file from manually entering data/combining data from 2 different sources</li><li>Typos, and reformatting for easier data use</li></ul>** | **Margaret** | **N/A** | **March 28 / 3 hours** |
 | 2 - Link Views | <ul><li>Link views and integrate code</li></ul> | Margaret, **Grace, Alexis** | March 25 / 3 hours | March 28 / 3 hours -- **Class received extension for milestone 2!<br>Linked views will have to be refined in the next milestone**|
 | 2 - Clean up | <ul><li>Clean up and document code</li><li>Organize file structures</li></ul> | Alexis, Margaret, Grace | March 25 / 5 hours | March 28 / 5 hours -- **Class received extension for milestone 2!** |
 | 2 - Reflective Write-up | <ul><li>Write rationale of design choices</li><li>Document any changes</li><li>Status update of team and project management</li><li>Assess team process and contributions</li></ul> | Alexis, Margaret, Grace | March 25 / 5 hours | March 28 / x hours -- **Class received extension for milestone 2!** |
