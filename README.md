@@ -64,11 +64,12 @@ The following tasks we set out to facilitate in our proposal were:
 - User can easily [compare] the number of serial killers associated with each sign.
 - User can [sort] the signs (by most number of killers to least, or least to most)  to get a more accurate read 
 - User can [select] an astrological sign on the “radial chart” to see which astrological signs actually have a certain number of kills (ie 15-20 kills)
-- User [selects] the world view (map)
-- User [hovers] over a dot in the USA and sees basic information about a specific serial killer born in the US (birthday, years active, sun sign, victims & possible victims). 
-- User [selects] the dot to get specific notes about the serial killer.
 
 In our current visualization, the user can easily compare the number of serial killers associated with each sign. However, instead of seeing a specific number of kills, our visualization currently only facilitates the comparison of the total number of proven kills and the total number of proven and suspected kills. Our visualization facilitates this by providing a drop down menu, where the user can select between “Number of Killers”, “Proven Kills”, and “Proven + Possible Kills”. For our next milestone, we plan on implementing the stacked bar so that a user can compare and see what type of sign actually has a certain number of kills (ie 15-20 kills).
+
+Our visualization will no longer facilitate “selecting” to enter the world view - rather, users can scroll down and see the world map. Users can now [compare] the number of killers from one country to another, as the number of killers per country is displayed. This will act as a basis for our next milestone, which will allow us to ensure that we are still facilitating the following tasks:
+- User [hovers] over a dot in the USA and sees basic information about a specific serial killer born in the US (birthday, years active, sun sign, victims & possible victims). 
+- User [selects] the dot to get specific notes about the serial killer.
 
 ### Screenshots
 <ul>
