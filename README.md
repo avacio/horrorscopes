@@ -1,4 +1,7 @@
-# project_babyyodavision
+# project_babyyodavision: HORRORSCOPES
+## Summary
+This data visualization is purely for entertainment purposes and gives the viewer information about serial killers and their corresponding horoscope (astrological sign). These interactive views will allow users to explore and learn more about serial killers such as their sun signs, their kill magnitude breakdown, as well as their locations around the world. For believers and non-believers of astrology, this data visualization is a fun way for people to support or deny their pre-existing beliefs and stereotypes associated with each astrological sign.  
+<br>
 
 ## Design Rationale
 ### Rationale for our design choices
@@ -54,6 +57,11 @@ Each node represents an astrological sign, along with the sign’s traditional s
 #### Does our visualization enable the tasks we set out to facilitate or successfully communicate the story you want to tell
 
 ### Screenshots
+<ul>
+  <li><img src="/src/screenshots/m2-a.png" width="400px"</img></li>
+   <li><img src="/src/screenshots/m2-b.png" width="400px"</img></li>
+  <li><img src="/src/screenshots/m2-c.png" width="400px"</img></li>
+</ul>
 
 ### Links to the original data source
 Our database was created by manually incorporating 2 sources together: 
@@ -103,7 +111,7 @@ Within our directory, the source files are:
 | 2 - Boilerplate | <ul><li>initialize repo with boilerplate code</li><li>adjust and restructure file structure</li></ul>  | Alexis | March 9 / 3 hours | March 8 / 2 hours |
 | **2 - Data compilation** | **<ul><li>Integrate dataset from Wikipedia and The Serial Killer Database into one csv file</li><li>Manual data entry</li></ul>** | **Alexis, Grace, Margaret** | **N/A (Additional work required that was not included in the original milestone)** | **March 19 / 12 hours** |
 | 2 - Data processing | <ul><li>Process data in Javascript to desired maps/arrays categories</li></ul> | Grace | March 16 / 3 hours | --- |
-| 2 - Astrological Sign View | <ul><li>Begin work on this view</li><li>Incorporate dropdown & toggle UI</li></ul> | Alexis | March 18 / 13 hours | Initial Version: March 18 / 13 hours<br> **Refined Version: March 28 / 10 hours** |
+| 2 - Astrological Sign View | <ul><li>Begin work on this view</li><li>Incorporate dropdown & toggle UI</li></ul> | Alexis | March 18 / 13 hours | Initial Version: March 18 / 11 hours<br> **Refined Version: March 28 / 5 hours** |
 | 2 - Stacked / Grouped Bar chart View | <ul><li>Begin work on this view</li></ul> | Grace | March 18 / 13 hours | Initial version: March 20 / 10 hours |
 | 2 - World Map View | <ul><li>Begin work on this view</li><li>Interactive tooltips</li></ul> | Margaret | March 18 / 13 hours | Initial version: March 24 / 10 hours<br>**Still need to work on interactivity and being able to show each individual killer within a country** |
 | **2 - Data Quality Control** | **<ul><li>Fix errors in csv file from manually entering data/combining data from 2 different sources</li><li>Typos, and reformatting for easier data use</li></ul>** | **Margaret** | **N/A** | **March 28 / 2 hours** |
