@@ -72,13 +72,9 @@ Within our directory, the source files are:
 | 3 - Demo Practice | <ul><li>Prepare for our demo</li><li>Do we want PowerPoint slides as well?</li><li>Rehearse who is saying what and what we want to show</li></ul> | Alexis, Margaret, Grace | April 10 / 3 hours | --- |
 
 ### Contributions Breakdown
-- alexis
-  - [VIS-NODES]
-    - add node size information to legend
-    - node size different options global scale or local depending on type?
-    - ICEBOX (would be nice):
-      - sort options for cyclic view?
-      - start order of zodiac from the top? instead of at 0 degrees
+| Alexis | Grace | Margaret |
+| --- | --- | --- |
+| <ul><li>The astrological nodes visualization (force simulation) with cyclic and element group view options</li><li>UI elements: dropdown for kill count, view button toggle</li><li>Data compilation and processing of astrological signs information</li><li>User interaction of showing astrological information on node hover</li><li>Manual data entry to improve our database of serial killers</ul> | <ul><li>item</li><li>item</li><li>item</li><li>item</li><li>item</ul> | <ul><li>The world map visualization</li><li>Parsed countries information from serial killers .csv and linked it to the data from world TopoJSON</li><li>Manual data entry and fixed errors in the csv file</li><li>Moved and formatted content from Google docs into README</li> |
 
 ### Team Process
 |   | Weak | Satisfactory | Good | Excellent | What are specific actions you want to take to address issues|
