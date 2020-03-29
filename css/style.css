@@ -16,9 +16,9 @@ html {
   flex:50%;
 }
 
+
 .geo-path {
-  fill: pink;
-  stroke: #fff;
+  stroke: black;
 }
 
 /*
@@ -29,11 +29,11 @@ html {
 
 #map {
   border: 1px solid grey;
-  background-image: url(../src/world-background.jpg);
+  background-image: url(../src/galaxy-background.jpg);
 }
 
 .world-sphere {
-  fill: grey;
+  fill: #8cb1de;
 }
 
 #play-button {
@@ -42,9 +42,10 @@ html {
 }
 
 .place-text {
-  font-size: 1.2rem;
+  font-size: 0.9rem;
   font-weight: 600;
   text-shadow: 1px 1px 4px #ffffff;
+  background: #fff;
 }
 
 p {

@@ -85,8 +85,12 @@ class ChoroplethMap {
     geoPath.merge(geoPathEnter)
       .transition()
         .attr('fill', d => {
+          if (vis.killersByCountry[d.properties.name] != 0) {
+            return '#3b5d38';
+          } else {
+            return '#D3D3D3';
+          }
           // To-do: Change fill to color code each province by its population
-          return '#fff';
         });
 
     // To-do: Add labels for each province with the population value
@@ -101,9 +105,12 @@ class ChoroplethMap {
     geoLabels.merge(geoLabelsEnter)
       .attr("x", d => vis.projection(d3.geoCentroid(d))[0])
       .attr("y", d => vis.projection(d3.geoCentroid(d))[1])
+      .attr("class", "place-text")
       .attr("text-anchor","middle")
       .text(d => {
+        if (vis.killersByCountry[d.properties.name] != 0) {
           return vis.killersByCountry[d.properties.name];
+        }
       });  
   }
 }
