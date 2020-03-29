@@ -1,6 +1,49 @@
 # project_babyyodavision
 
 ## Design Rationale
+### Rationale for our design choices
+
+### How our vision has changed since the proposal
+
+### Screenshots
+
+### Links to the original data source
+Our database was created by manually incorporating 2 sources together: 
+<ul>
+  <li><a href="https://en.wikipedia.org/wiki/List_of_serial_killers_by_number_of_victims">List of serial killers by numbers of victims from Wikipedia</a></li>
+  <li><a href="https://killer.cloud/">The Serial Killer Database by Killer.Cloud</a></li>
+</ul>
+
+As for our information regarding the astrological signs themselves, we created our own .csv file while referencing sources such as:
+<ul>
+  <li><a href="https://www.astrology-zodiac-signs.com/">Zodiac signs and astrology signs meanings and characteristics</a></li>
+  <li><a href="https://cafeastrology.com/natal/elements-astrology.html">The elements in astrology</a></li>
+  <li><a href="https://blog.prepscholar.com/zodiac-symbols-signs">What's your zodiac sign? The 12 zodiac symbols</a></li>
+  <li><a href="https://www.liveabout.com/astrological-symbols-4122678">Astrological symbols</a></li>
+</ul>
+
+### Data preprocessing pipeline
+Our first iteration of our dataset used [data from Wikipedia](https://en.wikipedia.org/wiki/List_of_serial_killers_by_number_of_victims). We converted the wikitables to .csv files using [this tool](https://wikitable2csv.ggor.de/). Through this process we obtained 322 items of data, 211 of which had birthdays listed (we need birthdays in order to obtain their astrological signs)
+
+Since the last milestone, however, we found additional information in [“The Serial Killer Database” by Killer.Cloud](https://killer.cloud/). Now we have increased our data pool to 512 serial killers with known birthdays.
+
+Unfortunately, the database from KillerCloud did not have prepared .csv or .json files for sharing, so we proceeded to add the new serial killer information through manual data entry. This was a very long, arduous and tedious process, but we are hoping that adding all of this data will help us discover more meaning from our visualization. Due to manually integrating serial killer information from 2 different sources into one dataset, we encountered 71 errors with the dataset such as spelling mistakes and missing commas/quotations. We had to go find and fix the errors in the csv as it was causing data to be parsed incorrectly. Additionally, since we also needed to link the serial killer csv file with the world TopoJson data, countries that no longer exist today were replaced with the current country equivalent. For example killers from the Czech Republic were changed to be from Czechia instead so that it matches the country name from the world data.
+
+Within our directory, the source files are:
+<ul>
+  <li>data/collective-serial-killer-database.csv
+    <ul><li>Contains combined list of our Wikipedia and KilledCloud sources</li></ul>
+  </li>
+  <li>data/signs-info.csv
+    <ul><li>Information about the signs (modality, description, element, dates, etc.)</li></ul>
+  </li>
+  <li>data/countries.topo.json
+    <ul>
+      <li><a href="https://www.npmjs.com/package/world-atlas">World TopoJSON</a></li>
+      <li>Used for the map view</li>
+    </ul>
+  </li>
+</ul>
 
 
 ## Project Management & Team Assessment
