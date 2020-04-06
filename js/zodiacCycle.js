@@ -230,7 +230,6 @@ class ZodiacCycle {
 
   registerSelectCallback(callback) {
     let vis = this;
-
     vis.OPTS.registerListener(callback);
   }
 

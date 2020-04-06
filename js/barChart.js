@@ -41,8 +41,11 @@ class Barchart {
    * In some cases, you may not need this function but when you create more complex visualizations
    * you will probably want to organize your code in multiple functions.
    */
-  update(selectedOption) {
+  update() {
     let vis = this;
+
+    console.log(vis.selectedCountOption);
+    console.log(vis.sortOption);
 
     // We don't need Unknown in this vis
     if ("Unknown" in vis.signsAndKills) {
@@ -52,19 +55,28 @@ class Barchart {
     vis.signsAndSelectedOption = {};
     let signs = Object.keys(vis.signsAndKills);
     let maxY = 0;
+    let unsortedYValues = [];
+    let leastToMost = [];
+    let mostToLeast = [];
  
 
     // get max value for y
     signs.forEach(sign => {
       if (maxY == 0)
       { 
-        maxY = this.getY(selectedOption, sign);
+        maxY = this.getY(vis.selectedCountOption, sign);
         vis.signsAndSelectedOption[sign]= maxY;
+        unsortedYValues.push(maxY);
+        leastToMost.push(maxY);
+        mostToLeast.push(maxY);
         
       } else
       { 
-        let y = this.getY(selectedOption, sign);
+        let y = this.getY(vis.selectedCountOption, sign);
         vis.signsAndSelectedOption[sign] = y;
+        unsortedYValues.push(y);
+        leastToMost.push(y);
+        mostToLeast.push(y);
 
         if (y > maxY)
         {
@@ -72,6 +84,21 @@ class Barchart {
         }
       }
     });
+
+    // sort values if sort option selected
+    if (vis.sortOption == "Least to Most")
+    { 
+
+      leastToMost.sort(function (a, b) {
+        return d3.ascending(a, b)});
+
+    } else if (vis.sortOption == "Most to Least")
+    {
+
+      mostToLeast.sort(function (a, b) {
+        return d3.descending(a, b)});
+
+    } 
 
 
     // create scale
@@ -98,6 +125,7 @@ class Barchart {
   getY(selectedOption, sign)
   { 
       let vis = this;
+      console.log("this is the count type" + selectedOption);
 
       if (selectedOption == "Number of Killers" || selectedOption == null)
       { 

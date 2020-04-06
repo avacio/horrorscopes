@@ -218,6 +218,7 @@ $("#view-toggle").on("click", function() {
 });
 
 const killCountOptions = ["Number of Killers", "Proven Kills", "Proven + Possible Kills"];
+const sortBarChartOptions = ["Unsorted", "Most to Least", "Least to Most"];
 
 const killCountVariableNameDict = {};
 killCountVariableNameDict[killCountOptions[0]] = "numKillers";
@@ -233,6 +234,15 @@ d3.select("#kill-count-select")
   .text(function (d) { return d; }) // text showed in the menu
   .attr("value", function (d) { return d; }); // corresponding value returned by the button
 
+// selection to sort bar chart
+d3.select("#sort-bars")
+  .selectAll('sortBarChartOptions')
+  .data(sortBarChartOptions)
+  .enter()
+  .append('option')
+  .text(function (d) { return d; }) // text showed in the menu
+  .attr("value", function (d) { return d; }); // corresponding value returned by the button
+
 zodiacCycle.countType = killCountVariableNameDict[d3.select("#kill-count-select").property("value")];
 zodiacCycle.update();
 
@@ -241,9 +251,17 @@ d3.select("#kill-count-select").on("change", function(d) {
   var selectedOption = d3.select(this).property("value")
 
   zodiacCycle.countType = killCountVariableNameDict[selectedOption];
+  barChart.selectedCountOption = selectedOption;
   zodiacCycle.update();
-  barChart.update(selectedOption);
+  barChart.update();
 
+});
+
+d3.select("#sort-bars").on("change", function(d) {
+  var selectedOption = d3.select(this).property("value")
+
+  barChart.sortOption = selectedOption;
+  barChart.update();
 });
 
 function updateSignInfo() {
@@ -260,3 +278,8 @@ function updateSignInfo() {
   $("#typeText").className = '';
   $("#typeText").addClass(signsInfoDict[selectedSign].type);
 }
+
+// function registerSelectCallback(callback) {
+//     zodiacCycle.OPTS.registerListener(callback);
+//     barChart.OPTS.registerListener(callback);
+//   }
