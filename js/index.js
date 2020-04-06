@@ -1,6 +1,6 @@
 let barChart = new Barchart({ parentElement: '#bar-chart'});
 let choroplethMap = new ChoroplethMap({ parentElement: '#map' });
-let selectedSign = "Aquarius";
+let highlightedSign = "Aquarius";
 let zodiacCycle = new ZodiacCycle({ parentElement: '#vis-row', svg: "#vis-nodes" });
 
 let formatTime = d3.timeFormat("%m/%d");
@@ -196,7 +196,7 @@ Promise.all([
 
   zodiacCycle.update();
   zodiacCycle.registerSelectCallback((sign) => {
-    selectedSign = sign;
+    highlightedSign = sign;
     updateSignInfo();
   });
 
@@ -247,16 +247,16 @@ d3.select("#kill-count-select").on("change", function(d) {
 });
 
 function updateSignInfo() {
-  console.log("Selected Sign: " + selectedSign);
-  if (!selectedSign) {return;} 
+  console.log("Highlighted Sign: " + highlightedSign);
+  if (!highlightedSign) {return;} 
 
-  $("#signNameText")[0].innerHTML = selectedSign;
-  $("#datesText")[0].innerHTML = signsInfoDict[selectedSign].dates;
-  $("#typeText")[0].innerHTML = signsInfoDict[selectedSign].type.toUpperCase();
-  $("#modalityText")[0].innerHTML = signsInfoDict[selectedSign].modality.toUpperCase();
-  $("#descriptionText")[0].innerHTML = signsInfoDict[selectedSign].description;
+  $("#signNameText")[0].innerHTML = highlightedSign;
+  $("#datesText")[0].innerHTML = signsInfoDict[highlightedSign].dates;
+  $("#typeText")[0].innerHTML = signsInfoDict[highlightedSign].type.toUpperCase();
+  $("#modalityText")[0].innerHTML = signsInfoDict[highlightedSign].modality.toUpperCase();
+  $("#descriptionText")[0].innerHTML = signsInfoDict[highlightedSign].description;
 
   elements.forEach(e =>  $("#typeText").removeClass(e));
   $("#typeText").className = '';
-  $("#typeText").addClass(signsInfoDict[selectedSign].type);
+  $("#typeText").addClass(signsInfoDict[highlightedSign].type);
 }
