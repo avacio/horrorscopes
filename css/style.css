@@ -16,6 +16,9 @@ html {
   flex:50%;
 }
 
+.hidden {
+  display: none;
+}
 
 .geo-path {
   stroke: black;
@@ -72,17 +75,31 @@ p {
   /*  display: block;*/
   /*  text-align: right;*/
   /*  line-height: 50px;*/
-    padding: 20px 0 0 20px;
-/*  padding: 20px;*/
+  padding: 20px 0 0 20px;
+  height: 100px;
+  /*  padding: 20px;*/
   /*  width: 200px;*/
 }
 
 #view-toggle {
   width: 150px;
+  background-color: silver;
+  border: 1px solid black;
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+
+#kill-count-select {
+  background-color: silver;
+  border: 1px solid black;
+  font-size: 1.2rem;
+  font-weight: 600;
 }
 
 #legend-elements, #elements-info, #modality-info {
-  padding: 20px;
+  /*  padding: 20px;*/
+/*  padding: 0 0 0 20px;*/
+  padding: 0 0 0 20px;
 }
 
 #signNameText {
@@ -92,7 +109,7 @@ p {
 }
 
 .description {
-  font-size: 1rem;
+  font-size: 0.9rem;
 }
 
 #descriptionText {
@@ -110,37 +127,18 @@ p {
   /*  color: black;*/
   color: white;
   width: 185px;
-  height: 460px;
+  height: 510px;
 }
 
 .legend-node {
-  height: 25px;
-  width: 25px;
+  height: 20px;
+  width: 20px;
   border-radius: 50%;
   display: inline-block;
 }
 
 .legend-node > html {
   margin-left: 50px;
-}
-
-.l-label {
-  font-size: 1.5rem;
-  font-weight: 600;
-  text-decoration: underline;
-  outline: solid 4px blue;
-}
-
-.sublabel {
-  font-size: 1.5rem;
-  font-weight: 600;
-  outline: solid 4px blue;
-  align-content: center;
-}
-
-.legend-icon {
-  height: 70px;
-  width:auto;
 }
 
 .monthArc {
@@ -159,7 +157,6 @@ p {
   font-size: 1.3rem;
   font-weight: 600;
   color: white;
-  /*  background-color: blueviolet;*/
   background-color: black;
 }
 
@@ -169,8 +166,6 @@ p {
 
 .node {
   stroke-width: 5;
-/*    stroke: black;*/
-
 }
 
 .regular-node {
@@ -179,10 +174,10 @@ p {
 
 .highlighted-node {
   stroke: white;
-/*  stroke: black;*/
 }
 
 #modality-legend-svg {
+  padding-left: 15px;
   width: 50px;
 }
 
@@ -247,7 +242,6 @@ title {
 .water {
   fill: #70B7BA;
   color: #70B7BA;
-
 }
 
 .water-bg {

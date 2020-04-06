@@ -1,8 +1,17 @@
 #TODO
 
 ## ALEXIS
-- reset position button to reset date orders in the vis nodes
-- fix date order
-- add date labels
-- fix taurus too small
 - add circle size to legend
+- dropdown count changes don't transition for some reason
+- double-check bidirectional highlighting when ready
+- help margaret with individual view?
+
+## GRACE
+- highlight bars
+- reorder bars
+  - drag to compare?
+- help margaret with individual view?
+  
+## MARGARET
+- Zipeng: "Huge label mess in Europe in the map view. Hint: think about how google map handles text labels."
+- individual view?

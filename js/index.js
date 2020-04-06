@@ -160,7 +160,7 @@ Promise.all([
   // ie loads signsAndKills map
   loadSignsAndKills(signsAndSerialKillers);
 
-/*
+  /*
   console.log(killersByCountry);
   console.log("signs");
   console.log(signsAndSerialKillers);
@@ -193,6 +193,7 @@ Promise.all([
   zodiacCycle.data = signsAndKills;
   zodiacCycle.elements = elements;
   zodiacCycle.signsInfoDict = signsInfoDict;
+//  zodiacCycle.signsInfoDict = shiftIndex(signsInfoDict, 5);
 
   zodiacCycle.update();
   zodiacCycle.registerSelectCallback((sign) => {
