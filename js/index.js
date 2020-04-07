@@ -196,8 +196,16 @@ Promise.all([
 
   zodiacCycle.update();
   zodiacCycle.registerSelectCallback((sign) => {
+    console.log("selectCallback");
     selectedSign = sign;
+    barChart.highlightBar(selectedSign);
     updateSignInfo();
+  });
+
+  zodiacCycle.registerUnselectCallback((sign) => {
+    console.log("unselect callback");
+    unselectedSign = sign;
+    barChart.unhighlightBar(unselectedSign);
   });
 
   updateSignInfo();
@@ -278,8 +286,3 @@ function updateSignInfo() {
   $("#typeText").className = '';
   $("#typeText").addClass(signsInfoDict[selectedSign].type);
 }
-
-// function registerSelectCallback(callback) {
-//     zodiacCycle.OPTS.registerListener(callback);
-//     barChart.OPTS.registerListener(callback);
-//   }

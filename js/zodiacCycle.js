@@ -3,9 +3,8 @@ class ZodiacCycle {
     this.config = {
       parentElement: _config.parentElement,
       svg: _config.svg,
-      //      containerWidth: _config.containerWidth || 1100,
       containerWidth: _config.containerWidth || 700,
-      containerHeight: _config.containerHeight || 600,
+      containerHeight: _config.containerHeight || 550,
     }
 
     this.data = _config.data;
@@ -14,15 +13,26 @@ class ZodiacCycle {
     this.OPTS = {
       aInternal: "Aquarius",
       aListener: function(val) {},
-      set selectedSign(val) {
+      unselectListener: function(Val) {},
+      set highlightedSign(val) {
         this.aInternal = val;
         this.aListener(val);
       },
-      get selectedSign() {
+      get highlightedSign() {
         return this.aInternal;
       },
-      registerListener: function(listener) {
+      set unhighlightSign(val) {
+        this.aInternal = val;
+        this.unselectListener(val);
+      },
+      get unhighlightSign() {
+        return this.aInternal;
+      },
+      registerSelectListener: function(listener) {
         this.aListener = listener;
+      },
+      registerUnselectListener: function(listener) {
+        this.unselectListener = listener;
       }
     }
 
@@ -46,16 +56,15 @@ class ZodiacCycle {
       .attr("class", "node");
     vis.icons = vis.chart.append("g")
       .attr("class", "icons");
+    vis.monthLabels = vis.chart.append("g")
+      .attr("class", "monthLabel");
 
     vis.tooltip = d3.select(vis.config.parentElement)
       .append("div")
     //    vis.tooltip = d3.select('body').append("div")
       .attr('class', 'tooltip')
       .attr('width', 70)
-      .attr('height', 100)
-    //      .style('opacity', .0);
-    ;
-
+      .attr('height', 100);
 
     vis.iconPath = (vis.data, d => {
       return "src/zodiac-icons/" + d.key.toLowerCase() + ".png";
@@ -79,7 +88,24 @@ class ZodiacCycle {
         delete vis.data["Unknown"];
       }
 
-      const nodes = d3.entries(vis.data);
+
+      /////////
+
+      //ZOOM NECESSARY??
+      //        var zoom = d3.zoom()
+      //      .scaleExtent([1, 8])
+      //      .on('zoom', function() {
+      //          vis.chart
+      //           .attr('transform', d3.event.transform);
+      //    });
+      //
+      //    vis.svg.call(zoom);
+      //      
+      //
+
+      //      const nodes = d3.entries(vis.data);
+      //      const nodes = vis.shiftIndex(d3.entries(vis.data), 5);
+      const nodes = vis.shiftIndex(d3.entries(vis.data), 3);
       const entries = Object.entries(vis.data);
 
       vis.sizeScale = d3.scaleSqrt()
@@ -90,7 +116,10 @@ class ZodiacCycle {
       //        .domain(
       //         d3.extent([].concat(nodes.map(d => d.value.numKillers), nodes.map(d => d.value.numProven), nodes.map(d => d.value.numPossible)))
       //      )
-        .range([15, 60])
+      //        .range([10, 50])
+      //        .range([18, 52])
+        .range([5, 52])
+      //        .range([15, 60])
         .nice();
 
       // local min and max based on count type
@@ -123,28 +152,26 @@ class ZodiacCycle {
       let simulation;
       if (vis.isCyclicView) {
         simulation = d3.forceSimulation(nodes)
-          .force("link", d3.forceLink(links).id(d =>d.key).distance(200))
-          .force("charge", d3.forceManyBody().strength(-500))
+          .force("link", d3.forceLink(links).id(d =>d.key).distance(150))
+        //          .force("link", d3.forceLink(links).id(d =>d.key).distance(200))
+          .force("charge", d3.forceManyBody().strength(-1200))
+        //          .force("charge", d3.forceManyBody().strength(-500))
           .force("collide", d3.forceCollide().strength(1.5))
-          .force("center", d3.forceCenter(vis.config.containerWidth / 2, vis.config.containerHeight / 2));
+          .force("center", d3.forceCenter(vis.config.containerWidth * 0.47, vis.config.containerHeight / 2));
       } else {
         simulation = d3.forceSimulation(nodes)
           .force("link", d3.forceLink(links).id(d =>d.key).distance(d => 80))
           .force("charge", d3.forceManyBody().strength(-1000))
           .force("collide", d3.forceCollide().strength(2))
-          .force("center", d3.forceCenter(vis.config.containerWidth / 2, vis.config.containerHeight / 2))
-          .force("forceX",d3.forceX().strength(0.07).x(vis.config.containerWidth / 2))
-          .force("forceY", d3.forceY().strength(0.15).y(vis.config.containerHeight / 2));
+          .force("center", d3.forceCenter(vis.config.containerWidth * 0.47, vis.config.containerHeight * 0.47))
+          .force("forceX",d3.forceX().strength(0.15).x(vis.config.containerWidth * 0.57))
+          .force("forceY", d3.forceY().strength(0.22).y(vis.config.containerHeight * 0.5));
       }
 
       const link = vis.links
       .selectAll("line")
       .data(links)
       .join("line");
-      //      links.forEach(d => {
-      //        console.log(d);
-      //      })
-
 
       // icon image
       const image = vis.icons.selectAll('image')
@@ -152,22 +179,26 @@ class ZodiacCycle {
       .data(nodes.filter(d => filter(d)))   
       .join("image")
       .attr("xlink:href", d => vis.iconPath(d))
-      //      .attr("width", d => vis.sizeScale(d))
-      //      .attr("height", d => vis.sizeScale(d))
-      .attr("width", d => 50)
-      .attr("height", d => 50)
-      ;
-
-      //      node.append("title")
-      //      //       node.append("p")
-      //        .text(d => d.key);
+      .attr("width", d => 35)
+      .attr("height", d => 35);
 
       // Tooltip!
       const tooltipMouseover = (d) => {
+        vis.OPTS.highlightedSign = d.key;
+
         if (vis.isCyclicView) {
           vis.setPositions = false;
         }
-        vis.OPTS.selectedSign = d.key;
+
+        if (node) {
+          vis.nodes
+            .selectAll("circle")
+            .data(nodes.filter(d => filter(d)))   
+            .join("circle")
+            .classed('regular-node', d => vis.OPTS.highlightedSign != d.key)
+            .classed('highlighted-node', d => vis.OPTS.highlightedSign == d.key);
+        }
+
         vis.tooltip.html(d.key)
           .style('left', (d3.event.pageX + 15) + "px")
           .style('top', (d3.event.pageY - 28) + "px")
@@ -176,6 +207,9 @@ class ZodiacCycle {
       };
 
       const tooltipMouseout = (d) => {
+        // this is here so listener can unhighlight the barchart
+        vis.OPTS.unhighlightSign = d.key;
+        console.log(vis.OPTS.unhighlightSign);
         vis.tooltip.transition()
           .style('opacity', 0);
       };
@@ -185,32 +219,44 @@ class ZodiacCycle {
       .data(nodes.filter(d => filter(d)))   
       .join("circle")
       .attr("id", d => d.key)
-      .attr("class", d => vis.signsInfoDict[d.key].type)
+      .attr("class", d => vis.signsInfoDict[d.key].type
+            + " regular-node"
+            + " modality-" + vis.signsInfoDict[d.key].modality)
+
       .attr("r", d => vis.sizeScale(d.value[vis.countType]))
       .call(vis.drag(simulation))
       .on('mouseover', d => tooltipMouseover(d))
       .on('mouseout', d => tooltipMouseout(d));
 
+      const monthLabel = vis.monthLabels
+      .selectAll('text')
+      .data(nodes.filter(d => filter(d)))   
+      .join('text')
+      .text(d => vis.signsInfoDict[d.key].dates.split(' ')[0])
+      .classed('hidden', !vis.isCyclicView);
+
       if (vis.isCyclicView) {
         // fix the position of the root node
         const rootNode = simulation.nodes()[12];
-        rootNode.fx= vis.config.containerWidth / 2;
-        rootNode.fy= vis.config.containerHeight / 2;
+        rootNode.fx= vis.config.containerWidth * 0.47;
+        rootNode.fy= vis.config.containerHeight * 0.5;
       }
 
       simulation.on("tick", () => {
         node
           .attr("cx", d => {
-          if (vis.setPositions && vis.isCyclicView) {
-            d.x = vis.config.containerWidth / 2 +
-              Math.round(215 * Math.cos(d.index * (2 * Math.PI / 12)));
+          //          if (vis.setPositions && vis.isCyclicView) {
+          if (vis.isCyclicView) {
+            d.x = vis.config.containerWidth * 0.47 +
+              Math.round(190 * Math.cos(d.index * (2 * Math.PI / 12)));
           }
           return d.x;
         })
           .attr("cy", d => {
-          if (vis.setPositions && vis.isCyclicView) {
-            d.y =   vis.config.containerWidth / 2.2 +
-              Math.round(215 * Math.sin(d.index * (2 * Math.PI / 12)));
+          //          if (vis.setPositions && vis.isCyclicView) {
+          if (vis.isCyclicView) {
+            d.y =   vis.config.containerHeight * 0.5 +
+              Math.round(190 * Math.sin(d.index * (2 * Math.PI / 12)));
           }
           return d.y;
         })
@@ -222,15 +268,43 @@ class ZodiacCycle {
           .attr("y2", d => d.target.y);
 
         image
-          .attr("x", d => d.x)
-          .attr("y", d => d.y);
+          .attr("x", d => d.x-18)
+          .attr("y", d => 
+                {
+          let scaled = vis.sizeScale(d.value[vis.countType]);
+
+          return scaled < 20 ? d.y+scaled : d.y-15;
+        }
+               );
+
+        monthLabel
+          .attr("x", d => vis.config.containerWidth * 0.43 +
+                Math.round(290 * Math.cos(d.index * (2 * Math.PI / 12))))
+          .attr("y", d => vis.config.containerHeight * 0.5 +
+                Math.round(260 * Math.sin(d.index * (2 * Math.PI / 12))));
       });
     }
   }
 
   registerSelectCallback(callback) {
     let vis = this;
-    vis.OPTS.registerListener(callback);
+
+    vis.OPTS.registerSelectListener(callback);
+  }
+
+  // here to unhighlight the barchart
+  registerUnselectCallback(callback) {
+    let vis = this;
+    vis.OPTS.registerUnselectListener(callback);
+  }
+
+  shiftIndex(array, shiftAmount) {
+    let i = 0;
+    while (i < shiftAmount) {
+      array.push(array.shift());
+      i++;
+    }
+    return array;
   }
 
   drag = simulation => {

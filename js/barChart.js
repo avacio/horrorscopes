@@ -140,22 +140,31 @@ class Barchart {
       }
   }
 
+  registerSelectCallback(callback) {
+    let vis = this;
+    vis.OPTS.registerListener(callback);
+  }
+
 
   render(signs) {
     let vis = this;
 
      // Bind data
-    let bar = vis.chart.selectAll('rect')
+    let bar = vis.chart.selectAll('.bar')
         .data(signs);
   
     // Append SVG rectangles for new data items
-    let barEnter = bar.enter().append('rect');
+    let barEnter = bar.enter().append('rect')
+        .attr("class", "bar");
 
     // Merge will update the attributes x, y, width, and height on both the "enter" and "update"
     // selection (i.e. define attributes for new data items and update attributes for existing items).
     // We use the chained transition() function to create smooth transitions whenever attributes change. 
     bar.merge(barEnter)
       .transition()
+        .attr('id', function(d) { 
+            return d;
+         })
         .attr('x', d => vis.xScale(d))
         .attr('y', d => vis.yScale(vis.signsAndSelectedOption[d]))
         .attr('width', vis.xScale.bandwidth())
@@ -172,5 +181,26 @@ class Barchart {
       .selectAll("text")
         .style("font-size", 12)
         .style("fill", 'black');
+  }
+
+  highlightBar(sign) {
+    let vis = this;
+    let selectString = "#" + sign;
+
+    let highlightBar = vis.chart.select(selectString);
+
+    highlightBar
+      .attr("fill", "steelblue");
+
+  }
+
+  unhighlightBar(sign) {
+    let vis = this;
+    let selectString = "#" + sign;
+
+    let highlightBar = vis.chart.select(selectString);
+
+    highlightBar
+      .attr("fill", "black");
   }
 }
