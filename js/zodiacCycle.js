@@ -14,6 +14,7 @@ class ZodiacCycle {
       aInternal: "Aquarius",
       aListener: function(val) {},
       unselectListener: function(Val) {},
+
       set highlightedSign(val) {
         this.aInternal = val;
         this.aListener(val);
@@ -28,6 +29,7 @@ class ZodiacCycle {
       get unhighlightSign() {
         return this.aInternal;
       },
+      
       registerSelectListener: function(listener) {
         this.aListener = listener;
       },
@@ -296,6 +298,15 @@ class ZodiacCycle {
   registerUnselectCallback(callback) {
     let vis = this;
     vis.OPTS.registerUnselectListener(callback);
+  }
+
+  shiftIndex(array, shiftAmount) {
+    let i = 0;
+    while (i < shiftAmount) {
+      array.push(array.shift());
+      i++;
+    }
+    return array;
   }
 
   shiftIndex(array, shiftAmount) {

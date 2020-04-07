@@ -16,6 +16,9 @@ html {
   flex:50%;
 }
 
+.hidden {
+  display: none;
+}
 
 .geo-path {
   stroke: black;
@@ -23,8 +26,8 @@ html {
 
 /*
 #map {
-  width: 1000px;
-  height: 1000px;
+width: 1000px;
+height: 1000px;
 }*/
 
 #map {
@@ -52,42 +55,8 @@ p {
   font-size: 1.4rem;
 }
 
-#task2a {
-  background-color: black;
-}
-
-#task2b {
-  background-color: black;
-}
-
 .tick {
   color: white;
-}
-
-#ground-control {
-  margin-bottom: 10px;
-  align-items: flex-end;
-}
-
-#ground-control button {
-  font-size: 1.5rem;
-  font-weight: 300;
-  width:150px;
-  height:50px;
-  background-color: blue;
-  color: white;
-}
-
-#legend {
-  font-size: 1.5rem;
-  font-weight: 300;
-  background-color:black; 
-  outline: solid 10px blue;
-  color: white;
-  display: block;
-  text-align: right;
-  line-height: 50px;
-  padding: 0 0 20px 20px;
 }
 
 #vis-nodes {
@@ -98,31 +67,53 @@ p {
 }
 
 #vis-nodes-legend {
-  font-size: 1.5rem;
+  font-size: 1.1rem;
   font-weight: 300;
   background-color:black; 
   /*  outline: solid 10px blue;*/
   color: white;
-/*  display: block;*/
+  /*  display: block;*/
   /*  text-align: right;*/
   /*  line-height: 50px;*/
-  /*  padding: 0 0 20px 20px;*/
-  padding: 20px;
-/*  width: 200px;*/
+  padding: 20px 0 0 20px;
+  height: 100px;
+  /*  padding: 20px;*/
+  /*  width: 200px;*/
+}
+
+#view-toggle {
+  width: 150px;
+  background-color: silver;
+  border: 1px solid black;
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+
+#kill-count-select {
+  background-color: silver;
+  border: 1px solid black;
+  font-size: 1.2rem;
+  font-weight: 600;
 }
 
 #legend-elements, #elements-info, #modality-info {
-  padding: 20px;
+  /*  padding: 20px;*/
+/*  padding: 0 0 0 20px;*/
+  padding: 0 0 0 20px;
 }
 
 #signNameText {
-  font-size: 3rem;
+  font-size: 1.8rem;
   font-weight: 700;
   text-decoration: underline;
 }
 
 .description {
-  font-size: 1rem;
+  font-size: 0.9rem;
+}
+
+#descriptionText {
+  font-size: 0.9rem;
 }
 
 #vis-nodes-info {
@@ -131,67 +122,23 @@ p {
   /*  background-color: gray;*/
   background-color: #565656;
   /*  background-color: darkgray;*/
-  font-size: 1.5rem;
+  font-size: 0.9rem;
   font-weight: 300;
   /*  color: black;*/
   color: white;
-  width: 250px;
+  width: 185px;
+  height: 510px;
 }
 
 .legend-node {
-  height: 25px;
-  width: 25px;
+  height: 20px;
+  width: 20px;
   border-radius: 50%;
   display: inline-block;
 }
 
 .legend-node > html {
   margin-left: 50px;
-}
-
-.l-label {
-  font-size: 1.5rem;
-  font-weight: 600;
-  text-decoration: underline;
-  outline: solid 4px blue;
-}
-
-.sublabel {
-  font-size: 1.5rem;
-  font-weight: 600;
-  outline: solid 4px blue;
-  align-content: center;
-}
-
-.legend-icon {
-  height: 70px;
-  width:auto;
-}
-
-.space-dog {
-  border-radius: 50%;
-  -webkit-transition: -webkit-transform 5s ease-in-out;
-  transition:         transform 5s ease-in-out;
-}
-
-.space-dog:hover {
-  outline: dotted 4px blueviolet;
-}
-
-.rotateC0 {
-  -webkit-transform: rotate(6deg);
-}
-
-.rotateC1 {
-  -webkit-transform: rotate(2deg);
-}
-
-.rotateCC0 {
-  -webkit-transform: rotate(-4deg);
-}
-
-.rotateCC0 {
-  -webkit-transform: rotate(-7deg);
 }
 
 .monthArc {
@@ -210,17 +157,45 @@ p {
   font-size: 1.3rem;
   font-weight: 600;
   color: white;
-  /*  background-color: blueviolet;*/
   background-color: black;
 }
 
+.node-icon {
+  pointer-events: none;
+}
+
 .node {
-  /*
-  stroke: #fff;
-  stroke-width: 1.5;
-  */
-  /*  color: aliceblue;*/
-  /*  fill: #ff0000;*/
+  stroke-width: 5;
+}
+
+.regular-node {
+  stroke: black;
+}
+
+.highlighted-node {
+  stroke: white;
+}
+
+#modality-legend-svg {
+  padding-left: 15px;
+  width: 50px;
+}
+
+.stroke {
+  stroke: white;
+  stroke-width: 5;
+}
+
+.modality-cardinal {
+  stroke-dasharray: 20,10,5,5,5,10;
+}
+
+.modality-fixed {
+  /*  stroke-dasharray: 5,5;*/
+}
+
+.modality-mutable {
+  stroke-dasharray: 5,5;
 }
 
 .link {
@@ -240,7 +215,6 @@ title {
 .fire {
   fill: #EF7C7A;
   color: #EF7C7A;
-  /*  background-color: #EF7C7A;*/
 }
 
 .fire-bg {
@@ -250,7 +224,6 @@ title {
 .earth {
   fill: #8AAA46;
   color: #8AAA46;
-  /*  background-color: #8AAA46;*/
 }
 
 .earth-bg {
@@ -260,7 +233,6 @@ title {
 .air {
   fill: #F7E967;
   color: #F7E967;
-  /*  background-color: #F7E967;*/
 }
 
 .air-bg {
@@ -270,7 +242,6 @@ title {
 .water {
   fill: #70B7BA;
   color: #70B7BA;
-  /*  background-color: #70B7BA;*/
 }
 
 .water-bg {

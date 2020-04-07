@@ -3,9 +3,9 @@ class Barchart {
     constructor(_config) {
     this.config = {
       parentElement: _config.parentElement,
-      containerWidth: _config.containerWidth || 700,
+      containerWidth: _config.containerWidth || 500,
       containerHeight: _config.containerHeight || 500,
-      margin: _config.margin || { top: 50, right: 30, bottom: 100, left: 100 }
+      margin: _config.margin || { top: 50, right: 30, bottom: 100, left: 50 }
     }
 
     this.initVis();
