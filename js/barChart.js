@@ -53,30 +53,22 @@ class Barchart {
     }
 
     vis.signsAndSelectedOption = {};
-    let signs = Object.keys(vis.signsAndKills);
+    let orderedSigns = [];
+    let unorderedSigns = Object.keys(vis.signsAndKills);
     let maxY = 0;
-    let unsortedYValues = [];
-    let leastToMost = [];
-    let mostToLeast = [];
  
 
     // get max value for y
-    signs.forEach(sign => {
+    unorderedSigns.forEach(sign => {
       if (maxY == 0)
       { 
         maxY = this.getY(vis.selectedCountOption, sign);
         vis.signsAndSelectedOption[sign]= maxY;
-        unsortedYValues.push(maxY);
-        leastToMost.push(maxY);
-        mostToLeast.push(maxY);
         
       } else
       { 
         let y = this.getY(vis.selectedCountOption, sign);
         vis.signsAndSelectedOption[sign] = y;
-        unsortedYValues.push(y);
-        leastToMost.push(y);
-        mostToLeast.push(y);
 
         if (y > maxY)
         {
@@ -85,25 +77,31 @@ class Barchart {
       }
     });
 
-    // sort values if sort option selected
+    // sort x values if sort option selected
     if (vis.sortOption == "Least to Most")
     { 
 
-      leastToMost.sort(function (a, b) {
-        return d3.ascending(a, b)});
+      orderedSigns = Object.keys(vis.signsAndSelectedOption).sort(function (a, b) {
+        return d3.ascending(vis.signsAndSelectedOption[a], vis.signsAndSelectedOption[b]);
+      });
+
 
     } else if (vis.sortOption == "Most to Least")
     {
 
-      mostToLeast.sort(function (a, b) {
-        return d3.descending(a, b)});
+      orderedSigns = Object.keys(vis.signsAndSelectedOption).sort(function (a, b) {
+        return d3.descending(vis.signsAndSelectedOption[a], vis.signsAndSelectedOption[b]);
+      });
 
-    } 
+    } else if (vis.sortOption == "Unsorted" || vis.sortOption == null)
+    {
+      orderedSigns = unorderedSigns;
+    }    
 
 
     // create scale
     vis.xScale = d3.scaleBand()
-      .domain(signs)
+      .domain(orderedSigns)
       .range([0, vis.width])
       .padding(0.5);
 
@@ -119,13 +117,13 @@ class Barchart {
     vis.yAxis = d3.axisLeft()
       .scale(vis.yScale);
 
-    this.render();
+    this.render(orderedSigns);
+
   }
 
   getY(selectedOption, sign)
   { 
       let vis = this;
-      console.log("this is the count type" + selectedOption);
 
       if (selectedOption == "Number of Killers" || selectedOption == null)
       { 
@@ -133,7 +131,6 @@ class Barchart {
 
       } else if (selectedOption == "Proven Kills")
       { 
-        console.log(vis.signsAndKills);
         return vis.signsAndKills[sign]['numProven'];
 
       } else if (selectedOption == "Proven + Possible Kills")
@@ -143,10 +140,9 @@ class Barchart {
       }
   }
 
-  render() {
-    let vis = this;
 
-    console.log(vis.signsAndSelectedOption);
+  render(signs) {
+    let vis = this;
 
      // Bind data
     let bar = vis.chart.selectAll('rect')
