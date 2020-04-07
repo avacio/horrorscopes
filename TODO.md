@@ -10,6 +10,8 @@
 - highlight bars
 - reorder bars
   - drag to compare?
+  - sort least to most/ most to least -DONE
+- put in stacked bar for proven/suspected kills
 - help margaret with individual view?
   
 ## MARGARET
