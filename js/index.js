@@ -1,10 +1,10 @@
+let highlightedSign = "Aquarius";
+let formatTime = d3.timeFormat("%m/%d");
+
 let barChart = new Barchart({ parentElement: '#bar-chart'});
 let choroplethMap = new ChoroplethMap({ parentElement: '#map' });
-let highlightedSign = "Aquarius";
 let zodiacCycle = new ZodiacCycle({ parentElement: '#vis-row', svg: "#vis-nodes" });
 let killerTypeChart = new KillerTypeChart({ parentElement: '#killer-type-chart'});
-
-let formatTime = d3.timeFormat("%m/%d");
 
 let astrologySignsData = {
   "Aquarius": d3.timeDay.range(new Date(0000, 0, 20), new Date(0000, 1, 18), 1), 
@@ -191,7 +191,14 @@ Promise.all([
   // load and update barchart
   barChart.signsAndKills = signsAndKills;
   barChart.update();
+  barChart.registerSelectCallback((sign) => {
+    highlightedSign = sign;
+    zodiacCycle.highlightNode(highlightedSign);
 
+    updateSignInfo();
+  });
+
+  // load and update zodiacCycle nodes
   zodiacCycle.data = signsAndKills;
   zodiacCycle.elements = elements;
   zodiacCycle.signsInfoDict = signsInfoDict;
@@ -200,7 +207,7 @@ Promise.all([
   zodiacCycle.registerSelectCallback((sign) => {
     highlightedSign = sign;
     barChart.highlightBar(highlightedSign);
-    
+
     updateSignInfo();
   });
 

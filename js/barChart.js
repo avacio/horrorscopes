@@ -1,11 +1,29 @@
 class Barchart {
 
-    constructor(_config) {
+  constructor(_config) {
     this.config = {
       parentElement: _config.parentElement,
       containerWidth: _config.containerWidth || 500,
       containerHeight: _config.containerHeight || 500,
       margin: _config.margin || { top: 50, right: 30, bottom: 100, left: 50 }
+    }
+
+    this.OPTS = {
+      aInternal: "Aquarius",
+      aListener: function(val) {},
+
+      set highlightedSign(val) {
+        if (this.aInternal == val) { return; }
+        this.aInternal = val;
+        this.aListener(val);
+      },
+      get highlightedSign() {
+        return this.aInternal;
+      },
+
+      registerSelectListener: function(listener) {
+        this.aListener = listener;
+      }
     }
 
     this.initVis();
@@ -16,8 +34,8 @@ class Barchart {
     let vis = this;
 
     vis.svg = d3.select(vis.config.parentElement)
-        .attr("width", vis.config.containerWidth)
-        .attr("height", vis.config.containerHeight);
+      .attr("width", vis.config.containerWidth)
+      .attr("height", vis.config.containerHeight);
 
     // Calculate inner chart size. Margin specifies the space around the actual chart.
     // You need to adjust the margin config depending on the types of axis tick labels
@@ -26,13 +44,13 @@ class Barchart {
     vis.height = vis.config.containerHeight - vis.config.margin.top - vis.config.margin.bottom;
 
     vis.chart = vis.svg.append('g')
-            .attr('transform', `translate(${vis.config.margin.left},${vis.config.margin.top})`);
-    
+      .attr('transform', `translate(${vis.config.margin.left},${vis.config.margin.top})`);
+
     vis.xAxisG = vis.chart.append('g')
-        .attr('transform', `translate(0,${vis.height})`); 
+      .attr('transform', `translate(0,${vis.height})`); 
 
     vis.yAxisG = vis.chart.append('g');
-    
+
   }
 
 
@@ -49,14 +67,14 @@ class Barchart {
 
     // We don't need Unknown in this vis
     if ("Unknown" in vis.signsAndKills) {
-        delete vis.signsAndKills["Unknown"];
+      delete vis.signsAndKills["Unknown"];
     }
 
     vis.signsAndSelectedOption = {};
     let orderedSigns = [];
     let unorderedSigns = Object.keys(vis.signsAndKills);
     let maxY = 0;
- 
+
 
     // get max value for y
     unorderedSigns.forEach(sign => {
@@ -64,7 +82,7 @@ class Barchart {
       { 
         maxY = this.getY(vis.selectedCountOption, sign);
         vis.signsAndSelectedOption[sign]= maxY;
-        
+
       } else
       { 
         let y = this.getY(vis.selectedCountOption, sign);
@@ -123,21 +141,21 @@ class Barchart {
 
   getY(selectedOption, sign)
   { 
-      let vis = this;
+    let vis = this;
 
-      if (selectedOption == "Number of Killers" || selectedOption == null)
-      { 
-        return vis.signsAndKills[sign]['numKillers'];
+    if (selectedOption == "Number of Killers" || selectedOption == null)
+    { 
+      return vis.signsAndKills[sign]['numKillers'];
 
-      } else if (selectedOption == "Proven Kills")
-      { 
-        return vis.signsAndKills[sign]['numProven'];
+    } else if (selectedOption == "Proven Kills")
+    { 
+      return vis.signsAndKills[sign]['numProven'];
 
-      } else if (selectedOption == "Proven + Possible Kills")
-      { 
-        return (vis.signsAndKills[sign]['numPossible'] +
-                        vis.signsAndKills[sign]['numProven'])
-      }
+    } else if (selectedOption == "Proven + Possible Kills")
+    { 
+      return (vis.signsAndKills[sign]['numPossible'] +
+              vis.signsAndKills[sign]['numProven'])
+    }
   }
 
   registerSelectCallback(callback) {
@@ -149,43 +167,50 @@ class Barchart {
   render(signs) {
     let vis = this;
 
-     // Bind data
+    // Bind data
     let bar = vis.chart.selectAll('.bar')
-        .data(signs);
-  
+    .data(signs);
+
     // Append SVG rectangles for new data items
     let barEnter = bar.enter().append('rect')
-        .attr("class", "bar");
+    .attr("class", "bar");
 
     // Merge will update the attributes x, y, width, and height on both the "enter" and "update"
     // selection (i.e. define attributes for new data items and update attributes for existing items).
     // We use the chained transition() function to create smooth transitions whenever attributes change. 
     bar.merge(barEnter)
       .transition()
-        .attr('id', function(d) { 
-            return d;
-         })
-        .attr('x', d => vis.xScale(d))
-        .attr('y', d => vis.yScale(vis.signsAndSelectedOption[d]))
-        .attr('width', vis.xScale.bandwidth())
-        .attr('height', d => vis.height - vis.yScale(vis.signsAndSelectedOption[d]));
+      .attr('id', function(d) { 
+      return d;
+    })
+      .attr('x', d => vis.xScale(d))
+      .attr('y', d => vis.yScale(vis.signsAndSelectedOption[d]))
+      .attr('width', vis.xScale.bandwidth())
+      .attr('height', d => vis.height - vis.yScale(vis.signsAndSelectedOption[d]));
+
+    vis.chart.selectAll('.bar')
+      .data(signs)
+      .on('mouseover', d => {
+      vis.highlightBar(d)
+    });
 
     vis.xAxisG.call(vis.xAxis)
       .selectAll("text")
-        .attr("transform", "rotate(-45)")
-        .style("font-size", 12)
-        .style("text-anchor", "end")
-        .style("fill", 'black');
+      .attr("transform", "rotate(-45)")
+      .style("font-size", 12)
+      .style("text-anchor", "end")
+      .style("fill", 'black');
 
     vis.yAxisG.call(vis.yAxis)
       .selectAll("text")
-        .style("font-size", 12)
-        .style("fill", 'black');
+      .style("font-size", 12)
+      .style("fill", 'black');
   }
 
   highlightBar(sign) {
     let vis = this;
     let selectString = "#" + sign;
+    vis.OPTS.highlightedSign = sign;
 
     // clear all bars first
     let bars = vis.chart.selectAll('.bar');
@@ -197,7 +222,11 @@ class Barchart {
 
     highlightBar
       .attr("fill", "grey");
-
   }
 
+  registerSelectCallback(callback) {
+    let vis = this;
+
+    vis.OPTS.registerSelectListener(callback);
+  }
 }

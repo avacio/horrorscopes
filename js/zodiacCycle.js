@@ -15,6 +15,7 @@ class ZodiacCycle {
       aListener: function(val) {},
 
       set highlightedSign(val) {
+        if (this.aInternal == val) { return; }
         this.aInternal = val;
         this.aListener(val);
       },
@@ -28,7 +29,6 @@ class ZodiacCycle {
     }
 
     this.setPositions = true;
-    console.log("Init ZodiacCycle View");
 
     this.initVis();
   }
@@ -180,16 +180,10 @@ class ZodiacCycle {
           vis.setPositions = false;
         }
 
-        if (node) {
-          vis.nodes
-            .selectAll("circle")
-            .data(nodes.filter(d => filter(d)))   
-            .join("circle")
-            .classed('regular-node', d => vis.OPTS.highlightedSign != d.key)
-            .classed('highlighted-node', d => vis.OPTS.highlightedSign == d.key);
-        }
-        
-//        + '<br>' + d["Flights"]
+        //        if (node) {
+
+        vis.highlightNode(d.key);
+        //      }
 
         vis.tooltip.html(d.key + '<br>' + d.value[vis.countType])
           .style('left', (d3.event.pageX + 15) + "px")
@@ -285,6 +279,20 @@ class ZodiacCycle {
     let vis = this;
 
     vis.OPTS.registerSelectListener(callback);
+  }
+
+  highlightNode(sign) {
+    let vis = this;
+
+    vis.OPTS.highlightedSign = sign;
+
+    vis.nodes.selectAll('circle')
+      .classed('regular-node', true)
+      .classed('highlighted-node', false);
+
+    vis.nodes.select('#'+sign)
+      .classed('regular-node', false)
+      .classed('highlighted-node', true);
   }
 
   shiftIndex(array, shiftAmount) {
