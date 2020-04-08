@@ -1,4 +1,4 @@
-class Barchart {
+class KillerTypeChart {
 
     constructor(_config) {
     this.config = {

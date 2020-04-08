@@ -13,7 +13,7 @@ class ZodiacCycle {
     this.OPTS = {
       aInternal: "Aquarius",
       aListener: function(val) {},
-      
+
       set highlightedSign(val) {
         this.aInternal = val;
         this.aListener(val);
@@ -21,7 +21,7 @@ class ZodiacCycle {
       get highlightedSign() {
         return this.aInternal;
       },
-      
+
       registerSelectListener: function(listener) {
         this.aListener = listener;
       }
@@ -52,7 +52,6 @@ class ZodiacCycle {
 
     vis.tooltip = d3.select(vis.config.parentElement)
       .append("div")
-    //    vis.tooltip = d3.select('body').append("div")
       .attr('class', 'tooltip')
       .attr('width', 70)
       .attr('height', 100);
@@ -189,8 +188,10 @@ class ZodiacCycle {
             .classed('regular-node', d => vis.OPTS.highlightedSign != d.key)
             .classed('highlighted-node', d => vis.OPTS.highlightedSign == d.key);
         }
+        
+//        + '<br>' + d["Flights"]
 
-        vis.tooltip.html(d.key)
+        vis.tooltip.html(d.key + '<br>' + d.value[vis.countType])
           .style('left', (d3.event.pageX + 15) + "px")
           .style('top', (d3.event.pageY - 28) + "px")
           .transition()
@@ -220,6 +221,7 @@ class ZodiacCycle {
       .selectAll('text')
       .data(nodes.filter(d => filter(d)))   
       .join('text')
+      .attr('class', 'node-month-label')
       .text(d => vis.signsInfoDict[d.key].dates.split(' ')[0])
       .classed('hidden', !vis.isCyclicView);
 
@@ -266,10 +268,15 @@ class ZodiacCycle {
                );
 
         monthLabel
-          .attr("x", d => vis.config.containerWidth * 0.43 +
-                Math.round(290 * Math.cos(d.index * (2 * Math.PI / 12))))
+          .attr("x", d => {
+          let scaled = vis.sizeScale(d.value[vis.countType]) * 0.8;
+
+
+          return vis.config.containerWidth * 0.43 +
+            Math.round((255 + scaled) * Math.cos(d.index * (2 * Math.PI / 12)));
+        })
           .attr("y", d => vis.config.containerHeight * 0.5 +
-                Math.round(260 * Math.sin(d.index * (2 * Math.PI / 12))));
+                Math.round(260 * Math.sin(d.index * (2 * Math.PI / 12))))
       });
     }
   }
@@ -278,16 +285,6 @@ class ZodiacCycle {
     let vis = this;
 
     vis.OPTS.registerSelectListener(callback);
-  }
-
-
-  shiftIndex(array, shiftAmount) {
-    let i = 0;
-    while (i < shiftAmount) {
-      array.push(array.shift());
-      i++;
-    }
-    return array;
   }
 
   shiftIndex(array, shiftAmount) {

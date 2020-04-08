@@ -1,10 +1,10 @@
 #TODO
 
 ## ALEXIS
-- add circle size to legend
-- dropdown count changes don't transition for some reason
+- add circle size to legend?
 - double-check bidirectional highlighting when ready
 - help margaret with individual view?
+- chart for serial killer types?
 
 ## GRACE
 - highlight bars - DONE

@@ -2,6 +2,7 @@ let barChart = new Barchart({ parentElement: '#bar-chart'});
 let choroplethMap = new ChoroplethMap({ parentElement: '#map' });
 let highlightedSign = "Aquarius";
 let zodiacCycle = new ZodiacCycle({ parentElement: '#vis-row', svg: "#vis-nodes" });
+let killerTypeChart = new KillerTypeChart({ parentElement: '#killer-type-chart'});
 
 let formatTime = d3.timeFormat("%m/%d");
 
@@ -42,6 +43,7 @@ let signsAndSerialKillers = {
 
 let signsAndKills = {};
 let killersByCountry = {};
+let killersByType = {}; // TODO
 
 // external functions to load or parse data correctly
 function formatAstrologyDates(){
@@ -193,14 +195,12 @@ Promise.all([
   zodiacCycle.data = signsAndKills;
   zodiacCycle.elements = elements;
   zodiacCycle.signsInfoDict = signsInfoDict;
-//  zodiacCycle.signsInfoDict = shiftIndex(signsInfoDict, 5);
 
   zodiacCycle.update();
   zodiacCycle.registerSelectCallback((sign) => {
-
-    selectedSign = sign;
-    barChart.highlightBar(selectedSign);
-
+    highlightedSign = sign;
+    barChart.highlightBar(highlightedSign);
+    
     updateSignInfo();
   });
 
@@ -222,7 +222,7 @@ $("#view-toggle").on("click", function() {
 });
 
 const killCountOptions = ["Number of Killers", "Proven Kills", "Proven + Possible Kills"];
-const sortBarChartOptions = ["Unsorted", "Most to Least", "Least to Most"];
+const sortBarChartOptions = ["Sign Order", "Most to Least", "Least to Most"];
 
 const killCountVariableNameDict = {};
 killCountVariableNameDict[killCountOptions[0]] = "numKillers";
