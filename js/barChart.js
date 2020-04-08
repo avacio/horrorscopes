@@ -187,6 +187,12 @@ class Barchart {
     let vis = this;
     let selectString = "#" + sign;
 
+    // clear all bars first
+    let bars = vis.chart.selectAll('.bar');
+
+    bars
+      .attr("fill", "black");
+
     let highlightBar = vis.chart.select(selectString);
 
     highlightBar
@@ -194,13 +200,4 @@ class Barchart {
 
   }
 
-  unhighlightBar(sign) {
-    let vis = this;
-    let selectString = "#" + sign;
-
-    let highlightBar = vis.chart.select(selectString);
-
-    highlightBar
-      .attr("fill", "black");
-  }
 }

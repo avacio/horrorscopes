@@ -13,8 +13,7 @@ class ZodiacCycle {
     this.OPTS = {
       aInternal: "Aquarius",
       aListener: function(val) {},
-      unselectListener: function(Val) {},
-
+      
       set highlightedSign(val) {
         this.aInternal = val;
         this.aListener(val);
@@ -22,19 +21,9 @@ class ZodiacCycle {
       get highlightedSign() {
         return this.aInternal;
       },
-      set unhighlightSign(val) {
-        this.aInternal = val;
-        this.unselectListener(val);
-      },
-      get unhighlightSign() {
-        return this.aInternal;
-      },
       
       registerSelectListener: function(listener) {
         this.aListener = listener;
-      },
-      registerUnselectListener: function(listener) {
-        this.unselectListener = listener;
       }
     }
 
@@ -209,9 +198,6 @@ class ZodiacCycle {
       };
 
       const tooltipMouseout = (d) => {
-        // this is here so listener can unhighlight the barchart
-        vis.OPTS.unhighlightSign = d.key;
-        console.log(vis.OPTS.unhighlightSign);
         vis.tooltip.transition()
           .style('opacity', 0);
       };
@@ -294,11 +280,6 @@ class ZodiacCycle {
     vis.OPTS.registerSelectListener(callback);
   }
 
-  // here to unhighlight the barchart
-  registerUnselectCallback(callback) {
-    let vis = this;
-    vis.OPTS.registerUnselectListener(callback);
-  }
 
   shiftIndex(array, shiftAmount) {
     let i = 0;
