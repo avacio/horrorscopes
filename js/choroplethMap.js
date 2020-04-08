@@ -17,14 +17,20 @@ class ChoroplethMap {
         .attr('width', vis.config.containerWidth)
         .attr('height', vis.config.containerHeight);
 
-    vis.chart = vis.svg.append('g')
-        .attr('transform', 'translate(20,50), scale(1.2,1.2)');
+    vis.chart = vis.svg.append('g');
+        //.attr('transform', 'translate(20,50), scale(1.2,1.2)');
         //.attr('transform', 'translate(300,300), scale(0.2,0.2)');
 
     // We initialize a geographic path generator, that is similar to shape generators that you have used before (e.g. d3.line())
     // We define a projection: https://github.com/d3/d3-geo/blob/v1.11.9/README.md#geoAlbers
 
-    vis.projection = d3.geoNaturalEarth1();
+    //vis.projection = d3.geoNaturalEarth1();
+    vis.projection = d3.geoEquirectangular()
+      .center([0, 15]) // set centre to further North as we are cropping more off bottom of map
+      .scale([vis.config.containerWidth / (2 * Math.PI)]) // scale to fit group width
+      .translate([vis.config.containerWidth / 2, vis.config.containerHeight / 2]) // ensure centred in group
+    ;
+
     const pathGenerator = d3.geoPath().projection(vis.projection);
 
     vis.path = pathGenerator;
@@ -50,6 +56,10 @@ class ChoroplethMap {
   render() {
     let vis = this;
 
+    var width = 960,
+      height = 500,
+      active = d3.select(null);
+
     /*
     var zoom = d3.zoom()
       .scaleExtent([1, 8])
@@ -64,6 +74,7 @@ class ChoroplethMap {
 
     var zoom = d3.zoom()
       .scaleExtent([1, 8])
+      .translateExtent([[0, 0], [1200, 700]])
       .on('zoom', function() {
           vis.chart.selectAll('path')
            .attr('transform', d3.event.transform);
