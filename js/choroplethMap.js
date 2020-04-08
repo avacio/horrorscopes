@@ -13,6 +13,10 @@ class ChoroplethMap {
   initVis() {
     let vis = this;
 
+    vis.width = 1200,
+    vis.height = 700,
+    vis.active = d3.select(null);
+
     vis.svg = d3.select(vis.config.parentElement)
         .attr('width', vis.config.containerWidth)
         .attr('height', vis.config.containerHeight);
@@ -40,7 +44,7 @@ class ChoroplethMap {
       .attr('class', 'world-sphere')
       .attr('d', pathGenerator({type: 'Sphere'}));
 
-      
+
   }
 
   update() {
@@ -53,12 +57,71 @@ class ChoroplethMap {
     vis.render();
   }
 
+  clicked(d) {
+    let vis = this;
+    console.log("1");
+    if (vis.active.node() === this) return reset();
+    console.log("2");
+    vis.active.classed("active", false);
+    console.log("3");
+    vis.active = d3.select(vis).classed("active", true);
+    console.log("4");
+
+    var bounds = vis.path.bounds(d),
+        dx = bounds[1][0] - bounds[0][0],
+        dy = bounds[1][1] - bounds[0][1],
+        x = (bounds[0][0] + bounds[1][0]) / 2,
+        y = (bounds[0][1] + bounds[1][1]) / 2,
+        scale = Math.max(1, Math.min(8, 0.9 / Math.max(dx / vis.width, dy / vis.height))),
+        translate = [vis.width / 2 - scale * x, vis.height / 2 - scale * y];
+    console.log("5");
+    vis.svg.transition()
+        .duration(750)
+        // .call(zoom.translate(translate).scale(scale).event); // not in d3 v4
+        .call( vis.zoom.transform, d3.zoomIdentity.translate(translate[0],translate[1]).scale(scale) ); // updated for d3 v4
+  }
+
+  stopped() {
+    if (d3.event.defaultPrevented) d3.event.stopPropagation();
+  }
+
+  reset() {
+    let vis = this;
+
+    vis.active.classed("active", false);
+    vis.active = d3.select(null);
+
+    vis.svg.transition()
+        .duration(750)
+        // .call( zoom.transform, d3.zoomIdentity.translate(0, 0).scale(1) ); // not in d3 v4
+        .call( vis.zoom.transform, d3.zoomIdentity ); // updated for d3 v4
+  }
+
   render() {
     let vis = this;
 
-    var width = 960,
-      height = 500,
-      active = d3.select(null);
+    vis.zoom = d3.zoom()
+      .scaleExtent([1, 8])
+      .translateExtent([[0, 0], [1200, 700]])
+      .on('zoom', function() {
+          vis.chart.selectAll('path')
+           .attr('transform', d3.event.transform);
+
+          vis.chart.selectAll('text')
+           .attr('transform', d3.event.transform); 
+    });
+
+    vis.svg.call(vis.zoom);
+
+    vis.svg.append("rect")
+      .attr("class", "background")
+      .attr("display", "none")
+      .attr("width", vis.config.containerWidth)
+      .attr("height", vis.config.containerHeight)
+      .on("click", this.reset());
+
+    // to-do 
+    //vis.svg.on('click', this.stopped(), true);
 
     /*
     var zoom = d3.zoom()
@@ -72,26 +135,36 @@ class ChoroplethMap {
 
     svg.call(zoom);*/
 
-    var zoom = d3.zoom()
-      .scaleExtent([1, 8])
-      .translateExtent([[0, 0], [1200, 700]])
-      .on('zoom', function() {
-          vis.chart.selectAll('path')
-           .attr('transform', d3.event.transform);
-
-          vis.chart.selectAll('text')
-           .attr('transform', d3.event.transform); 
-    });
-
-    vis.svg.call(zoom);
-
     // 
     let geoPath = vis.chart.selectAll('.geo-path')
         .data(topojson.feature(vis.world_geo, vis.world_geo.objects.countries).features);
 
     let geoPathEnter = geoPath.enter().append('path')
         .attr('class', 'geo-path')
-        .attr("d", vis.path);
+        .attr("d", vis.path)
+        //.on('click', this.clicked());
+        .on('click', function(d) {
+
+          if (vis.active.node() === this) return vis.reset();
+          console.log("2");
+          vis.active.classed("active", false);
+          console.log("3");
+          vis.active = d3.select(this).classed("active", true);
+          console.log("4");
+
+          var bounds = vis.path.bounds(d),
+              dx = bounds[1][0] - bounds[0][0],
+              dy = bounds[1][1] - bounds[0][1],
+              x = (bounds[0][0] + bounds[1][0]) / 2,
+              y = (bounds[0][1] + bounds[1][1]) / 2,
+              scale = Math.max(1, Math.min(8, 0.9 / Math.max(dx / vis.width, dy / vis.height))),
+              translate = [vis.width / 2 - scale * x, vis.height / 2 - scale * y];
+          console.log("5");
+          vis.svg.transition()
+              .duration(750)
+              // .call(zoom.translate(translate).scale(scale).event); // not in d3 v4
+              .call( vis.zoom.transform, d3.zoomIdentity.translate(translate[0],translate[1]).scale(scale) );
+        });
 
     geoPath.merge(geoPathEnter)
       .transition()
