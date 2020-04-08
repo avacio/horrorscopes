@@ -7,9 +7,7 @@
 - help margaret with individual view?
 
 ## GRACE
-- highlight bars - DONE but NEED TO DEBUG
-	- highlighted bars only show up when tooltip shows up and
-	doesn't stay. kind of finnicky.
+- highlight bars - DONE
 - reorder bars
   - drag to compare?
   - sort least to most/ most to least -DONE
