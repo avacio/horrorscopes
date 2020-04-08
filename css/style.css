@@ -32,7 +32,11 @@ height: 1000px;
 
 #map {
   border: 1px solid grey;
-  background-image: url(../src/galaxy-background.jpg);
+  /*background-image: url(../src/galaxy-background.jpg);*/
+  background-color: #8cb1de;
+  width: 100%;
+  margin: 0 auto;
+  margin-top: 3em;
 }
 
 .world-sphere {

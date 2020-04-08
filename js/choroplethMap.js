@@ -18,10 +18,11 @@ class ChoroplethMap {
     vis.active = d3.select(null);
 
     vis.svg = d3.select(vis.config.parentElement)
-        .attr('width', vis.config.containerWidth)
-        .attr('height', vis.config.containerHeight);
+      .attr('width', vis.config.containerWidth)
+      .attr('height', vis.config.containerHeight);
 
-    vis.chart = vis.svg.append('g');
+    vis.chart = vis.svg.append('g')
+      .attr('transform', 'translate(100, 0)');
         //.attr('transform', 'translate(20,50), scale(1.2,1.2)');
         //.attr('transform', 'translate(300,300), scale(0.2,0.2)');
 
