@@ -112,7 +112,7 @@ class ChoroplethMap {
            .attr('transform', d3.event.transform); 
     });
 
-    vis.svg.call(vis.zoom);
+    //vis.svg.call(vis.zoom);
 
     vis.svg.append("rect")
       .attr("class", "background")
