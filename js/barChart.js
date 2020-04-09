@@ -71,10 +71,12 @@ class Barchart {
     }
 
     vis.signsAndSelectedOption = {};
+    vis.groupedBarsSelection = {};
     let orderedSigns = [];
     let unorderedSigns = Object.keys(vis.signsAndKills);
     let maxY = 0;
 
+    console.log(vis.signsAndKills);
 
     // get max value for y
     unorderedSigns.forEach(sign => {
@@ -82,6 +84,7 @@ class Barchart {
       { 
         maxY = this.getY(vis.selectedCountOption, sign);
         vis.signsAndSelectedOption[sign]= maxY;
+        
 
       } else
       { 
@@ -153,20 +156,42 @@ class Barchart {
 
     } else if (selectedOption == "Proven + Possible Kills")
     { 
+
       return (vis.signsAndKills[sign]['numPossible'] +
               vis.signsAndKills[sign]['numProven'])
     }
   }
 
-  registerSelectCallback(callback) {
-    let vis = this;
-    vis.OPTS.registerListener(callback);
-  }
-
-
   render(signs) {
     let vis = this;
 
+    if(vis.selectedCountOption == "Proven + Possible Kills")
+    { 
+      vis.renderBars(signs);
+      vis.renderGroupedBars(signs);
+
+    } else
+    {
+      vis.renderBars(signs);
+    }
+
+    vis.xAxisG.call(vis.xAxis)
+      .selectAll("text")
+      .attr("transform", "rotate(-45)")
+      .style("font-size", 12)
+      .style("text-anchor", "end")
+      .style("fill", 'black');
+
+    vis.yAxisG.call(vis.yAxis)
+      .selectAll("text")
+      .style("font-size", 12)
+      .style("fill", 'black');
+  }
+
+  renderBars(signs)
+  { 
+    let vis = this;
+    console.log(vis.signsAndSelectedOption);
     // Bind data
     let bar = vis.chart.selectAll('.bar')
     .data(signs);
@@ -175,9 +200,6 @@ class Barchart {
     let barEnter = bar.enter().append('rect')
     .attr("class", "bar");
 
-    // Merge will update the attributes x, y, width, and height on both the "enter" and "update"
-    // selection (i.e. define attributes for new data items and update attributes for existing items).
-    // We use the chained transition() function to create smooth transitions whenever attributes change. 
     bar.merge(barEnter)
       .transition()
       .attr('id', function(d) { 
@@ -194,34 +216,51 @@ class Barchart {
       vis.highlightBar(d)
     });
 
-    vis.xAxisG.call(vis.xAxis)
-      .selectAll("text")
-      .attr("transform", "rotate(-45)")
-      .style("font-size", 12)
-      .style("text-anchor", "end")
-      .style("fill", 'black');
+  }
 
-    vis.yAxisG.call(vis.yAxis)
-      .selectAll("text")
-      .style("font-size", 12)
-      .style("fill", 'black');
+  renderGroupedBars(signs) {
+    let vis = this;
+
+    vis.chart.selectAll('.layerbar')
+      .data(signs)
+      .join('rect')
+      .transition()
+      .attr('class', 'layerbar')
+      .attr('id', function(d) { 
+        return d + "layer";
+      })
+      .attr('x', d => vis.xScale(d))
+      .attr('y', d => vis.yScale(vis.signsAndKills[d].numProven))
+      .attr('width', vis.xScale.bandwidth())
+      .attr('height', d => vis.height - vis.yScale(vis.signsAndKills[d].numProven))
+      .attr('fill', 'steelblue');
   }
 
   highlightBar(sign) {
     let vis = this;
     let selectString = "#" + sign;
+    let selectStringLayer = "#" + sign + "layer";
     vis.OPTS.highlightedSign = sign;
 
     // clear all bars first
     let bars = vis.chart.selectAll('.bar');
+    let layerBars = vis.chart.selectAll('.layerbar');
 
     bars
       .attr("fill", "black");
 
+    layerBars
+      .attr("fill", "steelblue");
+
     let highlightBar = vis.chart.select(selectString);
+    let highlightBarLayer = vis.chart.select(selectStringLayer);
 
     highlightBar
       .attr("fill", "grey");
+
+    highlightBarLayer
+      .attr("fill", "grey");
+
   }
 
   registerSelectCallback(callback) {

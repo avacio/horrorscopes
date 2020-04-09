@@ -11,7 +11,7 @@
 - reorder bars
   - drag to compare?
   - sort least to most/ most to least - DONE
-- put in stacked bar for proven/suspected kills
+- put in stacked bar for proven/suspected kills - DONE (kinda hacky, but works)
 - map signs to killer types - DONE 
 - help margaret with individual view?
   
