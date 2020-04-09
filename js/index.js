@@ -1,8 +1,9 @@
 let highlightedSign = "Aquarius";
+let selectedCountry = null;
 let formatTime = d3.timeFormat("%m/%d");
 
+let choroplethMap;
 let barChart = new Barchart({ parentElement: '#bar-chart'});
-let choroplethMap = new ChoroplethMap({ parentElement: '#map' });
 let zodiacCycle = new ZodiacCycle({ parentElement: '#vis-row', svg: "#vis-nodes" });
 let killerTypeChart = new KillerTypeChart({ parentElement: '#killer-type-chart'});
 
@@ -85,6 +86,14 @@ function loadSignsAndKills(signsAndSerialKillers)
     }
   });
 }
+// listen to country on click events
+const onClick = country => {
+  //console.log(selectedCountry);
+  choroplethMap.selectedCountry = selectedCountry;
+  selectedCountry = country;
+  
+  choroplethMap.render();
+}
 
 var signTypeMap = new Map();
 let prevSign = "";
@@ -126,7 +135,6 @@ function loadSignsAndKillerTypes(signsAndSerialKillers)
       })
 
     })
-
 }
 
 // Load data
@@ -233,6 +241,12 @@ Promise.all([
   });
 
   // loading data for the choropleth map
+  choroplethMap = new ChoroplethMap({ 
+    parentElement: '#map',
+    onCountryClick: onClick,
+    selectedCountry: selectedCountry 
+  });
+  //choroplethMap.onCountryClick = onCountryClick;
   choroplethMap.world_geo = files[1];
   choroplethMap.killersByCountry = killersByCountry;
   choroplethMap.data = signsAndSerialKillers;
@@ -271,6 +285,7 @@ Promise.all([
 
 ///////////////////////
 // INTERACTIVE ELEMENTS
+
 $("#view-toggle").on("click", function() {
   isCyclicView = $(this).text() == "Cyclic View";
 
