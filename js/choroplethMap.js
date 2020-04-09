@@ -102,6 +102,7 @@ class ChoroplethMap {
            .attr('transform', d3.event.transform); 
     });
 
+    // uncomment for manual zoom  
     //vis.svg.call(vis.zoom);
 
     vis.svg.append("rect")
@@ -111,6 +112,7 @@ class ChoroplethMap {
       .attr("height", vis.config.containerHeight)
       .on("click", this.reset());
 
+    // referenced: https://bl.ocks.org/piwodlaiwo/90777c94b0cd9b6543d9dfb8b5aefeef  
     var clicked = function(d) {
       // callback for index.js
       //console.log(d.properties.name);
