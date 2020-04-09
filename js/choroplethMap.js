@@ -3,6 +3,8 @@ class ChoroplethMap {
   constructor(_config) {
     this.config = {
       parentElement: _config.parentElement,
+      onCountryClick: _config.onCountryClick,
+      selectedCountry: _config.selectedCountry,
       containerWidth: _config.containerWidth || 1200,
       containerHeight: _config.containerHeight || 700,
     }
@@ -68,26 +70,6 @@ class ChoroplethMap {
     vis.render();
   }
 
-  clicked(d) {
-    let vis = this;
-
-    if (vis.active.node() === this) return reset();
-    vis.active.classed("active", false);
-    vis.active = d3.select(vis).classed("active", true);
-
-    var bounds = vis.path.bounds(d),
-        dx = bounds[1][0] - bounds[0][0],
-        dy = bounds[1][1] - bounds[0][1],
-        x = (bounds[0][0] + bounds[1][0]) / 2,
-        y = (bounds[0][1] + bounds[1][1]) / 2,
-        scale = Math.max(1, Math.min(8, 0.9 / Math.max(dx / vis.width, dy / vis.height))),
-        translate = [vis.width / 2 - scale * x, vis.height / 2 - scale * y];
-
-    vis.svg.transition()
-        .duration(750)
-        .call( vis.zoom.transform, d3.zoomIdentity.translate(translate[0],translate[1]).scale(scale) ); 
-  }
-
   stopped() {
     if (d3.event.defaultPrevented) d3.event.stopPropagation();
   }
@@ -97,6 +79,7 @@ class ChoroplethMap {
 
     vis.active.classed("active", false);
     vis.active = d3.select(null);
+    //vis.config.onCountryClick(null);
 
     vis.svg.transition()
         .duration(750)
@@ -105,6 +88,8 @@ class ChoroplethMap {
 
   render() {
     let vis = this;
+
+    console.log(selectedCountry);
 
     vis.zoom = d3.zoom()
       .scaleExtent([1, 8])
@@ -127,8 +112,18 @@ class ChoroplethMap {
       .on("click", this.reset());
 
     var clicked = function(d) {
+      // callback for index.js
+      //console.log(d.properties.name);
+      //vis.config.onClickedCountry(d);
+
       if (vis.killersByCountry[d.properties.name] == 0) return;
-      if (vis.active.node() === this) return vis.reset();
+      if (vis.active.node() === this) {
+        vis.config.onCountryClick(null);
+        return vis.reset();
+      }
+
+      // callback for selectedCountry
+      vis.config.onCountryClick(d.properties.name);
 
       vis.active.classed("active", false);
       vis.active = d3.select(this).classed("active", true);
@@ -144,6 +139,7 @@ class ChoroplethMap {
       vis.svg.transition()
           .duration(750)
           .call( vis.zoom.transform, d3.zoomIdentity.translate(translate[0],translate[1]).scale(scale) );
+
     }
 
     // mouseover event handler
@@ -178,7 +174,7 @@ class ChoroplethMap {
         .on('mouseout', countryMouseout)
         .on('click', clicked);
 
-    console.log(vis.active);
+    //console.log(vis.active);
 
     vis.geoPath.merge(vis.geoPathEnter)
       .transition()
@@ -202,7 +198,15 @@ class ChoroplethMap {
           // To-do: Change fill to color code each province by its population
         })
         .attr('opacity', d => {
-          //console.log(vis.active.node());
+          console.log(d);
+           //console.log(selectedCountry);
+            if (selectedCountry != null) {
+              if (d.properties.name == selectedCountry) {
+                return '1';
+              } else {
+                return '0.5';
+              }
+            }
         })
         .attr('cursor', d => {
           if (vis.killersByCountry[d.properties.name] != 0) {
