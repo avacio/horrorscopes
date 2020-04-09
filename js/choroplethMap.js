@@ -45,13 +45,23 @@ class ChoroplethMap {
       .attr('class', 'world-sphere')
       .attr('d', pathGenerator({type: 'Sphere'}));
 
+    // initiate tool tip
+    // Referenced: http://bl.ocks.org/williaster/af5b855651ffe29bdca1
+    vis.tooltip = d3.select('#map-tooltip')
+      .attr('class', 'tooltip')
+      .style('position', 'absolute')
+      .style('font-size', '12px')
+      .style('opacity', 0);
+
 
   }
 
   update() {
     let vis = this;
-
     // To-do: Add color scale
+    vis.colorScale = d3.scaleThreshold()
+      .domain([1, 5, 15, 50, 100, 200])
+      .range(d3.schemeReds[7]);
 
     // To-do: Select data for specific year (could be done in task1.js too)
 
@@ -60,13 +70,10 @@ class ChoroplethMap {
 
   clicked(d) {
     let vis = this;
-    console.log("1");
+
     if (vis.active.node() === this) return reset();
-    console.log("2");
     vis.active.classed("active", false);
-    console.log("3");
     vis.active = d3.select(vis).classed("active", true);
-    console.log("4");
 
     var bounds = vis.path.bounds(d),
         dx = bounds[1][0] - bounds[0][0],
@@ -121,65 +128,83 @@ class ChoroplethMap {
       .attr("height", vis.config.containerHeight)
       .on("click", this.reset());
 
-    // to-do 
-    //vis.svg.on('click', this.stopped(), true);
+    var clicked = function(d) {
+      if (vis.active.node() === this) return vis.reset();
+      vis.active.classed("active", false);
+      vis.active = d3.select(this).classed("active", true);
 
-    /*
-    var zoom = d3.zoom()
-      .scaleExtent([1, 8])
-      .on('zoom', function() {
-          g.selectAll('path')
-           .attr('transform', d3.event.transform);
-          g.selectAll("circle")
-           .attr('transform', d3.event.transform);
-    });
+      var bounds = vis.path.bounds(d),
+          dx = bounds[1][0] - bounds[0][0],
+          dy = bounds[1][1] - bounds[0][1],
+          x = (bounds[0][0] + bounds[1][0]) / 2,
+          y = (bounds[0][1] + bounds[1][1]) / 2,
+          scale = Math.max(1, Math.min(8, 0.9 / Math.max(dx / vis.width, dy / vis.height))),
+          translate = [vis.width / 2 - scale * x, vis.height / 2 - scale * y];
+      console.log("5");
+      vis.svg.transition()
+          .duration(750)
+          .call( vis.zoom.transform, d3.zoomIdentity.translate(translate[0],translate[1]).scale(scale) );
+    }
 
-    svg.call(zoom);*/
+    // mouseover event handler
+    var countryMouseover = function(d) {
+      vis.tooltip
+        .style('left', (d3.event.pageX + 10) + 'px')
+        .style('top', (d3.event.pageY - 20) + 'px')
+        .style('opacity', 1);
 
-    // 
-    let geoPath = vis.chart.selectAll('.geo-path')
+      if (vis.killersByCountry[d.properties.name] != 0) {
+        vis.tooltip
+          .html('<p>' + d.properties.name + ': ' + vis.killersByCountry[d.properties.name] + ' killer(s)</p>');
+      } else {
+        vis.tooltip
+          .html('<p>' + d.properties.name + ' has no killers</p>');
+      }
+    }
+
+    // mouseout event handler
+    var countryMouseout = function(d) {
+      vis.tooltip
+        .style('opacity', 0); 
+    }
+
+    vis.geoPath = vis.chart.selectAll('.geo-path')
         .data(topojson.feature(vis.world_geo, vis.world_geo.objects.countries).features);
 
-    let geoPathEnter = geoPath.enter().append('path')
+    vis.geoPathEnter = vis.geoPath.enter().append('path')
         .attr('class', 'geo-path')
         .attr("d", vis.path)
         //.on('click', this.clicked());
-        .on('click', function(d) {
+        .on('mouseover', countryMouseover)
+        .on('mouseout', countryMouseout)
+        .on('click', clicked);
 
-          if (vis.active.node() === this) return vis.reset();
-          console.log("2");
-          vis.active.classed("active", false);
-          console.log("3");
-          vis.active = d3.select(this).classed("active", true);
-          console.log("4");
 
-          var bounds = vis.path.bounds(d),
-              dx = bounds[1][0] - bounds[0][0],
-              dy = bounds[1][1] - bounds[0][1],
-              x = (bounds[0][0] + bounds[1][0]) / 2,
-              y = (bounds[0][1] + bounds[1][1]) / 2,
-              scale = Math.max(1, Math.min(8, 0.9 / Math.max(dx / vis.width, dy / vis.height))),
-              translate = [vis.width / 2 - scale * x, vis.height / 2 - scale * y];
-          console.log("5");
-          vis.svg.transition()
-              .duration(750)
-              // .call(zoom.translate(translate).scale(scale).event); // not in d3 v4
-              .call( vis.zoom.transform, d3.zoomIdentity.translate(translate[0],translate[1]).scale(scale) );
-        });
+    console.log(vis.killersByCountry);
 
-    geoPath.merge(geoPathEnter)
+    vis.geoPath.merge(vis.geoPathEnter)
       .transition()
         .attr('fill', d => {
+          return vis.colorScale(vis.killersByCountry[d.properties.name]);
+
+          /*
           if (vis.killersByCountry[d.properties.name] != 0) {
             return '#3b5d38';
           } else {
             return '#D3D3D3';
-          }
+          }*/
           // To-do: Change fill to color code each province by its population
+        })
+        .attr('cursor', d => {
+          if (vis.killersByCountry[d.properties.name] != 0) {
+            return 'pointer';
+          } else {
+            return 'default';
+          }
         });
 
     // To-do: Add labels for each province with the population value
-    let geoLabels = vis.chart.selectAll('.geo-labels')
+    /*let geoLabels = vis.chart.selectAll('.geo-labels')
         .data(topojson.feature(vis.world_geo, vis.world_geo.objects.countries).features); 
 
     let geoLabelsEnter = geoLabels.enter().append('text')
@@ -196,7 +221,7 @@ class ChoroplethMap {
         if (vis.killersByCountry[d.properties.name] != 0) {
           return vis.killersByCountry[d.properties.name];
         }
-      });  
+      });  */
   }
 }
 

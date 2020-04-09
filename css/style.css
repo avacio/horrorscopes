@@ -33,14 +33,14 @@ height: 1000px;
 #map {
   border: 1px solid grey;
   /*background-image: url(../src/galaxy-background.jpg);*/
-  background-color: #8cb1de;
+  background-color: #D3D3D3;
   width: 100%;
   margin: 0 auto;
   margin-top: 3em;
 }
 
 .world-sphere {
-  fill: #8cb1de;
+  fill: #D3D3D3;
 }
 
 #play-button {
@@ -158,8 +158,10 @@ p {
 
 .tooltip {
   position: absolute;
-  font-size: 1.1rem;
+  padding-left: 1em;
+  padding-right: 1em;
   font-weight: 600;
+  font-size: 0.8em;
   color: white;
   background-color: black;
 }
