@@ -24,6 +24,10 @@ html {
   stroke: black;
 }
 
+.geo-path.active {
+  opacity: 1;
+}
+
 /*
 #map {
 width: 1000px;

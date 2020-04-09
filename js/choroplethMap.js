@@ -82,11 +82,10 @@ class ChoroplethMap {
         y = (bounds[0][1] + bounds[1][1]) / 2,
         scale = Math.max(1, Math.min(8, 0.9 / Math.max(dx / vis.width, dy / vis.height))),
         translate = [vis.width / 2 - scale * x, vis.height / 2 - scale * y];
-    console.log("5");
+
     vis.svg.transition()
         .duration(750)
-        // .call(zoom.translate(translate).scale(scale).event); // not in d3 v4
-        .call( vis.zoom.transform, d3.zoomIdentity.translate(translate[0],translate[1]).scale(scale) ); // updated for d3 v4
+        .call( vis.zoom.transform, d3.zoomIdentity.translate(translate[0],translate[1]).scale(scale) ); 
   }
 
   stopped() {
@@ -101,8 +100,7 @@ class ChoroplethMap {
 
     vis.svg.transition()
         .duration(750)
-        // .call( zoom.transform, d3.zoomIdentity.translate(0, 0).scale(1) ); // not in d3 v4
-        .call( vis.zoom.transform, d3.zoomIdentity ); // updated for d3 v4
+        .call( vis.zoom.transform, d3.zoomIdentity ); 
   }
 
   render() {
@@ -129,7 +127,9 @@ class ChoroplethMap {
       .on("click", this.reset());
 
     var clicked = function(d) {
+      if (vis.killersByCountry[d.properties.name] == 0) return;
       if (vis.active.node() === this) return vis.reset();
+
       vis.active.classed("active", false);
       vis.active = d3.select(this).classed("active", true);
 
@@ -140,7 +140,7 @@ class ChoroplethMap {
           y = (bounds[0][1] + bounds[1][1]) / 2,
           scale = Math.max(1, Math.min(8, 0.9 / Math.max(dx / vis.width, dy / vis.height))),
           translate = [vis.width / 2 - scale * x, vis.height / 2 - scale * y];
-      console.log("5");
+
       vis.svg.transition()
           .duration(750)
           .call( vis.zoom.transform, d3.zoomIdentity.translate(translate[0],translate[1]).scale(scale) );
@@ -174,18 +174,24 @@ class ChoroplethMap {
     vis.geoPathEnter = vis.geoPath.enter().append('path')
         .attr('class', 'geo-path')
         .attr("d", vis.path)
-        //.on('click', this.clicked());
         .on('mouseover', countryMouseover)
         .on('mouseout', countryMouseout)
         .on('click', clicked);
 
-
-    console.log(vis.killersByCountry);
+    console.log(vis.active);
 
     vis.geoPath.merge(vis.geoPathEnter)
       .transition()
         .attr('fill', d => {
           return vis.colorScale(vis.killersByCountry[d.properties.name]);
+
+/*
+          if (vis.active._parents[0] == null) {
+            return vis.colorScale(vis.killersByCountry[d.properties.name]);
+          } else {
+            return 'blue';
+          }
+          
 
           /*
           if (vis.killersByCountry[d.properties.name] != 0) {
@@ -194,6 +200,9 @@ class ChoroplethMap {
             return '#D3D3D3';
           }*/
           // To-do: Change fill to color code each province by its population
+        })
+        .attr('opacity', d => {
+          //console.log(vis.active.node());
         })
         .attr('cursor', d => {
           if (vis.killersByCountry[d.properties.name] != 0) {
