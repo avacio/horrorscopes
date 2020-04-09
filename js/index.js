@@ -238,6 +238,10 @@ Promise.all([
   choroplethMap.data = signsAndSerialKillers;
   choroplethMap.elements = elements;
   choroplethMap.update();
+  /*choroplethMap.registerSelectCallback((country) => {
+    selectedCountry = country;
+    choroplethMap.highlightBar(selectedCountry);
+  })*/
 
   // load and update barchart
   barChart.signsAndKills = signsAndKills;
@@ -267,7 +271,6 @@ Promise.all([
 
 ///////////////////////
 // INTERACTIVE ELEMENTS
-
 $("#view-toggle").on("click", function() {
   isCyclicView = $(this).text() == "Cyclic View";
 
