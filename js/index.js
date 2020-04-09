@@ -86,6 +86,49 @@ function loadSignsAndKills(signsAndSerialKillers)
   });
 }
 
+var signTypeMap = new Map();
+let prevSign = "";
+
+function loadSignsAndKillerTypes(signsAndSerialKillers)
+{
+    signs = Object.keys(signsAndSerialKillers);
+
+    signs.forEach(sign => {
+      killers = signsAndSerialKillers[sign];
+      var typeCountMap = new Map();
+
+      killers.forEach(killer => {
+        let killerType = killer.Type;
+
+        killerType.forEach(type => {
+          // quick & dirty data fix for blank
+          // types
+          if(type == "")
+          {
+            type = "N/A";
+          }
+
+          // map the types to a count
+          if (typeCountMap.has(type)) {
+
+            let typeCount = typeCountMap.get(type) + 1;
+            typeCountMap.set(type, typeCount);
+
+          } 
+          else {
+          typeCountMap.set(type, 1);
+          }
+
+          killersByType[sign] = typeCountMap;
+
+        })
+
+      })
+
+    })
+
+}
+
 // Load data
 Promise.all([
   d3.csv('data/collective-serial-killer-database.csv'),
@@ -135,6 +178,7 @@ Promise.all([
             // push entire serial killer attribute to 
             // list based on astrological sign
             signsAndSerialKillers[sign].push(d);
+
           }
         });
       });
@@ -161,6 +205,13 @@ Promise.all([
   // total number of possible kills to each zodiac sign
   // ie loads signsAndKills map
   loadSignsAndKills(signsAndSerialKillers);
+
+  // returns obj where key is astrlogical sign, 
+  // value is a map that maps the type and the amount of times the type
+  // shows up
+  // SEE: {[astrological sign]: Map(type: # of types, type # of types...)}
+  // ie. {..., Gemini: {"Strangler" => 14, "NA" => 14...}, ...}
+  loadSignsAndKillerTypes(signsAndSerialKillers);
 
   /*
   console.log(killersByCountry);
