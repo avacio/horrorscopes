@@ -2,7 +2,7 @@
 
 ## ALEXIS
 - add circle size to legend?
-- double-check bidirectional highlighting when ready
+- double-check bidirectional highlighting when ready - DONE
 - help margaret with individual view?
 - chart for serial killer types?
 
@@ -10,8 +10,9 @@
 - highlight bars - DONE
 - reorder bars
   - drag to compare?
-  - sort least to most/ most to least -DONE
-- put in stacked bar for proven/suspected kills
+  - sort least to most/ most to least - DONE
+- put in stacked bar for proven/suspected kills - DONE (kinda hacky, but works)
+- map signs to killer types - DONE 
 - help margaret with individual view?
   
 ## MARGARET
