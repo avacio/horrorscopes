@@ -59,14 +59,21 @@
     </div>
 
     <div id="control" class="row">
-      <button id="view-toggle">Cyclic View</button>
+      <span class="row">
+        <button id="view-toggle">Cyclic View</button>
+        <span class="ul-title">Astrological Sign Network</span>
+      </span>
+
       <center>
         <span class="thick-text">Node size and bar length encodes:</span>
         <br>
         <select id="kill-count-select"></select>
       </center>
-      <select id="sort-bars"></select>
 
+      <span class="row">
+        <span class="ul-title">Killing Count Bar Chart</span>
+        <select id="sort-bars"></select>
+      </span>
     </div>
 
     <div id="vis-row" class="row">  
@@ -89,14 +96,16 @@
         <b>Description: </b><div id="descriptionText"></div>
       </div>
     </div>
-
+    <br>
     <div>
+      <span class="title">Choropleth Map of Serial Killers Across the World</span>
       <svg id="map">
         <div id="map-tooltip"></div>
       </svg>
     </div>
-
+    <br>
     <select id="sort-norm-bars"></select>
+    <span class="title">Normalized Stacked Bar Chart of Serial Killers by Type</span>
     <div id="type-row" class="row">
       <svg id="killer-type-chart"></svg>
     </div>

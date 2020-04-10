@@ -45,7 +45,7 @@ height: 1000px;
   background-color: #D3D3D3;
   width: 100%;
   margin: 0 auto;
-  margin-top: 3em;
+  margin-top: 1em;
 }
 
 .world-sphere {
@@ -125,6 +125,25 @@ p {
   font-size: 1.8rem;
   font-weight: 700;
   text-decoration: underline;
+}
+
+.title {
+  font-size: 1.3rem;
+  font-weight: 600;
+  text-decoration: underline;
+  margin-top: 1em;
+}
+
+.ul-title {
+  font-size: 0.8rem;
+  text-decoration: underline;
+  padding: 15px;
+}
+
+
+.axis-label {
+  fill: black;
+  font-size: 1.3rem;
 }
 
 .description {

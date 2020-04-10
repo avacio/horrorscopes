@@ -7,7 +7,8 @@ class KillerTypeChart {
       svg: _config.svg,
       containerWidth: _config.containerWidth || 1200,
       containerHeight: _config.containerHeight || 500,
-      margin: _config.margin || { top: 50, right: 30, bottom: 100, left: 50 }
+//      margin: _config.margin || { top: 50, right: 30, bottom: 100, left: 50 }
+      margin: _config.margin || { top: 30, right: 30, bottom: 100, left: 100 }
     }
 
     this.initVis();
@@ -40,7 +41,6 @@ class KillerTypeChart {
       .attr('class', 'tooltip')
       .attr('width', 70)
       .attr('height', 100);
-
   }
 
 
@@ -59,6 +59,7 @@ class KillerTypeChart {
 
     // clear state
     vis.chart.selectAll("rect.normalized-bar").remove();
+    vis.chart.selectAll(".axis-label").remove();
 
     //    vis.signsAndSelectedOption = {};
     //    vis.groupedBarsSelection = {};
@@ -126,20 +127,47 @@ class KillerTypeChart {
     vis.xAxis = d3.axisBottom()
       .scale(vis.xScale);
 
-    vis.xAxisG = vis.chart.append('g').call(vis.xAxis)
-      .attr('transform', `translate(0,${vis.height})`)
-      .attr('class', 'xAxisG');
-
-    //    vis.xAxisG.select('.domain').remove();
-    //    vis.xAxisG.append('text')
-    //      .attr('class', 'axis-label')
-    //      .attr('y', 50)
-    //      .attr('x', vis.width / 2)
-    //      .text(vis.xAxisLabel);
-
     vis.yAxis = d3.axisLeft()
       .scale(vis.yScale)
       .tickFormat(d => d + "%");
+
+    vis.xAxisG.call(vis.xAxis)
+      .selectAll("text")
+      .attr("transform", "rotate(-45)")
+      .style("font-size", 14)
+      .style("text-anchor", "end")
+      .style("fill", 'black');
+
+    vis.xAxisG.append('text')
+      .attr('class', 'axis-label')
+      .attr('y', 90)
+      .attr('x', vis.width / 2)
+      .text('Serial Killer Types');
+
+    vis.yAxisG.call(vis.yAxis)
+      .selectAll("text")
+      .style("font-size", 12)
+      .style("fill", 'black');
+
+    vis.yAxisG.append('text')
+      .attr('class', 'axis-label')
+//      .attr('x', vis.width / 2)
+      .attr('y', -50)
+      .attr('x', -vis.height / 2)
+      .attr('transform', `rotate(-90)`)
+      .attr('text-anchor', 'middle')
+      .text('Distribution of Signs (%)');
+
+    //    const yAxisG = vis.chart.append('g').call(yAxis)
+    //    .attr('class', 'yAxisG');
+    //    yAxisG.selectAll('.domain').remove();
+    //    yAxisG.append('text')
+    //      .attr('class', 'axis-label')
+    //      .attr('y', -50)
+    //      .attr('x', -vis.height / 2)
+    //      .attr('transform', `rotate(-90)`)
+    //      .attr('text-anchor', 'middle')
+    //      .text(vis.yAxisLabel);
 
     this.render();
   }
@@ -148,18 +176,6 @@ class KillerTypeChart {
     let vis = this;
 
     vis.renderBars();
-
-    vis.xAxisG.call(vis.xAxis)
-      .selectAll("text")
-      .attr("transform", "rotate(-45)")
-      .style("font-size", 12)
-      .style("text-anchor", "end")
-      .style("fill", 'black');    
-
-    vis.yAxisG.call(vis.yAxis)
-      .selectAll("text")
-      .style("font-size", 12)
-      .style("fill", 'black');
   }
 
   renderBars()
