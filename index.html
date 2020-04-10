@@ -60,7 +60,13 @@
 
     <div id="control" class="row">
       <button id="view-toggle">Cyclic View</button>
-      <select id="kill-count-select"></select>
+      <center>
+        <span class="thick-text">Node size and bar length encodes:</span>
+        <br>
+        <select id="kill-count-select"></select>
+      </center>
+      <select id="sort-bars"></select>
+
     </div>
 
     <div id="vis-row" class="row">  
@@ -69,7 +75,7 @@
       </svg>
 
       <div>
-        <select id="sort-bars"></select>
+        <!--        <select id="sort-bars"></select>-->
         <svg id="bar-chart"></svg>
       </div>
       <div id="vis-nodes-info">
@@ -83,20 +89,7 @@
         <br><br>
         <b>Description: </b><div id="descriptionText"></div>
       </div>
-
     </div>
-
-    <!--
-<div class="row">
-<div>
-<label for="year-slider">Year</label>
-<input type="range" id="year-slider" name="year-slider" value="1991" min="1991" max="2019" step="1">
-<span id="year-selection">1991</span>
-</div>
-
-<button id="play-button">Play</button> 
-</div>
--->
 
     <div>
       <svg id="map">

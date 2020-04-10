@@ -28,6 +28,11 @@ html {
   opacity: 1;
 }
 
+#control {
+  margin-right: 205px;
+  justify-content: space-between;
+}
+
 /*
 #map {
 width: 1000px;
@@ -67,30 +72,25 @@ p {
   color: white;
 }
 
+.thick-text {
+  font-weight: 600;
+}
+
 #vis-nodes {
-  /*  background-color: aqua;*/
-  /*    background-color: black;*/
   background-color: gray;
-  /*  background-color: darkgray;*/
 }
 
 #vis-nodes-legend {
   font-size: 1.1rem;
   font-weight: 300;
   background-color:black; 
-  /*  outline: solid 10px blue;*/
   color: white;
-  /*  display: block;*/
-  /*  text-align: right;*/
-  /*  line-height: 50px;*/
   padding: 20px 0 0 20px;
   height: 100px;
-  /*  padding: 20px;*/
-  /*  width: 200px;*/
 }
 
 #view-toggle {
-  width: 150px;
+  width: 160px;
   background-color: silver;
   border: 1px solid black;
   font-size: 0.9rem;
@@ -98,15 +98,20 @@ p {
 }
 
 #kill-count-select {
-  background-color: silver;
-  border: 1px solid black;
+  background-color: black;
+  color: white;
+  border: 1px solid white;
   font-size: 1.2rem;
   font-weight: 600;
 }
 
+#sort-bars {
+  background-color: silver;
+  border: 1px solid black;
+  font-size: 0.9rem;
+}
+
 #legend-elements, #elements-info, #modality-info {
-  /*  padding: 20px;*/
-  /*  padding: 0 0 0 20px;*/
   padding: 0 0 0 20px;
 }
 
@@ -125,14 +130,11 @@ p {
 }
 
 #vis-nodes-info {
-  /*  margin: 20px;*/
-  padding: 20px;
-  /*  background-color: gray;*/
+  margin-top: -44px;
+  padding: 42px 20px 42px 20px;
   background-color: #565656;
-  /*  background-color: darkgray;*/
   font-size: 0.9rem;
   font-weight: 300;
-  /*  color: black;*/
   color: white;
   width: 185px;
   height: 510px;
