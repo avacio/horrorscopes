@@ -414,7 +414,7 @@ class ChoroplethMap {
           .attr('cy', d => {
             return vis.projection([d.long, d.lat])[1];
           })
-          .attr('r', '2')
+          .attr('r', '1.5')
           .style('fill-opacity', '0.5'); 
     }
     
