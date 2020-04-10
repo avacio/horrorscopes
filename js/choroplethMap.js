@@ -55,6 +55,12 @@ class ChoroplethMap {
       .style('font-size', '12px')
       .style('opacity', 0);
 
+    vis.killerTooltip = d3.select('#killer-tooltip')
+      .attr('class', 'tooltip')
+      .style('position', 'absolute')
+      .style('font-size', '10px')
+      .style('opacity', 0);
+
     // store randomly generated points for the serial killers
     vis.generatedPointsByCountry = []; 
   }
@@ -174,6 +180,16 @@ class ChoroplethMap {
       if (vis.active.node() === this) {
         vis.generatedPointsByCountry = [];
         vis.config.onCountryClick(null);
+
+        // hide killers
+        /*var x = document.getElementsByClassName("killer");
+        if (x.style.display === "none") {
+          x.style.display = "block";
+        } else {
+          x.style.display = "none";
+        }*/
+
+        // reset zoom
         return vis.reset();
       }
 
@@ -214,7 +230,7 @@ class ChoroplethMap {
 
     }
 
-    // mouseover event handler
+    // country mouseover event handler
     var countryMouseover = function(d) {
       vis.tooltip
         .style('left', (d3.event.pageX + 10) + 'px')
@@ -230,7 +246,7 @@ class ChoroplethMap {
       }
     }
 
-    // mouseout event handler
+    // country mouseout event handler
     var countryMouseout = function(d) {
       vis.tooltip
         .style('opacity', 0); 
@@ -278,8 +294,12 @@ class ChoroplethMap {
 
       // parse data to only show ones from the selected country
       var filterKillersByCountry = vis.serialKillersData.filter(function (d) {
+        if (selectedCountry == "United States of America") {
+          return d.CountriesActive.includes("United States");
+        } else {
+          return d.CountriesActive.includes(selectedCountry);
+        }
         //console.log(d);
-        return d.CountriesActive.includes(selectedCountry);
       });
 
 
@@ -297,6 +317,47 @@ class ChoroplethMap {
       //var visTest = vis.generatedPointsByCountry[0];
       //console.log("vistests: " + visTest);
 
+      // country mouseover event handler
+      var killerMouseover = function(d) {
+        console.log(d);
+
+        var name = d.Name,
+            birthday = d.Birthday,
+            country = d.CountriesActive,
+            yearsActive = d.yearsActive;
+
+
+        vis.killerTooltip
+          .html("<p>" + 
+            "Name: " + d.Name + "</br>" + 
+            "Nickname(s): " + d.Nickname + "</br>" +
+            "Birthday: " + d.Birthday + "</br>" +
+            "Type(s) of Killer: " + d.Types + "</br>" + 
+            "Country/Countries Active: " + d.CountriesActive + "</br>" +
+            "Year(s) Active: " + d.YearsActive + "</br>" +
+            "Possible Victims: " + d.PossibleVictims + "</br>" + 
+            "Proven Victims: " + d.ProvenVictims + "</br>" + 
+            "Notes: " + d.Notes
+            + "</p>")
+          .style('left', (d3.event.pageX + 10) + 'px')
+          .style('top', (d3.event.pageY - 20) + 'px')
+          .style('opacity', 1);
+/*
+        if (vis.killersByCountry[d.properties.name] != 0) {
+          vis.killerTooltip
+            .html('<p>' + d.properties.name + ': ' + vis.killersByCountry[d.properties.name] + ' killer(s)</p>');
+        } else {
+          vis.killerTooltip
+            .html('<p>' + d.properties.name + ' has no killers</p>');
+        }*/
+      }
+
+      // country mouseout event handler
+      var killerMouseout = function(d) {
+        vis.killerTooltip
+          .style('opacity', 0); 
+      }
+
       vis.circles = vis.chart.selectAll('circle')
       .data(filterKillersByCountry);
 
@@ -312,15 +373,17 @@ class ChoroplethMap {
 
       vis.circles.enter().append('circle')
         .attr('class', 'killer')
+        .on('mouseover', killerMouseover)
+        .on('mouseout', killerMouseout)
         .merge(vis.circles)
           .attr('cx', d => {
-            console.log(d.long);
+            //console.log(d.long);
             return vis.projection([d.long, d.lat])[0];
           })
           .attr('cy', d => {
             return vis.projection([d.long, d.lat])[1];
           })
-          .attr('r', '5'); 
+          .attr('r', '2'); 
     }
     
 /*
