@@ -174,10 +174,6 @@ class ChoroplethMap {
         return vis.reset();
       }
 
-      // callback for selectedCountry
-      vis.config.onCountryClick(d.properties.name);
-
-
       console.log(d);
       console.log(vis.killersByCountry);
 
@@ -194,7 +190,8 @@ class ChoroplethMap {
         vis.generatedPointsByCountry.push(point);
       }
 
-      vis.randomPoints = vis.generatedPointsByCountry;
+      // callback for selectedCountry
+      vis.config.onCountryClick(d.properties.name);
 
       // zoom into country
       vis.active.classed("active", false);
@@ -285,14 +282,17 @@ class ChoroplethMap {
 
       // add lat/lon coordinates to filtered killers from generatedPointsByCoutry
       for (let i = 0; i < filterKillersByCountry.length; i++) {
-        /*filterKillersByCountry[i]["long"] = vis.generatedPointsByCountry[i][0];
+        filterKillersByCountry[i]["long"] = vis.generatedPointsByCountry[i][0];
         filterKillersByCountry[i]["lat"] = vis.generatedPointsByCountry[i][1];
 
-        console.log(vis.generatedPointsByCountry[i]);*/
+        console.log(vis.generatedPointsByCountry[i]);
       }
 
-      console.log(filterKillersByCountry);
-      console.log(vis.generatedPointsByCountry);
+      //console.log(filterKillersByCountry);
+      //console.log(vis.generatedPointsByCountry);
+
+      var visTest = vis.generatedPointsByCountry[0];
+      console.log("vistests: " + visTest);
 
       vis.circles = vis.chart.selectAll('circle')
       .data(filterKillersByCountry);
@@ -311,6 +311,7 @@ class ChoroplethMap {
         .attr('class', 'killer')
         .merge(vis.circles)
           .attr('cx', d => {
+            console.log(vis.generatedPointsByCountry)
             console.log(d);
           })
           .attr('cy', d => {
