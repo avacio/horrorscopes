@@ -101,6 +101,9 @@ class ChoroplethMap {
 
           vis.chart.selectAll('text')
            .attr('transform', d3.event.transform); 
+
+          vis.chart.selectAll('circle')
+            .attr('transform', d3.event.transform);
     });
 
     // uncomment for manual zoom  
@@ -285,14 +288,14 @@ class ChoroplethMap {
         filterKillersByCountry[i]["long"] = vis.generatedPointsByCountry[i][0];
         filterKillersByCountry[i]["lat"] = vis.generatedPointsByCountry[i][1];
 
-        console.log(vis.generatedPointsByCountry[i]);
+        //console.log(vis.generatedPointsByCountry[i]);
       }
 
       //console.log(filterKillersByCountry);
       //console.log(vis.generatedPointsByCountry);
 
-      var visTest = vis.generatedPointsByCountry[0];
-      console.log("vistests: " + visTest);
+      //var visTest = vis.generatedPointsByCountry[0];
+      //console.log("vistests: " + visTest);
 
       vis.circles = vis.chart.selectAll('circle')
       .data(filterKillersByCountry);
@@ -311,16 +314,19 @@ class ChoroplethMap {
         .attr('class', 'killer')
         .merge(vis.circles)
           .attr('cx', d => {
-            console.log(vis.generatedPointsByCountry)
-            console.log(d);
+            console.log(d.long);
+            return vis.projection([d.long, d.lat])[0];
           })
           .attr('cy', d => {
-
+            return vis.projection([d.long, d.lat])[1];
           })
           .attr('r', '5'); 
     }
     
 /*
+    .attr("cx", function(d){ return projection([d.long, d.lat])[0] })
+        .attr("cy", function(d){ return projection([d.long, d.lat])[1] })
+
     vis.circles.merge(vis.circles)
         .attr('cy', d => vis.yScale(vis.yValue(d)))
         .attr('cx', d => vis.xScale(vis.xValue(d)))
