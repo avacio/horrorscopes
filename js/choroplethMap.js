@@ -178,6 +178,7 @@ class ChoroplethMap {
       //console.log(d3.geoBounds(d));
 
       if (vis.killersByCountry[d.properties.name] == 0) return;
+
       if (vis.active.node() === this) {
         vis.generatedPointsByCountry = [];
         vis.config.onCountryClick(null);
@@ -191,6 +192,21 @@ class ChoroplethMap {
         }*/
 
         // reset zoom
+
+        var killers = document.getElementsByClassName('killer');
+        console.log(killers);
+        while(killers[0]) {
+          killers[0].parentNode.removeChild(killers[0]);
+        }
+
+        //destroy killers
+        /*
+        var killers = document.getElementsByClassName('.killer');
+
+        while(killers[0]) {
+            killers[0].parentNode.removeChild(killers[0]);
+        }​*/
+
         return vis.reset();
       }
 
@@ -236,7 +252,13 @@ class ChoroplethMap {
       vis.tooltip
         .style('left', (d3.event.pageX + 10) + 'px')
         .style('top', (d3.event.pageY - 20) + 'px')
-        .style('opacity', 1);
+        .style('opacity', d => {
+          if (selectedCountry != null) {
+            return '0';
+          } else {
+            return '1';
+          }
+        });
 
       if (vis.killersByCountry[d.properties.name] != 0) {
         vis.tooltip
