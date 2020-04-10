@@ -115,12 +115,13 @@ class ChoroplethMap {
     // uncomment for manual zoom  
     //vis.svg.call(vis.zoom);
 
+    /*
     vis.svg.append("rect")
       .attr("class", "background")
       .attr("display", "none")
       .attr("width", vis.config.containerWidth)
       .attr("height", vis.config.containerHeight)
-      .on("click", this.reset());
+      .on("click", this.reset());*/
 
     var getRandomPoint = function(d) {
       var boundingBox = d3.geoBounds(d),
@@ -328,16 +329,16 @@ class ChoroplethMap {
 
 
         vis.killerTooltip
-          .html("<p>" + 
-            "Name: " + d.Name + "</br>" + 
-            "Nickname(s): " + d.Nickname + "</br>" +
-            "Birthday: " + d.Birthday + "</br>" +
-            "Type(s) of Killer: " + d.Types + "</br>" + 
-            "Country/Countries Active: " + d.CountriesActive + "</br>" +
-            "Year(s) Active: " + d.YearsActive + "</br>" +
-            "Possible Victims: " + d.PossibleVictims + "</br>" + 
-            "Proven Victims: " + d.ProvenVictims + "</br>" + 
-            "Notes: " + d.Notes
+          .html("<div class='killer-notes' style='max-width: 400px;'>" + 
+            "<p>Name: " + d.Name + "</p>" + 
+            "<p>Nickname(s): " + d.Nickname + "</p>" +
+            "<p>Birthday: " + d.Birthday + "</p>" +
+            "<p>Type(s) of Killer: " + d.Type + "</p>" + 
+            "<p>Country/Countries Active: " + d.CountriesActive + "</p>" +
+            "<p>Year(s) Active: " + d.YearsActive + "</p>" +
+            "<p>Possible Victims: " + d.PossibleVictims + "</p>" + 
+            "<p>Proven Victims: " + d.ProvenVictims + "</p>" + 
+            "<p>Notes: " + d.Notes
             + "</p>")
           .style('left', (d3.event.pageX + 10) + 'px')
           .style('top', (d3.event.pageY - 20) + 'px')
@@ -383,7 +384,8 @@ class ChoroplethMap {
           .attr('cy', d => {
             return vis.projection([d.long, d.lat])[1];
           })
-          .attr('r', '2'); 
+          .attr('r', '2')
+          .style('fill-opacity', '0.5'); 
     }
     
 /*
