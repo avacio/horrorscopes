@@ -3,6 +3,8 @@ class KillerTypeChart {
   constructor(_config) {
     this.config = {
       parentElement: _config.parentElement,
+      svg: _config.svg,
+      svg: _config.svg,
       containerWidth: _config.containerWidth || 1200,
       containerHeight: _config.containerHeight || 500,
       margin: _config.margin || { top: 50, right: 30, bottom: 100, left: 50 }
@@ -15,7 +17,7 @@ class KillerTypeChart {
   initVis() {
     let vis = this;
 
-    vis.svg = d3.select(vis.config.parentElement)
+    vis.svg = d3.select(vis.config.svg)
       .attr("width", vis.config.containerWidth)
       .attr("height", vis.config.containerHeight);
 
@@ -54,6 +56,9 @@ class KillerTypeChart {
     //
     //    console.log(vis.selectedCountOption);
     //    console.log(vis.sortOption);
+
+    // clear state
+    vis.chart.selectAll("rect.normalized-bar").remove();
 
     //    vis.signsAndSelectedOption = {};
     //    vis.groupedBarsSelection = {};
@@ -110,7 +115,7 @@ class KillerTypeChart {
     vis.xScale = d3.scaleBand()
       .domain(vis.types)
       .range([0, vis.width])
-//      .padding(0.5);
+    //      .padding(0.5);
       .padding(0.5);
 
     vis.yScale = d3.scaleLinear()
@@ -121,65 +126,28 @@ class KillerTypeChart {
     vis.xAxis = d3.axisBottom()
       .scale(vis.xScale);
 
-        vis.xAxisG = vis.chart.append('g').call(vis.xAxis)
+    vis.xAxisG = vis.chart.append('g').call(vis.xAxis)
       .attr('transform', `translate(0,${vis.height})`)
       .attr('class', 'xAxisG');
 
-//    vis.xAxisG.select('.domain').remove();
-//    vis.xAxisG.append('text')
-//      .attr('class', 'axis-label')
-//      .attr('y', 50)
-//      .attr('x', vis.width / 2)
-//      .text(vis.xAxisLabel);
-    
+    //    vis.xAxisG.select('.domain').remove();
+    //    vis.xAxisG.append('text')
+    //      .attr('class', 'axis-label')
+    //      .attr('y', 50)
+    //      .attr('x', vis.width / 2)
+    //      .text(vis.xAxisLabel);
+
     vis.yAxis = d3.axisLeft()
       .scale(vis.yScale)
       .tickFormat(d => d + "%");
 
     this.render();
-    //    this.render(types);
-
   }
-
-  //  getY(selectedOption, sign)
-  //  { 
-  //    let vis = this;
-  //
-  //    if (selectedOption == "Number of Killers" || selectedOption == null)
-  //    { 
-  //      return vis.signsAndKills[sign]['numKillers'];
-  //
-  //    } else if (selectedOption == "Proven Kills")
-  //    { 
-  //      return vis.signsAndKills[sign]['numProven'];
-  //
-  //    } else if (selectedOption == "Proven + Possible Kills")
-  //    { 
-  //
-  //      return (vis.signsAndKills[sign]['numPossible'] +
-  //              vis.signsAndKills[sign]['numProven'])
-  //    }
-  //  }
 
   render() {
     let vis = this;
 
-    //    if(vis.selectedCountOption == "Proven + Possible Kills")
-    //    { 
     vis.renderBars();
-    //      vis.renderGroupedBars(signs);
-
-    //    } 
-    //    else
-    //    {
-    //      vis.renderBars(signs);
-    //    }
-
-//    vis.chart.selectAll('.normalized-bar')
-//      .data(signs)
-//      .on('mouseover', d => {
-//      vis.highlightBar(d)
-//    });
 
     vis.xAxisG.call(vis.xAxis)
       .selectAll("text")
@@ -224,53 +192,113 @@ class KillerTypeChart {
     //    //      .attr('height', d => vis.height - vis.yScale(vis.data[d][0])
     //      .attr('height', d =>100
     //           );
-  // Tooltip!
-      const tooltipMouseover = (name, percentage, sum) => {
-//        vis.highlightNode(d.key);
+    // Tooltip!
+    //    const tooltipMouseover = (name, percentage, sum) => {
+    //    const tooltipMouseover = (name, xPosn, yAndP) => {
+    //    const tooltipMouseover = (d) => {
+    const tooltipMouseover = (d, name, yAndP) => {
+      //        vis.highlightNode(d.key);
 
-        vis.tooltip.html(name + '<br>' + percentage)
-          .style('left', (d3.event.pageX + 15) + "px")
-          .style('top', (d3.event.pageY - 28) + "px")
-          .transition()
-          .style('opacity', .9); // started as 0!
-      };
-
+      vis.tooltip.html(name + ' ' + yAndP[1]+'%'
+                       + '<br>' + yAndP[3] + '/' + yAndP[2] +' killers')
+        .style('left', (d3.event.pageX + 15) + "px")
+        .style('top', (d3.event.pageY - 28) + "px")
+      //            .style("left", d3.select(this).attr("x") + "px")     
+      //        .style("top", d3.select(this).attr("y") + "px")
+      //            .style("left", (window.pageXOffset + matrix.e + 15) + "px")
+      //              .style("top", (window.pageYOffset + matrix.f - 30) + "px")
+      //                  .style("left", (window.pageXOffset + 15) + "px")
+      //              .style("top", (window.pageYOffset - 30) + "px")
+        .transition()
+        .style('opacity', .9); // started as 0!
+    };
 
     vis.types.forEach((type, index) => { 
-      console.log("INDEX: " + index)
-      //            console.log(vis.data[vis.types[index]])
+
+
+      //////////////////////////////////
+      // sort x values if sort option selected
+      //    if (vis.sortOption == "Least to Most")
+      //    { 
+      //
+      //      orderedSigns = Object.keys(vis.signsAndSelectedOption).sort(function (a, b) {
+      //        return d3.ascending(vis.signsAndSelectedOption[a], vis.signsAndSelectedOption[b]);
+      //      });
+      //
+      //
+      //    } else 
+      //      if (vis.sortOption == "Most to Least")
+      //      { 
+      //        orderedSigns = Object.keys(vis.signsAndSelectedOption).sort(function (a, b) {
+      //        return d3.descending(vis.signsAndSelectedOption[a], vis.signsAndSelectedOption[b]);
+      //      });
+      //
+
+      //
+      //      orderedSigns = Object.keys(vis.signsAndSelectedOption).sort(function (a, b) {
+      //        return d3.descending(vis.signsAndSelectedOption[a], vis.signsAndSelectedOption[b]);
+      //      });
+      //
+      //    } else if (vis.sortOption == "Sign Order" || vis.sortOption == null)
+      //    {
+      //      orderedSigns = unorderedSigns;
+      //    }    
+      //
+      //      
+      //      
+
+
+      ///////////////////////////////////////////
       let signsObject = vis.data[vis.types[index]];
-      let signValArray = Object.values(signsObject);
+      let orderedSignedObject = {}
+
+      if (vis.sortOption == "Most to Least")
+      { 
+        let signsArr = Object.keys(signsObject).sort(function (a, b) {
+          // axis is flipped
+          return d3.ascending(signsObject[a], signsObject[b]);
+        });
+        signsArr.forEach(s => { orderedSignedObject[s] = signsObject[s]; })
+      } else if (vis.sortOption == "Least to Most")
+      { 
+        let signsArr = Object.keys(signsObject).sort(function (a, b) {
+          // axis is flipped
+          return d3.descending(signsObject[a], signsObject[b]);
+        });
+        signsArr.forEach(s => { orderedSignedObject[s] = signsObject[s]; })
+      } else if (vis.sortOption == "Element Groups") {
+        let signsArr = [];
+        vis.elements.forEach(e => {
+          signsArr.push(Object.keys(signsObject).filter(s => signsInfoDict[s].type === e))
+        });
+
+        signsArr.flat().forEach(s => { orderedSignedObject[s] = signsObject[s]; })
+      } else {
+        orderedSignedObject = signsObject;
+      }
+
+      let signValArray = Object.values(orderedSignedObject);
 
       for (let i = 0; i < signValArray.length; i++) {
         //              vis.getYandPercent(vis.data[vis.types[index]], i);
         let yAndP = vis.getYandPercent(signValArray, i);
-        let signName = Object.keys(signsObject)[i];
+        let signName = Object.keys(orderedSignedObject)[i];
 
         let bar = vis.chart
         .append('rect')
-        //        .data(signArray)
-        //        .data(signArray)
-        //        .join('.bar ' + type)
-        .transition()
         .attr('id', signName)
-        //        .attr('class', 'normalized-bar')
         .attr("class", vis.signsInfoDict[signName].type
               + " normalized-bar"
               //            + " modality-" + vis.signsInfoDict[signName].modality
              )
-
-        //      .attr('x', d => vis.xScale(d))
         .attr('x', vis.xScale(type))
-        //            .attr('y', yAndP[0])
         .attr('y', vis.height - vis.yScale(yAndP[0]))
         .attr('width', vis.xScale.bandwidth())
-        //      .attr('height', d => vis.height - vis.yScale(vis.data[d][0])
         .attr('height', vis.height - vis.yScale(yAndP[1]))
-//              .on('mouseover', tooltipMouseover(signName, yAndP[1], yAndP[2]))
-//              .on('mouseover', tooltipMouseover(d))
+        .on('mouseover', d => tooltipMouseover(d, signName, yAndP));
 
-        ;
+        //        bar                              .on('mouseover', ()=> console.log("TET"))
+
         //            .attr('height', vis.height-vis.yScale(yAndP[1]));
 
       }
@@ -371,29 +399,12 @@ class KillerTypeChart {
       y+= arr[i] / totalSum * 100;
       i++;
     }
-    console.log("totalSum," + totalSum)
+    //    console.log("totalSum," + totalSum)
+    //
+    //    console.log('val: ' + arr[index])
+    //    console.log('y: ' + y)
+    //    console.log('%: ' + percentage)
 
-    console.log('val: ' + arr[index])
-    console.log('y: ' + y)
-    console.log('%: ' + percentage)
-
-    return [y , percentage, totalSum];
-  }
-
-  //  getYandPercent(obj, index) {
-  ////    console.log("HELLLOOOO")
-  //      let totalSum = Object.values(obj).reduce((a, b) => a + b);
-  //    console.log("totalSum," + totalSum)
-  //    
-  //    console.log('val: ' + Object.values(obj)[index])
-  //    console.log("%: " + Object.values(obj)[index] / totalSum);
-  //    
-  ////    return [ , ]
-  //  }
-
-  registerSelectCallback(callback) {
-    let vis = this;
-
-    vis.OPTS.registerSelectListener(callback);
+    return [y , percentage, totalSum, arr[index]];
   }
 }

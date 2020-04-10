@@ -3,8 +3,6 @@
 ## ALEXIS
 - add titles
 - add axis labels
-- sort normalized stacked bars?
-  - tooltip?
 
 ## GRACE
 - highlight bars - DONE
@@ -14,6 +12,8 @@
 - put in stacked bar for proven/suspected kills - DONE (kinda hacky, but works)
 - map signs to killer types - DONE 
 - help margaret with individual view?
+- fix stacked highlight persisting
+- add axis labels and title
   
 ## MARGARET
 - Zipeng: "Huge label mess in Europe in the map view. Hint: think about how google map handles text labels."

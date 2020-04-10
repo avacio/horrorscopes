@@ -111,6 +111,12 @@ p {
   font-size: 0.9rem;
 }
 
+#sort-norm-bars {
+  background-color: silver;
+  border: 1px solid black;
+  font-size: 0.9rem;
+}
+
 #legend-elements, #elements-info, #modality-info {
   padding: 0 0 0 20px;
 }

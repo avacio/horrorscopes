@@ -119,7 +119,6 @@ class Barchart {
       orderedSigns = unorderedSigns;
     }    
 
-
     // create scale
     vis.xScale = d3.scaleBand()
       .domain(orderedSigns)

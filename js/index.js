@@ -5,7 +5,7 @@ let formatTime = d3.timeFormat("%m/%d");
 let choroplethMap;
 let barChart = new Barchart({ parentElement: '#bar-chart'});
 let zodiacCycle = new ZodiacCycle({ parentElement: '#vis-row', svg: "#vis-nodes" });
-let killerTypeChart = new KillerTypeChart({ parentElement: '#killer-type-chart'});
+let killerTypeChart = new KillerTypeChart({ parentElement: '#type-row', svg: '#killer-type-chart'});
 
 let astrologySignsData = {
   "Aquarius": d3.timeDay.range(new Date(0000, 0, 20), new Date(0000, 1, 18), 1), 
@@ -306,7 +306,8 @@ Promise.all([
   
   // load and update killer type bar chart
   killerTypeChart.data = killersByType;
-  killerTypeChart.signs = astrologySignsData.keys;
+//  killerTypeChart.signs = astrologySignsData.keys;
+  killerTypeChart.elements = elements;
   killerTypeChart.signsInfoDict = signsInfoDict;
   killerTypeChart.update();
 
@@ -331,6 +332,7 @@ $("#view-toggle").on("click", function() {
 
 const killCountOptions = ["Number of Killers", "Proven Kills", "Proven + Possible Kills"];
 const sortBarChartOptions = ["Sign Order", "Most to Least", "Least to Most"];
+const normSortBarsOptions = ["Sign Order", "Most to Least", "Least to Most", "Element Groups"];
 
 const killCountVariableNameDict = {};
 killCountVariableNameDict[killCountOptions[0]] = "numKillers";
@@ -355,6 +357,15 @@ d3.select("#sort-bars")
   .text(function (d) { return d; }) // text showed in the menu
   .attr("value", function (d) { return d; }); // corresponding value returned by the button
 
+// selection to sort normalized stack bar chart
+d3.select("#sort-norm-bars")
+  .selectAll('normSortBarsOptions')
+  .data(normSortBarsOptions)
+  .enter()
+  .append('option')
+  .text(function (d) { return d; }) // text showed in the menu
+  .attr("value", function (d) { return d; }); // corresponding value returned by the button
+
 zodiacCycle.countType = killCountVariableNameDict[d3.select("#kill-count-select").property("value")];
 zodiacCycle.update();
 
@@ -374,6 +385,13 @@ d3.select("#sort-bars").on("change", function(d) {
 
   barChart.sortOption = selectedOption;
   barChart.update();
+});
+
+d3.select("#sort-norm-bars").on("change", function(d) {
+  var selectedOption = d3.select(this).property("value")
+
+  killerTypeChart.sortOption = selectedOption;
+  killerTypeChart.update();
 });
 
 function updateSignInfo() {
