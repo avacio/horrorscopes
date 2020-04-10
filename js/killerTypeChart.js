@@ -53,45 +53,12 @@ class KillerTypeChart {
     let vis = this;
 
     if (!vis.data) { return; }
-    //
-    //    console.log(vis.selectedCountOption);
-    //    console.log(vis.sortOption);
 
-    // clear state
+    // clear state before appending
     vis.chart.selectAll("rect.normalized-bar").remove();
     vis.chart.selectAll(".axis-label").remove();
 
-    //    vis.signsAndSelectedOption = {};
-    //    vis.groupedBarsSelection = {};
-    //    let orderedSigns = [];
-    //    let unorderedSigns = Object.keys(vis.signsAndKills);
-    //    let maxY = 0;
     vis.types = Object.keys(vis.data);
-    console.log(vis.types)
-    //    console.log(vis.signsAndKills);
-
-    //    // get max value for y
-    //    unorderedSigns.forEach(sign => {
-    //      if (maxY == 0)
-    //      { 
-    //        maxY = this.getY(vis.selectedCountOption, sign);
-    //        vis.signsAndSelectedOption[sign]= maxY;
-    //        
-    //
-    //      } else
-    //      { 
-    //        let y = this.getY(vis.selectedCountOption, sign);
-    //        vis.signsAndSelectedOption[sign] = y;
-    //
-    //        if (y > maxY)
-    //        {
-    //          maxY = y;
-    //        }
-    //      }
-    //    });
-
-    //    // sort x values if sort option selected
-    //    if (vis.sortOption == "Least to Most")
     //    { 
     //
     //      orderedSigns = Object.keys(vis.signsAndSelectedOption).sort(function (a, b) {
@@ -305,7 +272,7 @@ class KillerTypeChart {
         .attr('id', signName)
         .attr("class", vis.signsInfoDict[signName].type
               + " normalized-bar"
-              //            + " modality-" + vis.signsInfoDict[signName].modality
+//                          + " modality-" + vis.signsInfoDict[signName].modality
              )
         .attr('x', vis.xScale(type))
         .attr('y', vis.height - vis.yScale(yAndP[0]))

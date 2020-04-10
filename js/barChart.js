@@ -5,7 +5,7 @@ class Barchart {
       parentElement: _config.parentElement,
       containerWidth: _config.containerWidth || 500,
       containerHeight: _config.containerHeight || 500,
-      margin: _config.margin || { top: 50, right: 30, bottom: 100, left: 50 }
+      margin: _config.margin || { top: 50, right: 30, bottom: 100, left: 75 }
     }
 
     this.OPTS = {
@@ -25,6 +25,8 @@ class Barchart {
         this.aListener = listener;
       }
     }
+    
+    this.selectedCountOption = "Number of Killers";
 
     this.initVis();
   }
@@ -47,10 +49,9 @@ class Barchart {
       .attr('transform', `translate(${vis.config.margin.left},${vis.config.margin.top})`);
 
     vis.xAxisG = vis.chart.append('g')
-      .attr('transform', `translate(0,${vis.height})`); 
+      .attr('transform', `translate(0,${vis.height})`);
 
     vis.yAxisG = vis.chart.append('g');
-
   }
 
 
@@ -84,8 +85,6 @@ class Barchart {
       { 
         maxY = this.getY(vis.selectedCountOption, sign);
         vis.signsAndSelectedOption[sign]= maxY;
-        
-
       } else
       { 
         let y = this.getY(vis.selectedCountOption, sign);
@@ -130,7 +129,6 @@ class Barchart {
       .range([vis.height, 0])
       .nice();
 
-
     vis.xAxis = d3.axisBottom()
       .scale(vis.xScale);
 
@@ -174,17 +172,36 @@ class Barchart {
       vis.renderBars(signs);
     }
 
+    // clear state before appending
+    vis.chart.selectAll(".axis-label").remove();
+
     vis.xAxisG.call(vis.xAxis)
+    //      .selectAll("tick > text")
       .selectAll("text")
+    //      .selectAll("text")
       .attr("transform", "rotate(-45)")
       .style("font-size", 12)
       .style("text-anchor", "end")
       .style("fill", 'black');
 
+    vis.xAxisG.append('text')
+      .attr('class', 'axis-label')
+      .attr('y', 70)
+      .attr('x', vis.width / 2)
+      .text('Astrological Signs');
+
     vis.yAxisG.call(vis.yAxis)
       .selectAll("text")
       .style("font-size", 12)
       .style("fill", 'black');
+
+    vis.yAxisG.append('text')
+      .attr('class', 'axis-label')
+      .attr('y', -50)
+      .attr('x', -vis.height / 2)
+      .attr('transform', `rotate(-90)`)
+      .attr('text-anchor', 'middle')
+      .text(vis.selectedCountOption);
   }
 
   renderBars(signs)
@@ -226,8 +243,8 @@ class Barchart {
       .transition()
       .attr('class', 'layerbar')
       .attr('id', function(d) { 
-        return d + "layer";
-      })
+      return d + "layer";
+    })
       .attr('x', d => vis.xScale(d))
       .attr('y', d => vis.yScale(vis.signsAndKills[d].numProven))
       .attr('width', vis.xScale.bandwidth())
