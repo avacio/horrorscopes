@@ -179,6 +179,8 @@ class ChoroplethMap {
 
       if (vis.killersByCountry[d.properties.name] == 0) return;
 
+      console.log("clicked: " + selectedCountry);
+
       if (vis.active.node() === this) {
         vis.generatedPointsByCountry = [];
         vis.config.onCountryClick(null);
@@ -303,7 +305,13 @@ class ChoroplethMap {
             }
         })
         .attr('cursor', d => {
-          if (vis.killersByCountry[d.properties.name] != 0) {
+          if (selectedCountry != null) {
+            if (d.properties.name == selectedCountry) {
+              return 'pointer';
+            } else {
+              return 'default';
+            }
+          } else if (vis.killersByCountry[d.properties.name] != 0) {
             return 'pointer';
           } else {
             return 'default';
@@ -362,7 +370,7 @@ class ChoroplethMap {
             "<p>Proven Victims: " + d.ProvenVictims + "</p>" + 
             "<p>Notes: " + d.Notes
             + "</p>")
-          .style('left', (d3.event.pageX + 10) + 'px')
+          .style('left', (d3.event.pageX + 20) + 'px')
           .style('top', (d3.event.pageY - 20) + 'px')
           .style('opacity', 1);
 /*
