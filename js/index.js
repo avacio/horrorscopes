@@ -273,7 +273,10 @@ Promise.all([
   //choroplethMap.onCountryClick = onCountryClick;
   choroplethMap.world_geo = files[1];
   choroplethMap.killersByCountry = killersByCountry;
-  choroplethMap.data = signsAndSerialKillers;
+
+  //console.log(serialKillersData);
+  choroplethMap.serialKillersData = serialKillersData;
+  choroplethMap.signsAndSerialKillers = signsAndSerialKillers;
   choroplethMap.elements = elements;
   choroplethMap.update();
   /*choroplethMap.registerSelectCallback((country) => {

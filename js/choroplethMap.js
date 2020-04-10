@@ -55,7 +55,8 @@ class ChoroplethMap {
       .style('font-size', '12px')
       .style('opacity', 0);
 
-
+    // store randomly generated points for the serial killers
+    vis.generatedPointsByCountry = []; 
   }
 
   update() {
@@ -112,14 +113,63 @@ class ChoroplethMap {
       .attr("height", vis.config.containerHeight)
       .on("click", this.reset());
 
+    var getRandomPoint = function(d) {
+      var boundingBox = d3.geoBounds(d),
+          minCoordinates = boundingBox[0],
+          maxCoordinates = boundingBox[1],
+          minLong = minCoordinates[0],
+          minLat = minCoordinates[1],
+          maxLong = maxCoordinates[0],
+          maxLat = maxCoordinates[1];
+
+      var randLat = minLat + (Math.random() * (maxLat - minLat)),
+          randLong = minLong + (Math.random() * (maxLong - minLong));
+
+      // The point must be specified as a two-element array [longitude, latitude] in degrees
+      var randPoint = [randLong, randLat];
+
+/*
+      console.log("long min: " + minLong + " long max: " + maxLong);
+      console.log("lat min: " + minLat + " lat max: " + maxLat);
+      
+      console.log(randPoint);
+
+      console.log(d3.geoContains(d, randPoint));*/
+
+      var isPointInCountry = d3.geoContains(d, randPoint);
+      
+      // recurse until a point within the country is generated
+      if (isPointInCountry) {
+        return randPoint;
+      } else {
+        return getRandomPoint(d);
+      }
+      /*    
+      console.log("random lat: " + lat);
+      console.log("random long: " + long);
+      console.log(minCoordinates);
+      console.log(maxCoordinates);
+      console.log(minLong);
+      console.log(minLat);
+      console.log(maxLong);
+      console.log(maxLat);*/
+    }
+
     // referenced: https://bl.ocks.org/piwodlaiwo/90777c94b0cd9b6543d9dfb8b5aefeef  
     var clicked = function(d) {
       // callback for index.js
       //console.log(d.properties.name);
       //vis.config.onClickedCountry(d);
 
+
+      //[[left, bottom], [right, top]], 
+      // where left is the minimum longitude, bottom is the minimum latitude, 
+      // right is maximum longitude, and top is the maximum latitude.
+      //console.log(d3.geoBounds(d));
+
       if (vis.killersByCountry[d.properties.name] == 0) return;
       if (vis.active.node() === this) {
+        vis.generatedPointsByCountry = [];
         vis.config.onCountryClick(null);
         return vis.reset();
       }
@@ -127,6 +177,26 @@ class ChoroplethMap {
       // callback for selectedCountry
       vis.config.onCountryClick(d.properties.name);
 
+
+      console.log(d);
+      console.log(vis.killersByCountry);
+
+      var numKillersinCountry = vis.killersByCountry[d.properties.name];
+      console.log(numKillersinCountry);
+      // generate X points for how many killers a country has
+      /*if (vis.generatedPointsByCountry.includes(point)) {
+
+      }*/
+
+      for (let i = 0; i < vis.killersByCountry[d.properties.name]; i++) {
+        var point = getRandomPoint(d);
+
+        vis.generatedPointsByCountry.push(point);
+      }
+
+      vis.randomPoints = vis.generatedPointsByCountry;
+
+      // zoom into country
       vis.active.classed("active", false);
       vis.active = d3.select(this).classed("active", true);
 
@@ -200,6 +270,64 @@ class ChoroplethMap {
             return 'default';
           }
         });
+
+    //var point = getRandomPoint(d);
+
+    // to-do: generate points for each individual serial killer
+    if (selectedCountry != null) {
+
+      // parse data to only show ones from the selected country
+      var filterKillersByCountry = vis.serialKillersData.filter(function (d) {
+        //console.log(d);
+        return d.CountriesActive.includes(selectedCountry);
+      });
+
+
+      // add lat/lon coordinates to filtered killers from generatedPointsByCoutry
+      for (let i = 0; i < filterKillersByCountry.length; i++) {
+        /*filterKillersByCountry[i]["long"] = vis.generatedPointsByCountry[i][0];
+        filterKillersByCountry[i]["lat"] = vis.generatedPointsByCountry[i][1];
+
+        console.log(vis.generatedPointsByCountry[i]);*/
+      }
+
+      console.log(filterKillersByCountry);
+      console.log(vis.generatedPointsByCountry);
+
+      vis.circles = vis.chart.selectAll('circle')
+      .data(filterKillersByCountry);
+
+      //console.log(vis.randomPoints);
+      /*
+      console.log(JSON.stringify(vis.generatedPointsByCountry));
+      console.log(vis.generatedPointsByCountry);
+      console.log(vis.generatedPointsByCountry[0]);*/
+
+
+
+      // need a special case for united states
+
+      vis.circles.enter().append('circle')
+        .attr('class', 'killer')
+        .merge(vis.circles)
+          .attr('cx', d => {
+            console.log(d);
+          })
+          .attr('cy', d => {
+
+          })
+          .attr('r', '5'); 
+    }
+    
+/*
+    vis.circles.merge(vis.circles)
+        .attr('cy', d => vis.yScale(vis.yValue(d)))
+        .attr('cx', d => vis.xScale(vis.xValue(d)))
+        .attr('r', d => vis.radiusScale(vis.radiusValue(d)))
+        .style('fill-opacity', 
+          d => d.country === hoveredCountry || d.country === selectedCountry
+          ? "1"
+          : "0.5");*/
 
     // To-do: Add labels for each province with the population value
     /*let geoLabels = vis.chart.selectAll('.geo-labels')
