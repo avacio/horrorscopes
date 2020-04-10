@@ -130,6 +130,7 @@ p {
 }
 
 #vis-nodes-info {
+  border-top: 1px solid black;
   margin-top: -44px;
   padding: 42px 20px 42px 20px;
   background-color: #565656;
@@ -263,4 +264,9 @@ title {
 
 .water-bg {
   background-color: #70B7BA;
+}
+
+.normalized-bar {
+  stroke: black;
+  stroke-width: 3;
 }

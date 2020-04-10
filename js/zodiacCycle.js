@@ -78,44 +78,15 @@ class ZodiacCycle {
         delete vis.data["Unknown"];
       }
 
-
-      /////////
-
-      //ZOOM NECESSARY??
-      //        var zoom = d3.zoom()
-      //      .scaleExtent([1, 8])
-      //      .on('zoom', function() {
-      //          vis.chart
-      //           .attr('transform', d3.event.transform);
-      //    });
-      //
-      //    vis.svg.call(zoom);
-      //      
-      //
-
-      //      const nodes = d3.entries(vis.data);
-      //      const nodes = vis.shiftIndex(d3.entries(vis.data), 5);
       const nodes = vis.shiftIndex(d3.entries(vis.data), 3);
       const entries = Object.entries(vis.data);
 
       vis.sizeScale = d3.scaleSqrt()
-      // LOCAL DOMAIN BASED ON SELECTED COUNT TYPE
         .domain(d3.extent(nodes, d => d.value[vis.countType]))
-
-      // GLOBAL DOMAIN
-      //        .domain(
-      //         d3.extent([].concat(nodes.map(d => d.value.numKillers), nodes.map(d => d.value.numProven), nodes.map(d => d.value.numPossible)))
-      //      )
-      //        .range([10, 50])
-      //        .range([18, 52])
         .range([5, 52])
-      //        .range([15, 60])
         .nice();
 
-      // local min and max based on count type
-      //      console.log("EXTENT: " + d3.extent(nodes, d => d.value[vis.countType]));
-      //global min and max
-      console.log("GLOBAL EXTENT: " + d3.extent([].concat(nodes.map(d => d.value.numKillers), nodes.map(d => d.value.numProven), nodes.map(d => d.value.numPossible))));
+//      console.log("GLOBAL EXTENT: " + d3.extent([].concat(nodes.map(d => d.value.numKillers), nodes.map(d => d.value.numProven), nodes.map(d => d.value.numPossible))));
 
       let links = [];
       const filter = (vis.data, d => {
@@ -143,9 +114,7 @@ class ZodiacCycle {
       if (vis.isCyclicView) {
         simulation = d3.forceSimulation(nodes)
           .force("link", d3.forceLink(links).id(d =>d.key).distance(150))
-        //          .force("link", d3.forceLink(links).id(d =>d.key).distance(200))
           .force("charge", d3.forceManyBody().strength(-1200))
-        //          .force("charge", d3.forceManyBody().strength(-500))
           .force("collide", d3.forceCollide().strength(1.5))
           .force("center", d3.forceCenter(vis.config.containerWidth * 0.47, vis.config.containerHeight / 2));
       } else {
@@ -180,10 +149,7 @@ class ZodiacCycle {
           vis.setPositions = false;
         }
 
-        //        if (node) {
-
         vis.highlightNode(d.key);
-        //      }
 
         vis.tooltip.html(d.key + '<br>' + d.value[vis.countType])
           .style('left', (d3.event.pageX + 15) + "px")
@@ -205,7 +171,6 @@ class ZodiacCycle {
       .attr("class", d => vis.signsInfoDict[d.key].type
             + " regular-node"
             + " modality-" + vis.signsInfoDict[d.key].modality)
-
       .attr("r", d => vis.sizeScale(d.value[vis.countType]))
       .call(vis.drag(simulation))
       .on('mouseover', d => tooltipMouseover(d))

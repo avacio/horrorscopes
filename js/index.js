@@ -44,7 +44,8 @@ let signsAndSerialKillers = {
 
 let signsAndKills = {};
 let killersByCountry = {};
-let killersByType = {}; // TODO
+let killersByType = {};
+let killerTypesBySign = {};
 
 // external functions to load or parse data correctly
 function formatAstrologyDates(){
@@ -91,50 +92,71 @@ const onClick = country => {
   //console.log(selectedCountry);
   choroplethMap.selectedCountry = selectedCountry;
   selectedCountry = country;
-  
+
   choroplethMap.render();
 }
 
-var signTypeMap = new Map();
-let prevSign = "";
+function loadKillersByType()
+{
+  signs = Object.keys(astrologySignsData);
+
+  signs.forEach(sign => {
+    killers = signsAndSerialKillers[sign];
+
+    killers.forEach(killer => {
+      let killerType = killer.Type;
+
+      killerType.forEach(type => {
+
+        if (type != "N/A" && type != "") {
+          if (!killersByType[type]) {
+            killersByType[type] = {};
+          } 
+
+          killersByType[type][sign] = killersByType[type][sign] ? killersByType[type][sign] + 1 : 1;
+        }
+      });
+    });
+  });
+}
 
 function loadSignsAndKillerTypes(signsAndSerialKillers)
 {
-    signs = Object.keys(signsAndSerialKillers);
+  signs = Object.keys(signsAndSerialKillers);
 
-    signs.forEach(sign => {
-      killers = signsAndSerialKillers[sign];
-      var typeCountMap = new Map();
+  signs.forEach(sign => {
+    killers = signsAndSerialKillers[sign];
+    var typeCountMap = new Map();
 
-      killers.forEach(killer => {
-        let killerType = killer.Type;
+    killers.forEach(killer => {
+      let killerType = killer.Type;
 
-        killerType.forEach(type => {
-          // quick & dirty data fix for blank
-          // types
-          if(type == "")
-          {
-            type = "N/A";
-          }
+      killerType.forEach(type => {
+        // quick & dirty data fix for blank
+        // types
+        if(type == "")
+        {
+          type = "N/A";
+        }
 
-          // map the types to a count
-          if (typeCountMap.has(type)) {
+        // map the types to a count
+        if (typeCountMap.has(type)) {
 
-            let typeCount = typeCountMap.get(type) + 1;
-            typeCountMap.set(type, typeCount);
+          let typeCount = typeCountMap.get(type) + 1;
+          typeCountMap.set(type, typeCount);
 
-          } 
-          else {
+        } 
+        else {
           typeCountMap.set(type, 1);
-          }
+        }
 
-          killersByType[sign] = typeCountMap;
-
-        })
-
+        //            killersByType[sign] = typeCountMap;
+        killerTypesBySign[sign] = typeCountMap;
       })
 
     })
+
+  });
 }
 
 // Load data
@@ -221,6 +243,8 @@ Promise.all([
   // ie. {..., Gemini: {"Strangler" => 14, "NA" => 14...}, ...}
   loadSignsAndKillerTypes(signsAndSerialKillers);
 
+  loadKillersByType();
+
   /*
   console.log(killersByCountry);
   console.log("signs");
@@ -279,9 +303,17 @@ Promise.all([
 
     updateSignInfo();
   });
+  
+  // load and update killer type bar chart
+  killerTypeChart.data = killersByType;
+  killerTypeChart.signs = astrologySignsData.keys;
+  killerTypeChart.signsInfoDict = signsInfoDict;
+  killerTypeChart.update();
 
   updateSignInfo();
 });
+
+console.log(killersByType);
 
 ///////////////////////
 // INTERACTIVE ELEMENTS
@@ -345,7 +377,6 @@ d3.select("#sort-bars").on("change", function(d) {
 });
 
 function updateSignInfo() {
-  console.log("Highlighted Sign: " + highlightedSign);
   if (!highlightedSign) {return;} 
 
   $("#signNameText")[0].innerHTML = highlightedSign;

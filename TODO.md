@@ -1,10 +1,10 @@
 #TODO
 
 ## ALEXIS
-- add circle size to legend?
-- double-check bidirectional highlighting when ready - DONE
-- help margaret with individual view?
-- chart for serial killer types?
+- add titles
+- add axis labels
+- sort normalized stacked bars?
+  - tooltip?
 
 ## GRACE
 - highlight bars - DONE
