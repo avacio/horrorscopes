@@ -198,6 +198,23 @@ p {
   background-color: black;
 }
 
+.killer-tooltip {
+  font-weight: 400;
+  width: 300px;
+}
+
+.killer-notes p {
+  font-size: 14px;
+}
+
+.killer-notes span {
+  margin-bottom: 10px;
+}
+
+.killer-notes br {
+  margin-bottom: 2em;
+}
+
 .node-icon {
   pointer-events: none;
 }
