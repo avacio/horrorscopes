@@ -190,7 +190,7 @@ class ChoroplethMap {
           .html('<p>' + d.properties.name + ': ' + vis.killersByCountry[d.properties.name] + ' killer(s)</p>');
       } else {
         vis.tooltip
-          .html('<p>' + d.properties.name + ' has no killers</p>');
+          .html('<p>' + d.properties.name + ' has no<br>&nbsp;&nbsp;documented killers</p>');
       }
     }
 
