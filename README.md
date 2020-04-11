@@ -3,6 +3,11 @@
 This data visualization is purely for entertainment purposes and gives the viewer information about serial killers and their corresponding horoscope (astrological sign). These interactive views will allow users to explore and learn more about serial killers such as their sun signs, their kill magnitude breakdown, as well as their locations around the world. For believers and non-believers of astrology, this data visualization is a fun way for people to support or deny their pre-existing beliefs and stereotypes associated with each astrological sign.  
 <br>
 
+# MILESTONE 3
+Please refer to `Milestone3Writeup.pdf` in the root directory.
+
+# MILESTONE 2
+
 ## Design Rationale
 ### Rationale for our design choices
 We have 3 planned views and 1 potential view if there is time at the end:
