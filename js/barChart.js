@@ -40,9 +40,6 @@ class Barchart {
       .attr("width", vis.config.containerWidth)
       .attr("height", vis.config.containerHeight);
 
-    // Calculate inner chart size. Margin specifies the space around the actual chart.
-    // You need to adjust the margin config depending on the types of axis tick labels
-    // and the position of axis titles (margin convetion: https://bl.ocks.org/mbostock/3019563)
     vis.width = vis.config.containerWidth - vis.config.margin.left - vis.config.margin.right;
     vis.height = vis.config.containerHeight - vis.config.margin.top - vis.config.margin.bottom;
 
@@ -55,12 +52,6 @@ class Barchart {
     vis.yAxisG = vis.chart.append('g');
   }
 
-
-  /**
-   * This function contains all the code to prepare the data before we render it.
-   * In some cases, you may not need this function but when you create more complex visualizations
-   * you will probably want to organize your code in multiple functions.
-   */
   update() {
     let vis = this;
 
@@ -197,7 +188,7 @@ class Barchart {
   renderBars(signs)
   { 
     let vis = this;
-    console.log(vis.signsAndSelectedOption);
+
     // Bind data
     let bar = vis.chart.selectAll('.bar')
     .data(signs);

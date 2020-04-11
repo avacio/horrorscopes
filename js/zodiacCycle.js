@@ -86,8 +86,6 @@ class ZodiacCycle {
         .range([5, 52])
         .nice();
 
-//      console.log("GLOBAL EXTENT: " + d3.extent([].concat(nodes.map(d => d.value.numKillers), nodes.map(d => d.value.numProven), nodes.map(d => d.value.numPossible))));
-
       let links = [];
       const filter = (vis.data, d => {
         return d.key != "root" && 
@@ -194,6 +192,7 @@ class ZodiacCycle {
       simulation.on("tick", () => {
         node
           .attr("cx", d => {
+          // Uncomment below if you want to manipulate the nodes in cyclic view live
           //          if (vis.setPositions && vis.isCyclicView) {
           if (vis.isCyclicView) {
             d.x = vis.config.containerWidth * 0.47 +
@@ -202,6 +201,7 @@ class ZodiacCycle {
           return d.x;
         })
           .attr("cy", d => {
+          // Uncomment below if you want to manipulate the nodes in cyclic view live
           //          if (vis.setPositions && vis.isCyclicView) {
           if (vis.isCyclicView) {
             d.y =   vis.config.containerHeight * 0.5 +
@@ -237,6 +237,7 @@ class ZodiacCycle {
           .attr("y", d => vis.config.containerHeight * 0.5 +
                 Math.round(260 * Math.sin(d.index * (2 * Math.PI / 12))))
       });
+      vis.highlightNode(vis.OPTS.highlightedSign);
     }
   }
 

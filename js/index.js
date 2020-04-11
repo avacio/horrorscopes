@@ -87,9 +87,9 @@ function loadSignsAndKills(signsAndSerialKillers)
     }
   });
 }
+
 // listen to country on click events
 const onClick = country => {
-  //console.log(selectedCountry);
   choroplethMap.selectedCountry = selectedCountry;
   selectedCountry = country;
 
@@ -132,30 +132,21 @@ function loadSignsAndKillerTypes(signsAndSerialKillers)
       let killerType = killer.Type;
 
       killerType.forEach(type => {
-        // quick & dirty data fix for blank
-        // types
-        if(type == "")
-        {
-          type = "N/A";
-        }
+        if(type == "") { type = "N/A"; }
 
         // map the types to a count
         if (typeCountMap.has(type)) {
 
           let typeCount = typeCountMap.get(type) + 1;
           typeCountMap.set(type, typeCount);
-
         } 
         else {
           typeCountMap.set(type, 1);
         }
 
-        //            killersByType[sign] = typeCountMap;
         killerTypesBySign[sign] = typeCountMap;
       })
-
     })
-
   });
 }
 
@@ -194,8 +185,8 @@ Promise.all([
     d.ProvenVictims = +d.ProvenVictims;
     d.PossibleVictims = +d.PossibleVictims;
 
-    //match serial killer with sign based on birthday
-    //if birthday exists
+    // match serial killer with sign based on birthday
+    // if birthday exists
     if(birthday != "NaN/NaN")
     {
       signs.forEach(sign => {
@@ -261,7 +252,6 @@ Promise.all([
     onCountryClick: onClick,
     selectedCountry: selectedCountry 
   });
-  //choroplethMap.onCountryClick = onCountryClick;
   choroplethMap.world_geo = files[1];
   choroplethMap.killersByCountry = killersByCountry;
 
@@ -269,10 +259,6 @@ Promise.all([
   choroplethMap.signsAndSerialKillers = signsAndSerialKillers;
   choroplethMap.elements = elements;
   choroplethMap.update();
-  /*choroplethMap.registerSelectCallback((country) => {
-    selectedCountry = country;
-    choroplethMap.highlightBar(selectedCountry);
-  })*/
 
   // load and update barchart
   barChart.signsAndKills = signsAndKills;
