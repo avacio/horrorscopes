@@ -26,14 +26,9 @@ class ChoroplethMap {
     vis.chart = vis.svg.append('g')
       .attr('transform', 'translate(100, 0)');
 
-    this.drawColorLegend();
-
-    // We initialize a geographic path generator, that is similar to shape generators that you have used before (e.g. d3.line())
-    // We define a projection: https://github.com/d3/d3-geo/blob/v1.11.9/README.md#geoAlbers
-
-    //vis.projection = d3.geoNaturalEarth1();
+    // referenced: https://bl.ocks.org/piwodlaiwo/90777c94b0cd9b6543d9dfb8b5aefeef  
     vis.projection = d3.geoEquirectangular()
-      .center([0, 15]) // set centre to further North as we are cropping more off bottom of map
+      .center([0, 15]) // set centre to further North
       .scale([vis.config.containerWidth / (2 * Math.PI)]) // scale to fit group width
       .translate([vis.config.containerWidth / 2, vis.config.containerHeight / 2]) // ensure centred in group
     ;
@@ -46,6 +41,8 @@ class ChoroplethMap {
     vis.chart.append('path')
       .attr('class', 'world-sphere')
       .attr('d', pathGenerator({type: 'Sphere'}));
+
+    this.drawColorLegend();
 
     // initiate tool tip
     // Referenced: http://bl.ocks.org/williaster/af5b855651ffe29bdca1
@@ -112,7 +109,7 @@ class ChoroplethMap {
             .attr('transform', d3.event.transform);
     });
 
-    // uncomment for manual zoom  
+    // commented out manual zoom  
     //vis.svg.call(vis.zoom);
 
     var getRandomPoint = function(d) {
@@ -125,20 +122,9 @@ class ChoroplethMap {
           maxLat = maxCoordinates[1];
 
       var randLat = minLat + (Math.random() * (maxLat - minLat)),
-          randLong = minLong + (Math.random() * (maxLong - minLong));
-
-      // The point must be specified as a two-element array [longitude, latitude] in degrees
-      var randPoint = [randLong, randLat];
-
-/*
-      console.log("long min: " + minLong + " long max: " + maxLong);
-      console.log("lat min: " + minLat + " lat max: " + maxLat);
-      
-      console.log(randPoint);
-
-      console.log(d3.geoContains(d, randPoint));*/
-
-      var isPointInCountry = d3.geoContains(d, randPoint);
+          randLong = minLong + (Math.random() * (maxLong - minLong)),
+          randPoint = [randLong, randLat],
+          isPointInCountry = d3.geoContains(d, randPoint);
       
       // recurse until a point within the country is generated
       if (isPointInCountry) {
@@ -146,69 +132,29 @@ class ChoroplethMap {
       } else {
         return getRandomPoint(d);
       }
-      /*    
-      console.log("random lat: " + lat);
-      console.log("random long: " + long);
-      console.log(minCoordinates);
-      console.log(maxCoordinates);
-      console.log(minLong);
-      console.log(minLat);
-      console.log(maxLong);
-      console.log(maxLat);*/
     }
 
-    // referenced: https://bl.ocks.org/piwodlaiwo/90777c94b0cd9b6543d9dfb8b5aefeef  
     var clicked = function(d) {
-      // callback for index.js
-      //console.log(d.properties.name);
-      //vis.config.onClickedCountry(d);
-
-
-      //[[left, bottom], [right, top]], 
-      // where left is the minimum longitude, bottom is the minimum latitude, 
-      // right is maximum longitude, and top is the maximum latitude.
-      //console.log(d3.geoBounds(d));
-
+      // disable click if country has no killers
       if (vis.killersByCountry[d.properties.name] == 0) return;
-
-      console.log("clicked: " + selectedCountry);
 
       if (vis.active.node() === this) {
         vis.generatedPointsByCountry = [];
         vis.config.onCountryClick(null);
 
-        // reset zoom
-
+        // remove all the killers from the dom
         var killers = document.getElementsByClassName('killer');
-        console.log(killers);
         while(killers[0]) {
           killers[0].parentNode.removeChild(killers[0]);
         }
 
-        //destroy killers
-        /*
-        var killers = document.getElementsByClassName('.killer');
-
-        while(killers[0]) {
-            killers[0].parentNode.removeChild(killers[0]);
-        }​*/
-
+        //reset zoom
         return vis.reset();
       }
 
-      console.log(d);
-      console.log(vis.killersByCountry);
-
-      var numKillersinCountry = vis.killersByCountry[d.properties.name];
-      console.log(numKillersinCountry);
-      // generate X points for how many killers a country has
-      /*if (vis.generatedPointsByCountry.includes(point)) {
-
-      }*/
-
+      // generate random coordinates within the country
       for (let i = 0; i < vis.killersByCountry[d.properties.name]; i++) {
         var point = getRandomPoint(d);
-
         vis.generatedPointsByCountry.push(point);
       }
 
@@ -261,6 +207,7 @@ class ChoroplethMap {
         .style('opacity', 0); 
     }
 
+    // draw world map
     vis.geoPath = vis.chart.selectAll('.geo-path')
         .data(topojson.feature(vis.world_geo, vis.world_geo.objects.countries).features);
 
@@ -270,8 +217,6 @@ class ChoroplethMap {
         .on('mouseover', countryMouseover)
         .on('mouseout', countryMouseout)
         .on('click', clicked);
-
-    //console.log(vis.active);
 
     vis.geoPath.merge(vis.geoPathEnter)
       .transition()
@@ -302,9 +247,7 @@ class ChoroplethMap {
           }
         });
 
-    //var point = getRandomPoint(d);
-
-    // to-do: generate points for each individual serial killer
+    // generate points for each individual serial killer
     if (selectedCountry != null) {
 
       // parse data to only show ones from the selected country
@@ -314,16 +257,12 @@ class ChoroplethMap {
         } else {
           return d.CountriesActive.includes(selectedCountry);
         }
-        //console.log(d);
       });
-
 
       // add lat/lon coordinates to filtered killers from generatedPointsByCoutry
       for (let i = 0; i < filterKillersByCountry.length; i++) {
         filterKillersByCountry[i]["long"] = vis.generatedPointsByCountry[i][0];
         filterKillersByCountry[i]["lat"] = vis.generatedPointsByCountry[i][1];
-
-        //console.log(vis.generatedPointsByCountry[i]);
       }
 
       // country mouseover event handler
@@ -375,17 +314,14 @@ class ChoroplethMap {
 
   drawColorLegend() {
     let vis = this;
-
     vis.colorLegend = d3.select("#map-legend")
 
-    //.domain([1, 5, 15, 50, 100, 200])
     // title
     vis.colorLegend.append("text")
       .attr("x", 10)
       .attr("y", 20)
       .text("Killers per Country")
       .style("font-size", "14px")
-      //.attr("alignment-baseline","middle")
 
     //0 killers
     vis.colorLegend.append("circle")
