@@ -34,7 +34,6 @@ class ChoroplethMap {
     ;
 
     const pathGenerator = d3.geoPath().projection(vis.projection);
-
     vis.path = pathGenerator;
 
     // outline for the world
@@ -64,18 +63,12 @@ class ChoroplethMap {
 
   update() {
     let vis = this;
-    // To-do: Add color scale
+
     vis.colorScale = d3.scaleThreshold()
       .domain([1, 5, 15, 50, 100])
       .range(d3.schemeReds[6]);
 
-    // To-do: Select data for specific year (could be done in task1.js too)
-
     vis.render();
-  }
-
-  stopped() {
-    if (d3.event.defaultPrevented) d3.event.stopPropagation();
   }
 
   reset() {
