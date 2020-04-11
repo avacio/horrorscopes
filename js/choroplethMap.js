@@ -383,7 +383,7 @@ class ChoroplethMap {
     vis.colorLegend.append("text")
       .attr("x", 10)
       .attr("y", 20)
-      .text("Number of killers in the country")
+      .text("Killers per Country")
       .style("font-size", "14px")
       //.attr("alignment-baseline","middle")
 
