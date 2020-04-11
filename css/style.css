@@ -26,7 +26,12 @@ html {
 }
 
 #control {
-  margin-right: 205px;
+  width: 1127px;
+  justify-content: space-between;
+}
+
+#kill-type-control {
+  width: 1127px;
   justify-content: space-between;
 }
 
@@ -36,7 +41,6 @@ html {
 
 #map {
   border: 1px solid grey;
-  /*background-image: url(../src/galaxy-background.jpg);*/
   background-color: #D3D3D3;
   width: 100%;
   margin: 0 auto;
@@ -103,6 +107,7 @@ p {
 #sort-bars {
   background-color: silver;
   border: 1px solid black;
+  border-right: 27px solid silver;
   font-size: 0.9rem;
 }
 
@@ -126,7 +131,6 @@ p {
   font-size: 1.3rem;
   font-weight: 600;
   text-decoration: underline;
-  margin-top: 1em;
 }
 
 .ul-title {
@@ -134,7 +138,6 @@ p {
   text-decoration: underline;
   padding: 15px;
 }
-
 
 .axis-label {
   fill: black;
@@ -250,6 +253,11 @@ p {
 
 .modality-mutable {
   stroke-dasharray: 5,5;
+}
+
+#inline-elem-legend {
+  background-color: black;
+  height: 20px;
 }
 
 .link {
