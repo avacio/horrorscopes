@@ -245,15 +245,6 @@ Promise.all([
 
   loadKillersByType();
 
-  /*
-  console.log(killersByCountry);
-  console.log("signs");
-  console.log(signsAndSerialKillers);
-  console.log("elements");
-  console.log(elements);
-  console.log("signs elements dict");
-  console.log(signsElementsDict);*/
-
   // load info on astrological signs
   files[2].forEach(d => {
     signsInfoDict[d.Sign] = {
@@ -274,7 +265,6 @@ Promise.all([
   choroplethMap.world_geo = files[1];
   choroplethMap.killersByCountry = killersByCountry;
 
-  //console.log(serialKillersData);
   choroplethMap.serialKillersData = serialKillersData;
   choroplethMap.signsAndSerialKillers = signsAndSerialKillers;
   choroplethMap.elements = elements;
@@ -306,10 +296,9 @@ Promise.all([
 
     updateSignInfo();
   });
-  
-  // load and update killer type bar chart
+
+  // load and update killer type normalized stacked bars
   killerTypeChart.data = killersByType;
-//  killerTypeChart.signs = astrologySignsData.keys;
   killerTypeChart.elements = elements;
   killerTypeChart.signsInfoDict = signsInfoDict;
   killerTypeChart.update();
@@ -317,7 +306,6 @@ Promise.all([
   updateSignInfo();
 });
 
-console.log(killersByType);
 
 ///////////////////////
 // INTERACTIVE ELEMENTS

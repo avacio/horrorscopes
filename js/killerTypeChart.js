@@ -7,13 +7,11 @@ class KillerTypeChart {
       svg: _config.svg,
       containerWidth: _config.containerWidth || 1200,
       containerHeight: _config.containerHeight || 500,
-//      margin: _config.margin || { top: 50, right: 30, bottom: 100, left: 50 }
       margin: _config.margin || { top: 30, right: 30, bottom: 100, left: 100 }
     }
 
     this.initVis();
   }
-
 
   initVis() {
     let vis = this;

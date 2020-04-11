@@ -25,8 +25,9 @@ class Barchart {
         this.aListener = listener;
       }
     }
-    
+
     this.selectedCountOption = "Number of Killers";
+    this.sortOption = "Sign Order";
 
     this.initVis();
   }
@@ -77,8 +78,6 @@ class Barchart {
     let unorderedSigns = Object.keys(vis.signsAndKills);
     let maxY = 0;
 
-    console.log(vis.signsAndKills);
-
     // get max value for y
     unorderedSigns.forEach(sign => {
       if (maxY == 0)
@@ -100,19 +99,14 @@ class Barchart {
     // sort x values if sort option selected
     if (vis.sortOption == "Least to Most")
     { 
-
       orderedSigns = Object.keys(vis.signsAndSelectedOption).sort(function (a, b) {
         return d3.ascending(vis.signsAndSelectedOption[a], vis.signsAndSelectedOption[b]);
       });
-
-
     } else if (vis.sortOption == "Most to Least")
     {
-
       orderedSigns = Object.keys(vis.signsAndSelectedOption).sort(function (a, b) {
         return d3.descending(vis.signsAndSelectedOption[a], vis.signsAndSelectedOption[b]);
       });
-
     } else if (vis.sortOption == "Sign Order" || vis.sortOption == null)
     {
       orderedSigns = unorderedSigns;
@@ -136,7 +130,6 @@ class Barchart {
       .scale(vis.yScale);
 
     this.render(orderedSigns);
-
   }
 
   getY(selectedOption, sign)
@@ -162,23 +155,20 @@ class Barchart {
   render(signs) {
     let vis = this;
 
+    // clear state
+    vis.chart.selectAll(".axis-label").remove();
+    vis.chart.selectAll(".layerbar").remove();
+
     if(vis.selectedCountOption == "Proven + Possible Kills")
     { 
       vis.renderBars(signs);
       vis.renderGroupedBars(signs);
-
-    } else
-    {
+    } else {
       vis.renderBars(signs);
     }
 
-    // clear state before appending
-    vis.chart.selectAll(".axis-label").remove();
-
     vis.xAxisG.call(vis.xAxis)
-    //      .selectAll("tick > text")
       .selectAll("text")
-    //      .selectAll("text")
       .attr("transform", "rotate(-45)")
       .style("font-size", 12)
       .style("text-anchor", "end")
@@ -228,6 +218,7 @@ class Barchart {
 
     vis.chart.selectAll('.bar')
       .data(signs)
+      .attr('fill', d => d == vis.OPTS.highlightedSign ? 'grey' : 'black')
       .on('mouseover', d => {
       vis.highlightBar(d)
     });
@@ -249,7 +240,7 @@ class Barchart {
       .attr('y', d => vis.yScale(vis.signsAndKills[d].numProven))
       .attr('width', vis.xScale.bandwidth())
       .attr('height', d => vis.height - vis.yScale(vis.signsAndKills[d].numProven))
-      .attr('fill', 'steelblue');
+      .attr('fill', d => d == vis.OPTS.highlightedSign ? '#b9b9b9' : '#8b0000');
   }
 
   highlightBar(sign) {
@@ -258,7 +249,6 @@ class Barchart {
     let selectStringLayer = "#" + sign + "layer";
     vis.OPTS.highlightedSign = sign;
 
-    // clear all bars first
     let bars = vis.chart.selectAll('.bar');
     let layerBars = vis.chart.selectAll('.layerbar');
 
@@ -266,7 +256,7 @@ class Barchart {
       .attr("fill", "black");
 
     layerBars
-      .attr("fill", "steelblue");
+      .attr("fill", "#8b0000");
 
     let highlightBar = vis.chart.select(selectString);
     let highlightBarLayer = vis.chart.select(selectStringLayer);
@@ -275,8 +265,7 @@ class Barchart {
       .attr("fill", "grey");
 
     highlightBarLayer
-      .attr("fill", "grey");
-
+      .attr("fill", "#b9b9b9");
   }
 
   registerSelectCallback(callback) {
